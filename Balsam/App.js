@@ -10,7 +10,7 @@ import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons/Materi
 import CryptoJS from 'crypto-js';
 import { FileSystem } from 'react-native-file-access';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFonts } from 'expo-font';
+
 
 import Home from './screens/Home'
 import SubjectStack from './screens/SubjectStack'
@@ -38,11 +38,7 @@ export default function App() {
       info: '#2f7ac1'
     },
   };
-  let [fontsLoaded] = useFonts({
-    'Cairo_400Regular': require('./assets/fonts/Cairo_400Regular.ttf'),
-    'Cairo_60SemiBold': require('./assets/fonts/Cairo_60SemiBold.ttf'),
-    'Cairo_700Bold': require('./assets/fonts/Cairo_700Bold.ttf'),
-  });
+
   const h = new Hashids("nabeel adnan ali nizam", 12, "abcdefghijklmnopqrstuvwxyz123456789");
   const [loading, setLoading] = React.useState(true);
 
@@ -202,22 +198,22 @@ const styles = StyleSheet.create({
 
   },
   welcome: {
-    fontFamily: 'Cairo_700Bold',
+    //fontFamily: 'Cairo_700Bold',
     fontSize: 35,
     padding: 10,
     paddingBottom: 3
   },
   headline: {
-    fontFamily: 'Cairo_700Bold',
+   // fontFamily: 'Cairo_700Bold',
     fontSize: 21,
     paddingBottom: 20
   },
   text: {
-    fontFamily: 'Cairo_600SemiBold',
+   // fontFamily: 'Cairo_600SemiBold',
     color: 'grey'
   },
   button: {
     letterSpacing: 0,
-    fontFamily: 'Cairo_700Bold'
+  //  fontFamily: 'Cairo_700Bold'
   }
 })
