@@ -39,9 +39,9 @@ export default function App() {
     },
   };
   let [fontsLoaded] = useFonts({
-    'Cairo_400Regular': require('./assets/fonts/Cairo_400Regular.TTF'),
-    'Cairo_60SemiBold': require('./assets/fonts/Cairo_60SemiBold.TTF'),
-    'Cairo_700Bold': require('./assets/fonts/Cairo_700Bold.TTF'),
+    'Cairo_400Regular': require('./assets/fonts/Cairo_400Regular.ttf'),
+    'Cairo_60SemiBold': require('./assets/fonts/Cairo_60SemiBold.ttf'),
+    'Cairo_700Bold': require('./assets/fonts/Cairo_700Bold.ttf'),
   });
   const h = new Hashids("nabeel adnan ali nizam", 12, "abcdefghijklmnopqrstuvwxyz123456789");
   const [loading, setLoading] = React.useState(true);
