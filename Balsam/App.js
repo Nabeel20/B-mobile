@@ -10,7 +10,7 @@ import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons/Materi
 import CryptoJS from 'crypto-js';
 import { FileSystem } from 'react-native-file-access';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as Animatable from 'react-native-animatable';
 
 import Home from './screens/Home'
 import SubjectStack from './screens/SubjectStack'
