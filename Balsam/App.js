@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DateTime } from 'luxon';
 import Hashids from 'hashids';
-import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import CryptoJS from 'crypto-js';
 import { FileSystem } from 'react-native-file-access';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -144,15 +144,15 @@ export default function App() {
         <Animatable.Text animation='fadeInRight' style={styles.welcome}>مرحباً يا بلسم!</Animatable.Text>
         <Animatable.Text animation='fadeInRight' delay={450} style={styles.headline}>تطبيق حل أسئلة صمم خصيصاً ليكون بلسماً لمشاكلك.</Animatable.Text>
         <Animatable.View animation='fadeIn' delay={700} style={{ paddingTop: 10 }}>
-          <Icon name='lightbulb' size={20} color="grey" style={{ alignSelf: 'flex-start' }} />
+          <MaterialCommunityIcons name='lightbulb' size={20} color="grey" style={{ alignSelf: 'flex-start' }} />
           <Text style={styles.text}> ملفات اختبارات بلسم بلاحقة
       <Text style={{ fontWeight: 'bold', fontFamily: 'Cairo_700Bold', marginHorizontal: 10 }}>
               quiz.
       </Text>{'\n'}
 يمكنك تحميل الملفات من قناتنا على التلغرام
-<Icon style={{ paddingHorizontal: 3 }} name='telegram' size={16} color='grey' /> <Text style={{ paddingLeft: 5 }}>@Balsam_app</Text>    {'\n'}
+<MaterialCommunityIcons style={{ paddingHorizontal: 3 }} name='telegram' size={16} color='grey' /> <Text style={{ paddingLeft: 5 }}>@Balsam_app</Text>    {'\n'}
 تتم قراءة الملفات تلقائياً من مجلد التنزيلات
-      <Icon style={{ paddingHorizontal: 5 }} name='folder-download' size={16} color='grey' /> {'\n'}
+      <MaterialCommunityIcons style={{ paddingHorizontal: 5 }} name='folder-download' size={16} color='grey' /> {'\n'}
 
           </Text>
         </Animatable.View>
@@ -166,7 +166,7 @@ export default function App() {
       <PaperProvider
         theme={theme}
         settings={{
-          icon: props => <Icon {...props} />,
+          icon: props => <MaterialCommunityIcons {...props} />,
         }}>
         <NavigationContainer>
           <Drawer.Navigator
