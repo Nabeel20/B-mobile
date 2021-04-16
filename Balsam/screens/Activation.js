@@ -33,9 +33,6 @@ export default function Activation({ navigation, route }) {
         'abcdefghijklmnopqrstuvwxyznNIZAM123456789',
     );
     const { subject_name, code } = route.params;
-    React.useEffect(() => {
-        navigation.setOptions({ title: 'تفعيل بنك' + ' ' + subject_name });
-    }, [navigation, subject_name]);
     const [screenHeight, setScreenHeight] = React.useState(
         Dimensions.get('window'),
     );
@@ -61,13 +58,6 @@ export default function Activation({ navigation, route }) {
             n3.current?.fadeInRight(1500);
         }
     }, []);
-    React.useEffect(() => {
-        let d = h.decode(get_act_code());
-        if (d.length > 0 && d === keyCode) {
-            act_button.current?.tada();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [keyCode]);
     function hasErrors() {
         if (storeCode.length > 0) { return storeCode.length < 12; }
         return false;
@@ -113,7 +103,9 @@ export default function Activation({ navigation, route }) {
     function copy() {
         Clipboard.setString(`Telegram: @Balsam_dev
 - - - 
-${storeCode}-${get_act_code()}-${DateTime.now().toISODate()}`);
+${storeCode}
+${get_act_code()}
+${DateTime.now().toISODate()}`);
         ToastAndroid.showWithGravity(
             'تم النسخ للحافظة',
             ToastAndroid.LONG,
@@ -164,7 +156,13 @@ ${storeCode}-${get_act_code()}-${DateTime.now().toISODate()}`);
             );
         }
     }
-
+    function play_animation() {
+        let d = h.decode(get_act_code());
+        if (d.length > 0 && d == keyCode) {
+            act_button.current?.tada();
+        }
+    }
+    play_animation();
     return (
         <ScrollView
             style={{ flex: 1 }}
@@ -276,7 +274,7 @@ ${storeCode}-${get_act_code()}-${DateTime.now().toISODate()}`);
                                 labelStyle={styles.button}
                                 color="#00C853"
                                 icon="lock-open"
-                                disabled={keyCode !== h.decode(get_act_code())}
+                                disabled={keyCode != h.decode(get_act_code())}
                                 contentStyle={{ flexDirection: 'row-reverse' }}
                                 onPress={() => save()}>
                                 تفعيل البنك

@@ -87,6 +87,7 @@ export default function HomeStack({ navigation }) {
                         name="Activation"
                         component={Activation}
                         options={({ route }) => ({
+                            title: `تفعيل بنك ${route.params.subject_name}`,
                             headerTitleStyle: {
                                 color: '#313131',
                                 fontSize: 14,
