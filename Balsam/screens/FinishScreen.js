@@ -75,9 +75,6 @@ export default function FinishScreen({ navigation, route }) {
         function between(x, min, max) {
             return x >= min && x < max ? true : false;
         }
-        if (between(number, 0, 70)) {
-            return { text: 'عادي.', color: '#74d99f' };
-        }
         if (between(number, 70, 80)) {
             return { text: 'جيد', color: '#74d99f' };
         }
@@ -93,6 +90,7 @@ export default function FinishScreen({ navigation, route }) {
         if (between(number, 95, 100) || number === 100) {
             return { text: 'عظيم جداً', color: '#249d57' };
         }
+        return { text: 'عادي.', color: '#74d99f' };
     }
     function get_time() {
         let end = DateTime.fromISO(DateTime.now().toISOTime());
@@ -207,7 +205,8 @@ export default function FinishScreen({ navigation, route }) {
             );
             let other_files = data_subjects
                 .filter(file => file.title !== quiz.title)
-                .sort((a, b) => a.taken_number - b.last_time);
+                .filter(q => q.wrong_count === 0)
+                .sort((a, b) => a.taken_number - b.taken_number);
             return other_files;
         }
         function Header() {
@@ -467,14 +466,14 @@ export default function FinishScreen({ navigation, route }) {
                     <View>
                         <MaterialCommunityIcons
                             name="lightbulb-on"
-                            color="#546E7A"
+                            color="#818181"
                             size={20}
                         />
                         <Text
                             style={{
                                 fontFamily: 'Cairo-Bold',
                                 fontSize: 14,
-                                color: '#546E7A',
+                                color: '#818181',
                             }}>
                             {data[random_between(0, data.length)]}
                         </Text>

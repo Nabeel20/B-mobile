@@ -530,7 +530,7 @@ export default function Home({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        paddingBottom: 5,
+        paddingVertical: 6,
         flex: 1,
         width: '100%',
     },

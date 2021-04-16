@@ -23,6 +23,7 @@ export default function HomeStack({ navigation }) {
         return (
             <Animatable.View
                 animation="flash"
+                useNativeDriver={true}
                 iterationCount="infinite"
                 duration={3500}
                 style={{

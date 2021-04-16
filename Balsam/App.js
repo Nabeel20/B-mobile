@@ -349,6 +349,7 @@ export default function App() {
       return (
         <Animatable.View
           animation="flash"
+          useNativeDriver={true}
           iterationCount="infinite"
           duration={3500}
           style={{

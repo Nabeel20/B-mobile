@@ -103,7 +103,7 @@ export default function CustomExam({ navigation }) {
                     borderColor: '#d7d8d2',
                 }}>
                     <Subheading style={{
-                        fontFamily: 'Cairo_700Bold',
+                        fontFamily: 'Cairo-Bold',
                         color: '#343434',
                         padding: 10,
                     }}>المقررات</Subheading>
@@ -127,9 +127,9 @@ export default function CustomExam({ navigation }) {
                                         status={subject === item ? 'checked' : 'unchecked'}
                                         color="#00C853" />
                                     <Text style={{
-                                        fontFamily: 'Cairo_600SemiBold',
+                                        fontFamily: 'Cairo-SemiBold',
                                         fontSize: 14,
-                                        color: 'grey',
+                                        color: '#616161',
                                     }}>{item}</Text>
                                 </Pressable>
                             );
