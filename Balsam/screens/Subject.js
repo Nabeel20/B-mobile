@@ -313,6 +313,7 @@ export default function Subject({ navigation, route }) {
                                                     size={16}
                                                     style={{ marginHorizontal: 5 }}
                                                 />
+                                                 <Text style={styles.subtitle}>{item.subject}</Text>
                                                 {item.is_cycle() ? (
                                                     <Text
                                                         style={[
