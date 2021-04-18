@@ -203,8 +203,18 @@ export default function FinishScreen({ navigation, route }) {
             let data_subjects = app_database.get_database.filter(
                 data_quiz => data_quiz.subject === quiz.subject,
             );
+            function check_valid(file) {
+                if (file.is_paid()) {
+                    if (app_database.get_activation.includes(file.code)) {
+                        return file;
+                    }
+                } else {
+                    return file;
+                }
+            }
             let other_files = data_subjects
                 .filter(file => file.title !== quiz.title)
+                .filter(check_valid)
                 .filter(q => q.wrong_count === 0)
                 .sort((a, b) => a.taken_number - b.taken_number);
             return other_files;
