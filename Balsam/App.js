@@ -292,7 +292,7 @@ export default function App() {
             app_database.update_bookmarks = json_file.bookmarks;
             app_database.update_activation = json_file.activation;
             app_database.update_cache = json_file.cache;
-            app_database.userId = json_file.ID;
+            app_database.ID = json_file.ID;
           } catch (error) {
             ToastAndroid.showWithGravity(
               'Error#005',
