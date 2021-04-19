@@ -60,11 +60,14 @@ export default function CustomExam({ navigation }) {
             set_total_number(numbers);
         }, [subject, quizzes, database]);
         function is_valid(quiz) {
-            let codes = app_database.get_activation.map(c => c.code);
+            let codes = app_database.get_activation;
             if (quiz.is_paid()) {
-                return codes.includes(quiz.code) ? true : false;
+                if (codes.includes(quiz.code)) {
+                    return quiz;
+                }
+            } else {
+                return quiz;
             }
-            return true;
         }
         function Subjects() {
             function get_subjects() {
@@ -141,7 +144,10 @@ export default function CustomExam({ navigation }) {
 
         function Quizzes() {
             function get_titles() {
-                return database.filter(quiz => quiz.subject === subject).filter(quiz => is_valid(quiz)).map(q => q.title);
+                return database
+                    .filter(quiz => quiz.subject === subject)
+                    .filter(quiz => is_valid(quiz))
+                    .map(q => q.title);
             }
             function AllSwitch() {
                 function handle_switch() {

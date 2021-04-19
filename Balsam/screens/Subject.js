@@ -226,6 +226,12 @@ export default function Subject({ navigation, route }) {
                 return { name: 'asterisk', color: '#616161' };
             } else if (quiz.taken_number > 0) {
                 return { name: 'checkbox-blank-circle', color: '#616161' };
+            } else if (quiz.is_paid()) {
+                if (app_database.get_activation.includes(quiz.code)) {
+                    return { name: 'checkbox-blank-circle-outline', color: '#37474F' };
+                } else {
+                    return { name: 'lock', color: '#37474F' };
+                }
             }
             return { name: 'checkbox-blank-circle-outline', color: '#616161' };
         }
@@ -313,7 +319,7 @@ export default function Subject({ navigation, route }) {
                                                     size={16}
                                                     style={{ marginHorizontal: 5 }}
                                                 />
-                                                 <Text style={styles.subtitle}>{item.subject}</Text>
+                                                <Text style={styles.subtitle}>{item.subject}</Text>
                                                 {item.is_cycle() ? (
                                                     <Text
                                                         style={[
