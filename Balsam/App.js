@@ -9,6 +9,7 @@ import {
   StyleSheet,
   ToastAndroid,
   PermissionsAndroid,
+  NativeEventEmitter,
   NativeModules,
   Platform,
 } from 'react-native';
@@ -343,6 +344,14 @@ export default function App() {
 
     check_permission();
     read_blsm();
+    const eventEmitter = new NativeEventEmitter(Storage);
+    this.eventListener = eventEmitter.addListener('onHostResume', (event) => {
+      ToastAndroid.showWithGravity(
+        event.MyName,
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+      );
+    });
   }, [shouldAskForPermissions, ready]);
   function LoadingScreen() {
     if (shouldAskForPermissions === false) {
@@ -367,13 +376,13 @@ export default function App() {
         <View style={styles.container}>
           <Animatable.Text animation="fadeInRight" style={styles.welcome}>
             مرحباً يا بلسم!
-      </Animatable.Text>
+          </Animatable.Text>
           <Animatable.Text
             animation="fadeInRight"
             delay={450}
             style={styles.headline}>
             تطبيق حل أسئلة صمم خصيصاً ليكون بلسماً لمشاكلك.
-      </Animatable.Text>
+          </Animatable.Text>
           <Animatable.View
             animation="fadeIn"
             delay={700}
@@ -386,26 +395,26 @@ export default function App() {
             />
             <Text style={styles.text}>
               {' '}
-          ملفات اختبارات بلسم بلاحقة
-          <Text
+              ملفات اختبارات بلسم بلاحقة
+              <Text
                 style={{
                   fontWeight: 'bold',
                   fontFamily: 'Cairo_700Bold',
                   marginHorizontal: 14,
                 }}>
                 quiz.
-          </Text>
+              </Text>
               {'\n'}
-          يمكنك تحميل الملفات من قناتنا على التلغرام
-          <MaterialCommunityIcons
+              يمكنك تحميل الملفات من قناتنا على التلغرام
+              <MaterialCommunityIcons
                 style={{ paddingHorizontal: 4 }}
                 name="telegram"
                 size={16}
                 color="grey"
               />{' '}
               <Text style={{ paddingLeft: 5 }}>@Balsam_app</Text> {'\n'}
-          تتم قراءة الملفات تلقائياً من مجلد التنزيلات
-          <MaterialCommunityIcons
+              تتم قراءة الملفات تلقائياً من مجلد التنزيلات
+              <MaterialCommunityIcons
                 style={{ paddingHorizontal: 5 }}
                 name="folder-download"
                 size={16}
@@ -421,7 +430,7 @@ export default function App() {
               color="#313131"
               onPress={() => ask_for_permission()}>
               الحصول على صلاحية الوصول للذاكرة
-        </Button>
+            </Button>
           </Animatable.View>
         </View>
       );
