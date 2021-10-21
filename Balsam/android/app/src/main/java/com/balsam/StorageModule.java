@@ -22,8 +22,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 public class StorageModule extends ReactContextBaseJavaModule {
   StorageModule(ReactApplicationContext context) {
     super(context);
-    //
-    context.addLifecycleEventListener(this);
+   // context.addLifecycleEventListener(this);
   }
   
   @Override
@@ -64,14 +63,12 @@ public class StorageModule extends ReactContextBaseJavaModule {
     }
   }
 
-  @Override
-public void onHostResume() {
-   // Activity `onResume`
-   // sending the "event"
-   WritableMap params = Arguments.createMap();
-   params.putString("MyName", "Nabeel");
-   ReactContext
-     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-     .emit("onHostResume", params);
-}
+//   @Override
+// public void onHostResume() {
+//    WritableArray params = Arguments.createArray();
+//    params.putString("MyName", "Nabeel");
+//    ReactContext
+//      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+//      .emit("onHostResume", params);
+// }
 }

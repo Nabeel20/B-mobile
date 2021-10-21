@@ -1,7 +1,11 @@
 package com.balsam;
 
 import com.facebook.react.ReactActivity;
-
+// new import
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.Arguments;
 public class MainActivity extends ReactActivity {
 
   /**
@@ -12,4 +16,16 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "Balsam";
   }
+
+  // onResume data
+   @Override
+    protected void onResume() {
+        super.onResume();
+        WritableArray params = Arguments.createArray();
+        params.putString("MyName", "Nabeel");
+
+        ReactContext
+     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+     .emit("onHostResume", params);
+    }
 }
