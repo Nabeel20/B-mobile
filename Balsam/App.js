@@ -9,7 +9,6 @@ import {
   StyleSheet,
   ToastAndroid,
   PermissionsAndroid,
-  NativeEventEmitter,
   NativeModules,
   Platform,
 } from 'react-native';
@@ -341,17 +340,20 @@ export default function App() {
         );
       }
     }
-
+    async function magic() {
+      let private_files = await FileSystem.ls(Dirs.DocumentDir);
+      let files = [];
+      for (let index = 0; index < private_files.length; index++) {
+        let file = await FileSystem.readFile(private_files[index]);
+        let decoded_file = decode_file(file);
+        let file_content = JSON.parse(decoded_file);
+        files.push(file_content.title);
+      }
+      app_database.debug = files;
+    }
     check_permission();
     read_blsm();
-    const eventEmitter = new NativeEventEmitter(Storage);
-    this.eventListener = eventEmitter.addListener('onHostResume', (event) => {
-      ToastAndroid.showWithGravity(
-        event.MyName,
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-      );
-    });
+    magic();
   }, [shouldAskForPermissions, ready]);
   function LoadingScreen() {
     if (shouldAskForPermissions === false) {

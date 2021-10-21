@@ -231,6 +231,7 @@ export default function Home({ navigation }) {
     }
     return (
         <View style={styles.container}>
+            <Text>{JSON.stringify(app_database.debug)}</Text>
             {data.length > 0 ? (
                 <FlatList
                     data={data}
@@ -363,8 +364,8 @@ export default function Home({ navigation }) {
                     )}
                 />
             ) : (
-                    <EmptyHome />
-                )}
+                <EmptyHome />
+            )}
 
             <Portal>
                 <Dialog
@@ -378,7 +379,7 @@ export default function Home({ navigation }) {
                             marginBottom: 15,
                         }}>
                         لم تنه الامتحان آخر مرة!
-          </Dialog.Title>
+                    </Dialog.Title>
                     <Dialog.Content style={{ paddingHorizontal: 15, paddingBottom: 0 }}>
                         <Text style={{ fontFamily: 'Cairo-SemiBold', fontSize: 15 }}>
                             توقفت عند السؤال {unfinishedDialog.index} من أصل{' '}
@@ -396,7 +397,7 @@ export default function Home({ navigation }) {
                             labelStyle={styles.dialog_button}
                             onPress={() => resume_exam({ quiz: unfinishedDialog.quiz })}>
                             البدء من جديد
-            </Button>
+                        </Button>
                         <Button
                             color={colors.success}
                             labelStyle={styles.dialog_button}
@@ -404,7 +405,7 @@ export default function Home({ navigation }) {
                                 resume_exam({ quiz: unfinishedDialog.quiz, continue_exam: true })
                             }>
                             تكملة الامتحان
-            </Button>
+                        </Button>
                     </Dialog.Actions>
                 </Dialog>
 
@@ -520,12 +521,12 @@ export default function Home({ navigation }) {
                             labelStyle={{ letterSpacing: 0, fontFamily: 'Cairo-Bold' }}
                             onPress={() => remove_file(dialogData.title, dialogData.ID, dialogData.path)}>
                             حذف الملف
-            </Button>
+                        </Button>
                         <Button
                             onPress={() => setDialogData({ visible: false })}
                             labelStyle={{ letterSpacing: 0, fontFamily: 'Cairo-Bold' }}>
                             حسناً
-            </Button>
+                        </Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
