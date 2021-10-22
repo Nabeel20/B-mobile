@@ -22,7 +22,7 @@ import * as Animatable from 'react-native-animatable';
 import * as Haptics from 'expo-haptics';
 import { DateTime } from 'luxon';
 import { useFocusEffect } from '@react-navigation/native';
-import { FileSystem } from 'react-native-file-access';
+import { Dirs, FileSystem } from 'react-native-file-access';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Analytics from 'appcenter-analytics';
@@ -38,6 +38,8 @@ export default function Home({ navigation }) {
         questions_number: 0,
     });
     const [data, set_data] = React.useState(DB.current);
+    const [files, setFiles] = React.useState([]);
+    const [errorLog, setErrorLog] = React.useState([]);
     const is_first = React.useRef(true);
     useFocusEffect(
         React.useCallback(() => {
@@ -55,6 +57,32 @@ export default function Home({ navigation }) {
             };
         }, []),
     );
+
+    React.useEffect(() => {
+        async function read_local_database() {
+            try {
+                if (await FileSystem.isDir(Dirs.DocumentDir + '/files')) {
+                    let all_files = await FileSystem.ls(Dirs.DocumentDir + '/files');
+                    for (let index = 0; index < all_files.length; index++) {
+                        let file = all_files[index];
+                        let file_content = await FileSystem.readFile(file);
+                        setFiles([...files, file_content]);
+                    }
+                } else {
+                    setErrorLog([...errorLog, 'Dirs.DocumentDir-files does not exist']);
+                    let all_files = await FileSystem.ls(Dirs.DocumentDir);
+                    for (let index = 0; index < all_files.length; index++) {
+                        let file = all_files[index];
+                        let file_content = await FileSystem.readFile(file);
+                        setFiles([...files, file_content]);
+                    }
+                }
+            } catch (error) {
+                setErrorLog([...errorLog, JSON.stringify(error)]);
+            }
+        }
+        read_local_database();
+    }, []);
     function EmptyHome() {
         return (
             <Animatable.View animation="fadeIn" style={{ flex: 1, width: '100%' }}>
@@ -231,7 +259,8 @@ export default function Home({ navigation }) {
     }
     return (
         <View style={styles.container}>
-            <Text>{JSON.stringify(app_database.debug)}</Text>
+            <Text style={{ color: 'red' }}>error messages: {JSON.stringify(errorLog)}</Text>
+            <Text>Files: {JSON.stringify(files, null, 2)}</Text>
             {data.length > 0 ? (
                 <FlatList
                     data={data}
