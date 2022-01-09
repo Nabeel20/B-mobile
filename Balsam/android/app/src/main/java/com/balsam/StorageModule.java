@@ -72,6 +72,6 @@ public void onHostResume() {
    params.putString("MyName", "Nabeel");
    ReactContext
      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-     .emit("onHostResume", params);
+     .emit('onHostResume', params);
 }
 }
