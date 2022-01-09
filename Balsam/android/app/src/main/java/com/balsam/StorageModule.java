@@ -16,16 +16,11 @@ import com.facebook.react.bridge.Arguments;
 import java.util.*;
 import java.io.*;
 
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
-
 public class StorageModule extends ReactContextBaseJavaModule {
   StorageModule(ReactApplicationContext context) {
     super(context);
-    //
-    context.addLifecycleEventListener(this);
   }
-  
+
   @Override
   public String getName() {
     return "Storage";
@@ -63,15 +58,4 @@ public class StorageModule extends ReactContextBaseJavaModule {
       promise.reject("Something went wrong: ", e);
     }
   }
-
-  @Override
-public void onHostResume() {
-   // Activity `onResume`
-   // sending the "event"
-   WritableMap params = Arguments.createMap();
-   params.putString("MyName", "Nabeel");
-   ReactContext
-     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-     .emit('onHostResume', params);
-}
 }
