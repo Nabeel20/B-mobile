@@ -7,9 +7,6 @@ export let app_database = {
     cache: [],
     activation: [],
     ID: null,
-    // remove
-    debug: [],
-    // remove
     get get_database() {
         return this.database;
     },
