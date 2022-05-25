@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ThemeProvider } from './screens/Theme';
-import { Text, View, Image, ActivityIndicator, StyleSheet } from 'react-native';;
+import { Text, View, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import Settings from './screens/Settings';
 import Subject from './screens/Subject';
 import Exam from './screens/Exam';
@@ -18,27 +18,25 @@ function App() {
   const bookmarks_data = React.useRef([]);
   const [loading, setLoading] = React.useState(true);
   const error_log = React.useRef('');
-  const try_again_num = React.useRef(0);
-
-  React.useEffect(() => {
-    async function handle_data() {
-      let _subjects = await get_data();
-      if (_subjects.status === false) {
-        error_log.current = _subjects.error_message;
-        setLoading(false);
-        return;
-      }
-      home_data.current = _subjects.data;
+  async function handle_data() {
+    let _subjects = await get_data();
+    if (_subjects.status === false) {
+      error_log.current = _subjects.error_message;
       setLoading(false);
+      return;
     }
+    home_data.current = _subjects.data;
+    setLoading(false);
+  }
+  React.useEffect(() => {
     function load_bookmarks() {
-      const Bookmarks = [];
-      bookmarks_data.current = Bookmarks;
+      const BM = [];
+      bookmarks_data.current = BM;
       return;
     }
     load_bookmarks();
     handle_data();
-  }, [try_again_num.current]);
+  }, []);
   if (loading) {
     return (
       <View style={styles.container}>
@@ -49,7 +47,7 @@ function App() {
           color="#212121"
           style={styles.loading}
         />
-      </View>;
+      </View>
     );
   }
 
