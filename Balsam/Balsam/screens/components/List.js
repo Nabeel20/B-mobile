@@ -173,8 +173,7 @@ export default function SubjectList({
 const styles = StyleSheet.create({
   list_title: {
     fontSize: 14,
-    fontFamily: 'readex pro',
-    fontWeight: '400',
+    fontFamily: 'ReadexPro-Medium',
     marginRight: -4,
     marginBottom: 8,
   },
@@ -188,21 +187,20 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   title: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Medium',
     fontSize: 16,
-    fontWeight: '500',
     padding: 4,
     textAlign: 'right',
   },
   list_empty_title: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
     alignSelf: 'center',
     marginTop: 24,
     marginBottom: 8,
     fontSize: 18,
   },
   list_empty_text: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
     alignSelf: 'center',
     fontSize: 14,
   },
@@ -213,7 +211,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   subTitle: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
     fontSize: 14,
     marginTop: 4,
   },
