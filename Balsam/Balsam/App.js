@@ -1,112 +1,97 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ThemeProvider } from './screens/Theme';
+import { Text, View, Image, ActivityIndicator, StyleSheet } from 'react-native';;
+import Settings from './screens/Settings';
+import Subject from './screens/Subject';
+import Exam from './screens/Exam';
+import Bookmarks from './screens/Bookmarks';
+import Home from './screens/Home';
+import BalsamLogo from './assets/logo.png';
+import { get_data } from './helper/api';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+function App() {
+  const home_data = React.useRef([]);
+  const bookmarks_data = React.useRef([]);
+  const [loading, setLoading] = React.useState(true);
+  const error_log = React.useRef('');
+  const try_again_num = React.useRef(0);
+
+  React.useEffect(() => {
+    async function handle_data() {
+      let _subjects = await get_data();
+      if (_subjects.status === false) {
+        error_log.current = _subjects.error_message;
+        setLoading(false);
+        return;
+      }
+      home_data.current = _subjects.data;
+      setLoading(false);
+    }
+    function load_bookmarks() {
+      const Bookmarks = [];
+      bookmarks_data.current = Bookmarks;
+      return;
+    }
+    load_bookmarks();
+    handle_data();
+  }, [try_again_num.current]);
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Image source={{ uri: BalsamLogo }} style={styles.logo} />
+        <Text style={styles.logoText}>بــــلـــــــــــســــم</Text>
+        <ActivityIndicator
+          size="small"
+          color="#212121"
+          style={styles.loading}
+        />
+      </View>;
+    );
+  }
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <ThemeProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home">
+            {props => <Home {...props} data={home_data.current} />}
+          </Stack.Screen>
+          <Stack.Screen name="Settings" component={Settings} />
+          <Stack.Screen name="Subject" component={Subject} />
+          <Stack.Screen name="Exam" component={Exam} />
+          <Stack.Screen name="Bookmarks">
+            {props => <Bookmarks {...props} data={bookmarks_data.current} />}
+          </Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
   );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
+}
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
+  logoText: {
+    fontFamily: 'readex pro',
     fontWeight: '700',
+    fontSize: 32,
+    marginTop: 32,
+    marginBottom: 32,
+  },
+  loadingIndicator: {
+    alignSelf: 'center',
+  },
+  logo: {
+    width: 98,
+    height: 127,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
-
 export default App;
