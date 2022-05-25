@@ -44,6 +44,6 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Regular',
   },
 });

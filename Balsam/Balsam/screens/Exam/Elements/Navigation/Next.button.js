@@ -50,8 +50,7 @@ export default function NextButton({
 const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
-    fontWeight: 'bold',
-    fontFamily: 'Readex Pro',
+    fontFamily: 'ReadexPro-Bold',
     fontSize: 16,
   },
   flexContainer: {
