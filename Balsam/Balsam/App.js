@@ -73,8 +73,7 @@ function App() {
 }
 const styles = StyleSheet.create({
   logoText: {
-    fontFamily: 'readex pro',
-    fontWeight: '700',
+    fontFamily: 'ReadexPro-Bold',
     fontSize: 32,
     marginTop: 32,
     marginBottom: 32,
