@@ -111,13 +111,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   title: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Bold',
     fontSize: 21,
-    fontWeight: '600',
     marginRight: 8,
   },
   bookmark: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
     fontSize: 12,
     color: Colors.blue,
   },
