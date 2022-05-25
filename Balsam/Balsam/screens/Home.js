@@ -153,7 +153,7 @@ export default function Home({data, navigation}) {
         keywords={userInput}
         data={data}
         onPress={category => {
-          if (category.rtl != undefined) {
+          if (category.rtl !== undefined) {
             if (category.branch) {
               setLoading(true);
               get_titles(category.url);
@@ -196,8 +196,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     marginRight: 8,
     marginBottom: 16,
-    fontWeight: '500',
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Medium',
   },
   row: {
     flex: 1,
@@ -212,9 +211,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 8,
     fontSize: 14,
-    fontWeight: '400',
     textAlign: 'right',
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
   },
   searchContainer: {
     flexDirection: 'row',
@@ -232,9 +230,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   clearButtonText: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Medium',
     fontSize: 14,
-    fontWeight: 'bold',
   },
   clearButtonContainer: {
     position: 'absolute',
