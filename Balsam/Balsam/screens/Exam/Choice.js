@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 15,
     marginHorizontal: 8,
-    fontFamily: 'Readex pro',
-    fontWeight: '500',
+    fontFamily: 'ReadexPro-Medium',
   },
 });
