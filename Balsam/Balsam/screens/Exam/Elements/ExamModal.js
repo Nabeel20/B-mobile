@@ -204,8 +204,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.blue,
     fontSize: 45,
-    fontWeight: 'bold',
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Bold',
     textAlign: 'center',
     marginBottom: 32,
   },
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Regular',
     textAlign: 'center',
     marginTop: 8,
   },
@@ -231,7 +230,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
     fontSize: 16,
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Regular',
   },
   image: {
     width: 80,
