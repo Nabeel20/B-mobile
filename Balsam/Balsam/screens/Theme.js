@@ -9,7 +9,7 @@ const Colors = {
   blue_light: '#BFDBFE',
 };
 
-function ThemeProvider({ children }) {
+function ThemeProvider({children}) {
   const [darkTheme, setTheme] = React.useState(false);
   const Theme = {
     background: darkTheme ? '#212121' : '#ffffff',
@@ -31,4 +31,4 @@ function ThemeProvider({ children }) {
   );
 }
 
-export { ThemeContext, ThemeProvider, Colors };
+export {ThemeContext, ThemeProvider, Colors};
