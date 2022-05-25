@@ -326,7 +326,7 @@ function Exam({route, navigation}) {
         </Text>
         <Spacer vertical={16} />
         {quiz_mcq ? (
-          <View style={{margin: 8}}>
+          <View style={styles.mcqContainer}>
             {item.choices.map((choice, i) => {
               return (
                 <Choice
@@ -367,7 +367,7 @@ function Exam({route, navigation}) {
     timer.current = false;
     setIndex(0);
     QuizData.current.map(question => {
-      if (question.review == false) {
+      if (question.review === false) {
         question.review = true;
         question.user_answer = '';
       }
@@ -419,7 +419,7 @@ function Exam({route, navigation}) {
         }
       />
       <ScrollView
-        contentContainerStyle={{padding: 16}}
+        contentContainerStyle={styles.scrollView}
         showsVerticalScrollIndicator={true}>
         <Header
           details={{
@@ -463,7 +463,7 @@ function Exam({route, navigation}) {
           scrollEnabled={false}
           initialScrollIndex={index}
           pagingEnabled
-          style={{flex: 1}}
+          style={styles.flatList}
           renderItem={Question}
         />
       </ScrollView>
@@ -507,6 +507,16 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 13,
     fontFamily: 'Readex pro',
+  },
+  mcqContainer: {
+    width: 24,
+    height: 24,
+  },
+  flatList: {
+    flex: 1,
+  },
+  scrollView: {
+    padding: 16,
   },
 });
 
