@@ -88,21 +88,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Bold',
     fontSize: 21,
-    fontWeight: '600',
     margin: 16,
   },
-  dots: {
-    fontFamily: 'readex pro',
-    fontSize: 21,
-    fontWeight: '600',
-    margin: 1,
-  },
   text: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Medium',
     fontSize: 16,
-    fontWeight: '500',
     color: Colors.blue,
   },
   button: {
