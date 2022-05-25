@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.red_light,
   },
   buttonText: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
     fontSize: 14,
   },
 });

@@ -31,11 +31,10 @@ export default function MetaData({title, subject}) {
 const styles = StyleSheet.create({
   subject: {
     fontSize: 12,
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Regular',
   },
   title: {
     fontSize: 14,
-    fontWeight: 'bold',
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Bold',
   },
 });

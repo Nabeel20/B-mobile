@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   numberText: {
     color: Colors.blue,
-    fontWeight: 'bold',
+    fontWeight: '500',
     textAlign: 'center',
   },
 });
