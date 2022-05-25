@@ -178,9 +178,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Bold',
     fontSize: 20,
-    fontWeight: '600',
     marginRight: 16,
     marginBottom: 16,
   },
@@ -191,19 +190,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
   helperText: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
     fontSize: 14,
   },
   subject: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Bold',
     fontSize: 14,
-    fontWeight: '600',
     color: Colors.blue,
   },
   text: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Medium',
     fontSize: 16,
-    fontWeight: '500',
     padding: 4,
   },
   modalView: {
@@ -235,9 +232,8 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   question: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Medium',
     fontSize: 20,
-    fontWeight: '600',
     marginBottom: 32,
   },
   header: {
