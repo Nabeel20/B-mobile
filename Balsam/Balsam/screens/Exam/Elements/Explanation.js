@@ -73,8 +73,7 @@ const styles = StyleSheet.create({
   explanation: {
     fontSize: 16,
     margin: 8,
-    fontFamily: 'readex pro',
-    fontWeight: '400',
+    fontFamily: 'ReadexPro-Regular',
   },
   container: {
     alignItems: 'center',
@@ -92,7 +91,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-    fontFamily: 'Readex pro',
-    fontWeight: '500',
+    fontFamily: 'ReadexPro-Medium',
   },
 });
