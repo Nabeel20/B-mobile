@@ -490,8 +490,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 2,
     marginHorizontal: 8,
-    fontFamily: 'Readex pro',
-    fontWeight: '600',
+    fontFamily: 'ReadexPro-Bold',
   },
   footer: {
     flexDirection: 'row',
@@ -501,12 +500,12 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 18,
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Regular',
     textAlign: 'center',
   },
   timerText: {
     fontSize: 13,
-    fontFamily: 'Readex pro',
+    fontFamily: 'ReadexPro-Regular',
   },
   mcqContainer: {
     width: 24,
