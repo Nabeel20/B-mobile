@@ -1,9 +1,0 @@
-{
-    "cSpell.ignoreWords": [
-        "pressable"
-    ],
-    "extends": [
-        // ...
-        "plugin:react-hooks/recommended"
-    ]
-}
