@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   I18nManager,
+  useColorScheme,
 } from 'react-native';
 import Settings from './screens/Settings';
 import Subject from './screens/Subject';
@@ -21,6 +22,7 @@ const Stack = createNativeStackNavigator();
 I18nManager.allowRTL(false);
 
 function App() {
+  const color_scheme = useColorScheme() || 'light';
   const home_data = React.useRef([]);
   const bookmarks_data = React.useRef([]);
   const [loading, setLoading] = React.useState(true);
@@ -44,14 +46,29 @@ function App() {
     load_bookmarks();
     handle_data();
   }, []);
+
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: color_scheme === 'dark' ? '#ffffff' : '#212121',
+          },
+        ]}>
         <Image source={require('./assets/logo.png')} style={styles.logo} />
-        <Text style={styles.logoText}>بــــلـــــــــــســــم</Text>
+        <Text
+          style={[
+            styles.logoText,
+            {
+              color: color_scheme === 'dark' ? '#ffffff' : '#141414',
+            },
+          ]}>
+          بــــلـــــــــــســــم
+        </Text>
         <ActivityIndicator
           size="small"
-          color="#212121"
+          color={color_scheme === 'dark' ? '#ffffff' : '#212121'}
           style={styles.loading}
         />
       </View>
