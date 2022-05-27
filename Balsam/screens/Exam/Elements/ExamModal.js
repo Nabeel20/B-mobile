@@ -9,10 +9,9 @@ import {
   Animated,
 } from 'react-native';
 import MetaData from './Header/MetaData';
-import {ThemeContext, Colors} from '../../Theme';
-import LoadingIcon from '../../../assets/celebration.icon.png';
+import { ThemeContext, Colors } from '../../Theme';
 
-function Button({onPress, blue = false, text, theme}) {
+function Button({ onPress, blue = false, text, theme }) {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -34,8 +33,8 @@ function Button({onPress, blue = false, text, theme}) {
     </TouchableOpacity>
   );
 }
-function Details({noInput, Theme, type, data}) {
-  const {skipped_num, correct_num, total_num, progress, time} = data;
+function Details({ noInput, Theme, type, data }) {
+  const { skipped_num, correct_num, total_num, progress, time } = data;
   if (noInput) {
     return (
       <Text
@@ -57,9 +56,8 @@ function Details({noInput, Theme, type, data}) {
           {
             color: Theme.grey.accent_2,
           },
-        ]}>{`تجاوزت ${skipped_num} ${
-        skipped_num < 3 ? 'سؤال' : 'أسئلة'
-      } يمكنك حل الأسئلة المتبقية أو الانتقال مباشرة إلى النتائج`}</Text>
+        ]}>{`تجاوزت ${skipped_num} ${skipped_num < 3 ? 'سؤال' : 'أسئلة'
+          } يمكنك حل الأسئلة المتبقية أو الانتقال مباشرة إلى النتائج`}</Text>
     );
   }
 
@@ -72,9 +70,8 @@ function Details({noInput, Theme, type, data}) {
             color: Theme.grey.accent_2,
           },
         ]}>
-        {`${correct_num} ${
-          correct_num < 3 ? 'جواب صحيح' : 'أجوبة صحيحة'
-        } من أصل  ${total_num} (${Math.ceil(progress)}%)`}{' '}
+        {`${correct_num} ${correct_num < 3 ? 'جواب صحيح' : 'أجوبة صحيحة'
+          } من أصل  ${total_num} (${Math.ceil(progress)}%)`}{' '}
         • {`${time} `}
         {time >= 3 ? 'دقائق' : 'دقيقة'}
       </Text>
@@ -101,7 +98,7 @@ export default function ExamModal({
   onPressPrimary,
   onPressSecondary,
 }) {
-  const {Theme} = React.useContext(ThemeContext);
+  const { Theme } = React.useContext(ThemeContext);
   const animation = React.useRef(new Animated.Value(0)).current;
   const {
     title,
@@ -154,7 +151,7 @@ export default function ExamModal({
             <MetaData title={title} subject={subject} />
           </View>
           <View style={styles.header}>
-            <Image source={{uri: LoadingIcon}} style={styles.image} />
+            <Image source={require('../../../assets/celebration.icon.png')} style={styles.image} />
             <Text
               style={[
                 styles.title,
@@ -169,7 +166,7 @@ export default function ExamModal({
               Theme={Theme}
               type={type}
               noInput={no_input}
-              data={{skipped_num, correct_num, total_num, progress, time}}
+              data={{ skipped_num, correct_num, total_num, progress, time }}
             />
           </View>
         </Animated.View>

@@ -1,15 +1,14 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {ThemeProvider} from './screens/Theme';
-import {Text, View, Image, ActivityIndicator, StyleSheet} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ThemeProvider } from './screens/Theme';
+import { Text, View, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import Settings from './screens/Settings';
 import Subject from './screens/Subject';
 import Exam from './screens/Exam';
 import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
-import BalsamLogo from './assets/logo.png';
-import {get_data} from './helper/api';
+import { get_data } from './helper/api';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,7 +39,7 @@ function App() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Image source={{uri: BalsamLogo}} style={styles.logo} />
+        <Image source={require('./assets/logo.png')} style={styles.logo} />
         <Text style={styles.logoText}>بــــلـــــــــــســــم</Text>
         <ActivityIndicator
           size="small"
@@ -56,7 +55,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Home"
-          screenOptions={{headerShown: false}}>
+          screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home">
             {props => <Home {...props} data={home_data.current} />}
           </Stack.Screen>

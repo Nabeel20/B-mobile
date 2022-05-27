@@ -11,13 +11,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import List from './components/List';
-import GearIcon from '../assets/gearIcon.png';
-import BookmarkIcon from '../assets/bookmarkIcon.png';
-import {ThemeContext, Colors} from './Theme';
-import {get_titles} from '../helper/api';
+import { ThemeContext, Colors } from './Theme';
+import { get_titles } from '../helper/api';
 import Loading from './components/Loading';
 
-function Title({color}) {
+function Title({ color }) {
   const _Date = new Date();
   const _hours = _Date.getHours();
   let greet = 'أهلاً،';
@@ -27,25 +25,25 @@ function Title({color}) {
   if (_hours >= 17 && _hours <= 24) {
     greet = 'مساء الخير،';
   }
-  return <Text style={[styles.title, {color}]}>{greet} نبيل</Text>;
+  return <Text style={[styles.title, { color }]}>{greet} نبيل</Text>;
 }
-function ClearButton({onPress, keywords, color}) {
+function ClearButton({ onPress, keywords, color }) {
   if (keywords.length === 0) {
     return null;
   }
   return (
     <Pressable onPress={() => onPress()} style={styles.clearButtonContainer}>
-      <Text style={[styles.clearButtonText, {color}]}>مسح</Text>
+      <Text style={[styles.clearButtonText, { color }]}>مسح</Text>
     </Pressable>
   );
 }
 
-export default function Home({data, navigation}) {
+export default function Home({ data, navigation }) {
   const header_animation = React.useRef(new Animated.Value(100)).current;
   const textInput_ref = React.useRef(null);
   const played_once = React.useRef(false);
 
-  const {Theme} = React.useContext(ThemeContext);
+  const { Theme } = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
   const _status = React.useRef(true);
   const [userInput, setInput] = React.useState('');
@@ -91,7 +89,7 @@ export default function Home({data, navigation}) {
 
   return (
     <KeyboardAvoidingView
-      style={[styles.container, {backgroundColor: Theme.background}]}>
+      style={[styles.container, { backgroundColor: Theme.background }]}>
       <TouchableOpacity
         onPress={() => navigation.navigate('Settings')}
         style={[
@@ -102,7 +100,7 @@ export default function Home({data, navigation}) {
           },
         ]}>
         <Image
-          source={{uri: GearIcon}}
+          source={require('../assets/gearIcon.png')}
           style={[
             styles.gearIcon,
             {
@@ -111,7 +109,7 @@ export default function Home({data, navigation}) {
           ]}
         />
       </TouchableOpacity>
-      <View style={{height: '20%'}} />
+      <View style={{ height: '20%' }} />
       <Title color={Theme.text} />
       <View style={styles.searchContainer}>
         <ClearButton
@@ -138,15 +136,15 @@ export default function Home({data, navigation}) {
         />
         <TouchableOpacity
           style={styles.bookmark}
-          onPress={() => navigation.navigate('Bookmarks', {subject: ''})}>
+          onPress={() => navigation.navigate('Bookmarks', { subject: '' })}>
           <Image
-            source={{uri: BookmarkIcon}}
-            style={[styles.bookmarkIcon, {tintColor: Colors.blue}]}
+            source={require('../assets/bookmarkIcon.png')}
+            style={[styles.bookmarkIcon, { tintColor: Colors.blue }]}
           />
         </TouchableOpacity>
       </View>
 
-      <View style={{height: 48}} />
+      <View style={{ height: 48 }} />
 
       <List
         animation={header_animation}

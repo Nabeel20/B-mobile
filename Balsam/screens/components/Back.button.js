@@ -1,10 +1,9 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Image} from 'react-native';
-import {ThemeContext} from '../Theme';
-import Arrow from '../../assets/arrow.png';
+import { TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { ThemeContext } from '../Theme';
 
-export default function BackButton({onPress, _style = {}}) {
-  const {Theme} = React.useContext(ThemeContext);
+export default function BackButton({ onPress, _style = {} }) {
+  const { Theme } = React.useContext(ThemeContext);
 
   return (
     <TouchableOpacity
@@ -18,7 +17,7 @@ export default function BackButton({onPress, _style = {}}) {
         _style,
       ]}>
       <Image
-        source={{uri: Arrow}}
+        source={require('../../assets/arrow.png')}
         style={[
           styles.image,
           {
@@ -44,6 +43,6 @@ const styles = StyleSheet.create({
   image: {
     width: 24,
     height: 24,
-    transform: [{scaleX: -1}],
+    transform: [{ scaleX: -1 }],
   },
 });

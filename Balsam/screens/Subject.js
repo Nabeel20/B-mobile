@@ -7,19 +7,18 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {get_titles} from '../helper/api';
+import { get_titles } from '../helper/api';
 import List from './components/List';
 import BackButton from './components/Back.button';
-import {Colors, ThemeContext} from './Theme';
-import bookmarksIcon from '../assets/bookmarksIcon.png';
+import { Colors, ThemeContext } from './Theme';
 import Loading from './components/Loading';
 
-export default function Subject({route, navigation}) {
+export default function Subject({ route, navigation }) {
   const _animation = React.useRef(new Animated.Value(100)).current;
-  const {Theme} = React.useContext(ThemeContext);
+  const { Theme } = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
   const _status = React.useRef(true);
-  const {title, list} = route.params;
+  const { title, list } = route.params;
 
   async function handle_data(id) {
     let _subjects = await get_titles(id);
@@ -57,9 +56,9 @@ export default function Subject({route, navigation}) {
         onPress={() => {
           navigation.goBack();
         }}
-        _style={{alignSelf: 'flex-end'}}
+        _style={{ alignSelf: 'flex-end' }}
       />
-      <View style={{height: '30%'}} />
+      <View style={{ height: '30%' }} />
 
       <View style={styles.row}>
         <Text
@@ -75,10 +74,10 @@ export default function Subject({route, navigation}) {
         <TouchableOpacity
           style={styles.bookmarkButton}
           onPress={() =>
-            navigation.navigate('Bookmarks', {subject: get_subject()})
+            navigation.navigate('Bookmarks', { subject: get_subject() })
           }>
           <Text style={styles.bookmark}>المحفوظات</Text>
-          <Image source={{uri: bookmarksIcon}} style={styles.image} />
+          <Image source={require('../assets/bookmarksIcon.png')} style={styles.image} />
         </TouchableOpacity>
       </View>
 

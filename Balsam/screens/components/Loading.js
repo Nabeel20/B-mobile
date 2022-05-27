@@ -7,12 +7,10 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import {ThemeContext, Colors} from '../Theme';
-import LoadingIcon from '../../assets/loading.icon.png';
-import ErrorIcon from '../../assets/error.icon.png';
+import { ThemeContext, Colors } from '../Theme';
 
-export default function Loading({status = true, onPress}) {
-  const {Theme} = React.useContext(ThemeContext);
+export default function Loading({ status = true, onPress }) {
+  const { Theme } = React.useContext(ThemeContext);
 
   return (
     <View
@@ -22,11 +20,11 @@ export default function Loading({status = true, onPress}) {
           backgroundColor: Theme.background,
         },
       ]}>
-      <View style={{alignSelf: 'center'}}>
+      <View style={{ alignSelf: 'center' }}>
         {status ? (
           <View>
             <Image
-              source={{uri: LoadingIcon}}
+              source={require('../../assets/loading.icon.png')}
               style={{
                 width: 104,
                 height: 104,
@@ -46,13 +44,13 @@ export default function Loading({status = true, onPress}) {
             <ActivityIndicator
               size="small"
               color={Theme.text}
-              style={{alignSelf: 'center'}}
+              style={{ alignSelf: 'center' }}
             />
           </View>
         ) : (
           <View>
             <Image
-              source={{uri: ErrorIcon}}
+              source={require('../../assets/error.icon.png')}
               style={{
                 width: 80,
                 height: 80,

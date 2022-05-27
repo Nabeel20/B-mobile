@@ -1,10 +1,10 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Image} from 'react-native';
-import {ThemeContext} from '../../../Theme';
-import BookmarksIcon from '../../../../assets/bookmarkIcon.png';
+import { TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { ThemeContext } from '../../../Theme';
 
-export default function BookmarksButton({id}) {
-  const {Theme} = React.useContext(ThemeContext);
+
+export default function BookmarksButton({ id }) {
+  const { Theme } = React.useContext(ThemeContext);
   return (
     <TouchableOpacity
       style={[
@@ -15,8 +15,8 @@ export default function BookmarksButton({id}) {
       ]}
       onPress={() => console.log(id)}>
       <Image
-        source={{uri: BookmarksIcon}}
-        style={[styles.image, {tintColor: Theme.text}]}
+        source={require('../../../../assets/bookmarkIcon.png')}
+        style={[styles.image, { tintColor: Theme.text }]}
       />
     </TouchableOpacity>
   );
