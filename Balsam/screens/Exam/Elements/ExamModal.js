@@ -121,6 +121,7 @@ export default function ExamModal({
     return () => {
       animation.setValue(0);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
   return (
     <Modal animationType="slide" visible={visible}>

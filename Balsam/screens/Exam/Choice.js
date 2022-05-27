@@ -24,19 +24,7 @@ export default function Choice({
   let wrong = review && data === userInput;
   let chosen = !validation && data === selectedChoice;
   const {Theme} = React.useContext(ThemeContext);
-  const [border_color, set_border_color] = React.useState(Theme.grey.accent_1);
 
-  // React.useEffect(() => {
-  //   //  console.log({ prefix, review, data, validation, selectedChoice, userInput, correctAnswer })
-  //   let correct = review && data === correctAnswer;
-  //   let wrong = review && data === userInput;
-  //   let chosen = !validation && data === selectedChoice;
-  //   if (correct) return set_border_color(Colors.green);
-  //   if (chosen) return set_border_color(Colors.blue);
-  //   if (wrong) return set_border_color(Colors.red)
-  //   set_border_color(Theme.grey.default)
-  //   //review, data, validation, selectedChoice, userInput, correctAnswer
-  // }, [review, data, validation, selectedChoice, userInput, correctAnswer])
   return (
     <TouchableOpacity onPress={() => handlePress(data)}>
       <View
@@ -68,18 +56,18 @@ export default function Choice({
             },
           ]}>
           <Animated.Text
-            style={{
-              fontWeight: 'bold',
-              fontSize: 14,
-              textAlign: 'center',
-              color: chosen
-                ? Colors.blue
-                : correct
-                ? Colors.green
-                : wrong
-                ? Colors.red
-                : Theme.grey.accent_2,
-            }}>
+            style={[
+              styles.prefix,
+              {
+                color: chosen
+                  ? Colors.blue
+                  : correct
+                  ? Colors.green
+                  : wrong
+                  ? Colors.red
+                  : Theme.grey.accent_2,
+              },
+            ]}>
             {prefixes[prefix]}
           </Animated.Text>
         </View>
@@ -118,5 +106,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginHorizontal: 8,
     fontFamily: 'ReadexPro-Medium',
+  },
+  prefix: {
+    fontFamily: 'ReadexPro-Medium',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

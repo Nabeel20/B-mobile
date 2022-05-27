@@ -15,6 +15,7 @@ export default function ExamButton({
 }) {
   const {Theme} = React.useContext(ThemeContext);
   if (textAnimation === undefined) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     textAnimation = React.useRef(new Animated.Value(100)).current;
   }
   if (index === 0) {

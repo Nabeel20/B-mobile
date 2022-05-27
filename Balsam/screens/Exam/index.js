@@ -67,6 +67,7 @@ function Exam({route, navigation}) {
   React.useEffect(() => {
     timer.current = true;
     fetch_quiz_data(quiz_id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quiz_id]);
 
   React.useEffect(() => {
@@ -118,6 +119,7 @@ function Exam({route, navigation}) {
     update_text();
     play_explanation_animation();
     play_animation(question_animation, 400);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
 
   async function fetch_quiz_data(id) {

@@ -56,7 +56,13 @@ function App() {
             backgroundColor: color_scheme === 'dark' ? '#ffffff' : '#212121',
           },
         ]}>
-        <Image source={require('./assets/logo.png')} style={styles.logo} />
+        <Image
+          source={require('./assets/logo.png')}
+          style={[
+            styles.logo,
+            {tintColor: color_scheme === 'dark' ? '#ffffff' : '#212121'},
+          ]}
+        />
         <Text
           style={[
             styles.logoText,
