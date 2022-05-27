@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, Animated} from 'react-native';
-import {Colors, ThemeContext} from '../../Theme';
+import {Colors, defaultButtonStyle, ThemeContext} from '../../Theme';
 
 export default function ExamButton({
   isCorrect = false,
@@ -67,11 +67,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   flexContainer: {
-    borderRadius: 10,
+    ...defaultButtonStyle,
     justifyContent: 'center',
     alignContent: 'center',
     padding: 8,
     margin: 8,
-    borderBottomWidth: 2,
   },
 });

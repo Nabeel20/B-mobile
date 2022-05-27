@@ -16,6 +16,7 @@ export default function Progress({step, dir}) {
   };
   React.useEffect(() => {
     load(step);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
   return (
     <View
