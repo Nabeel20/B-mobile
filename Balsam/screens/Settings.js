@@ -313,7 +313,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'ReadexPro-Medium',
-    fontWeight: '400',
     fontSize: 16,
     padding: 8,
   },
@@ -347,7 +346,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     margin: 8,
-    textAlign: 'center',
+    alignItems: 'center',
     padding: 8,
   },
 });

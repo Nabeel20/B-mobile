@@ -8,7 +8,12 @@ const Colors = {
   blue: '#0284C7',
   blue_light: '#BFDBFE',
 };
-
+const defaultButtonStyle = {
+  borderRadius: 10,
+  borderBottomLeftRadius: 10,
+  borderBottomRightRadius: 10,
+  borderBottomWidth: 2,
+};
 function ThemeProvider({children}) {
   const [darkTheme, setTheme] = React.useState(false);
   const Theme = {
@@ -31,4 +36,4 @@ function ThemeProvider({children}) {
   );
 }
 
-export {ThemeContext, ThemeProvider, Colors};
+export {ThemeContext, ThemeProvider, Colors, defaultButtonStyle};

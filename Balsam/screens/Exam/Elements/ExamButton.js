@@ -1,6 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, Animated } from 'react-native';
-import { Colors, ThemeContext } from '../../Theme';
+import {TouchableOpacity, StyleSheet, Text, Animated} from 'react-native';
+import {Colors, ThemeContext} from '../../Theme';
 
 export default function ExamButton({
   isCorrect = false,
@@ -13,7 +13,7 @@ export default function ExamButton({
   isPrevious = false,
   main = false,
 }) {
-  const { Theme } = React.useContext(ThemeContext);
+  const {Theme} = React.useContext(ThemeContext);
   if (textAnimation === undefined) {
     textAnimation = React.useRef(new Animated.Value(100)).current;
   }
@@ -25,7 +25,7 @@ export default function ExamButton({
       return null;
     }
     return (
-      <Text style={{ color: isCorrect ? Colors.green : Colors.red }}>
+      <Text style={{color: isCorrect ? Colors.green : Colors.red}}>
         {isCorrect ? 'إجابة صحيحة' : 'إجابة خاطئة'}
       </Text>
     );

@@ -1,16 +1,24 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ThemeProvider } from './screens/Theme';
-import { Text, View, Image, ActivityIndicator, StyleSheet } from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {ThemeProvider} from './screens/Theme';
+import {
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+  StyleSheet,
+  I18nManager,
+} from 'react-native';
 import Settings from './screens/Settings';
 import Subject from './screens/Subject';
 import Exam from './screens/Exam';
 import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
-import { get_data } from './helper/api';
+import {get_data} from './helper/api';
 
 const Stack = createNativeStackNavigator();
+I18nManager.allowRTL(false);
 
 function App() {
   const home_data = React.useRef([]);
@@ -55,7 +63,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Home"
-          screenOptions={{ headerShown: false }}>
+          screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home">
             {props => <Home {...props} data={home_data.current} />}
           </Stack.Screen>

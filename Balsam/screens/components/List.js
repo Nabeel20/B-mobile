@@ -8,12 +8,12 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { ThemeContext, Colors } from '../Theme';
+import {ThemeContext, Colors} from '../Theme';
 
-function EmptyList({ onPress, theme }) {
+function EmptyList({onPress, theme}) {
   return (
     <View>
-      <Text style={[styles.list_empty_title, { color: theme.text }]}>
+      <Text style={[styles.list_empty_title, {color: theme.text}]}>
         لا نتائج لعملية البحث
       </Text>
       <TouchableOpacity
@@ -24,7 +24,7 @@ function EmptyList({ onPress, theme }) {
             backgroundColor: theme.grey.default,
           },
         ]}>
-        <Text style={[styles.list_empty_text, { color: theme.grey.accent_2 }]}>
+        <Text style={[styles.list_empty_text, {color: theme.grey.accent_2}]}>
           جرّب مرة أخرى{' '}
         </Text>
       </TouchableOpacity>
@@ -53,27 +53,27 @@ function Card({
         },
       ]}>
       <View>
-        <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
+        <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
         {onHome && has_updates ? (
           <View style={styles.update}>
-            <Text style={[styles.subTitle, { color: theme.grey.accent_2 }]}>
-              <Text style={{ color: Colors.red }}>جديد</Text> {details}
+            <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
+              <Text style={{color: Colors.red}}>جديد</Text> {details}
             </Text>
             <Image
               source={require('../../assets/starsIcon.png')}
-              style={[{ width: 18, height: 18, tintColor: Colors.red }]}
+              style={[{width: 18, height: 18, tintColor: Colors.red}]}
             />
           </View>
         ) : null}
         {show_numbers ? (
-          <Text style={[styles.subTitle, { color: theme.grey.accent_2 }]}>
+          <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
             {number} سؤال
           </Text>
         ) : null}
       </View>
       <Image
         source={require('../../assets/arrow.png')}
-        style={[styles.arrowIcon, { tintColor: theme.text }]}
+        style={[styles.arrowIcon, {tintColor: theme.text}]}
       />
     </TouchableOpacity>
   );
@@ -112,7 +112,7 @@ export default function SubjectList({
     data = output;
   }
 
-  const { Theme } = React.useContext(ThemeContext);
+  const {Theme} = React.useContext(ThemeContext);
   let _header = keywords !== 0 && data.length !== 0 && onHome;
   return (
     <Animated.View
@@ -124,7 +124,7 @@ export default function SubjectList({
         flex: 1,
       }}>
       {_header ? (
-        <Text style={[styles.list_title, { color: Theme.grey.accent_2 }]}>
+        <Text style={[styles.list_title, {color: Theme.grey.accent_2}]}>
           {keywords === '' ? 'المقررات' : 'نتائج البحث'}
         </Text>
       ) : null}
@@ -151,8 +151,8 @@ export default function SubjectList({
             onPress={() => {
               let props =
                 category === undefined
-                  ? { title, list: quizzes }
-                  : { title, subject: category, rtl, mcq, url, branch };
+                  ? {title, list: quizzes}
+                  : {title, subject: category, rtl, mcq, url, branch};
               onPress(props);
             }}
             title={title}
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'ReadexPro-Medium',
-    fontSize: 16,
+    fontSize: 14,
     padding: 4,
     textAlign: 'right',
   },
