@@ -7,10 +7,10 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import { ThemeContext, Colors } from '../Theme';
+import {ThemeContext, Colors} from '../Theme';
 
-export default function Loading({ status = true, onPress }) {
-  const { Theme } = React.useContext(ThemeContext);
+export default function Loading({status = true, onPress}) {
+  const {Theme} = React.useContext(ThemeContext);
 
   return (
     <View
@@ -20,16 +20,12 @@ export default function Loading({ status = true, onPress }) {
           backgroundColor: Theme.background,
         },
       ]}>
-      <View style={{ alignSelf: 'center' }}>
+      <View style={{alignSelf: 'center'}}>
         {status ? (
           <View>
             <Image
               source={require('../../assets/loading.icon.png')}
-              style={{
-                width: 104,
-                height: 104,
-                alignSelf: 'center',
-              }}
+              style={styles.image}
             />
             <Text
               style={[
@@ -44,18 +40,14 @@ export default function Loading({ status = true, onPress }) {
             <ActivityIndicator
               size="small"
               color={Theme.text}
-              style={{ alignSelf: 'center' }}
+              style={{alignSelf: 'center'}}
             />
           </View>
         ) : (
           <View>
             <Image
               source={require('../../assets/error.icon.png')}
-              style={{
-                width: 80,
-                height: 80,
-                alignSelf: 'center',
-              }}
+              style={styles.image}
             />
             <Text
               style={[
@@ -101,5 +93,10 @@ const styles = StyleSheet.create({
     padding: 8,
     alignItems: 'center',
     marginTop: 32,
+  },
+  image: {
+    width: 104,
+    height: 104,
+    alignSelf: 'center',
   },
 });

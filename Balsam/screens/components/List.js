@@ -61,7 +61,7 @@ function Card({
             </Text>
             <Image
               source={require('../../assets/starsIcon.png')}
-              style={[{width: 18, height: 18, tintColor: Colors.red}]}
+              style={[styles.starsIcon, {tintColor: Colors.red}]}
             />
           </View>
         ) : null}
@@ -116,13 +116,15 @@ export default function SubjectList({
   let _header = keywords !== 0 && data.length !== 0 && onHome;
   return (
     <Animated.View
-      style={{
-        opacity: animation.interpolate({
-          inputRange: [0, 100],
-          outputRange: [0, 1],
-        }),
-        flex: 1,
-      }}>
+      style={[
+        styles.main,
+        {
+          opacity: animation.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0, 1],
+          }),
+        },
+      ]}>
       {_header ? (
         <Text style={[styles.list_title, {color: Theme.grey.accent_2}]}>
           {keywords === '' ? 'المقررات' : 'نتائج البحث'}
@@ -169,6 +171,9 @@ export default function SubjectList({
   );
 }
 const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+  },
   list_title: {
     fontSize: 14,
     fontFamily: 'ReadexPro-Medium',
@@ -220,5 +225,9 @@ const styles = StyleSheet.create({
   arrowIcon: {
     width: 24,
     height: 24,
+  },
+  starsIcon: {
+    width: 18,
+    height: 18,
   },
 });
