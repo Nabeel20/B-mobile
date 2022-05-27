@@ -9,24 +9,20 @@ import {
   ScrollView,
 } from 'react-native';
 import Choice from './Choice';
-import PreviousButton from './Elements/Navigation/Previous.button';
 import Spacer from './Elements/Spacer';
-import NextButton from './Elements/Navigation/Next.button';
 import Explanation from './Elements/Explanation';
-import {ThemeContext} from '../Theme';
+import { ThemeContext } from '../Theme';
 import Loading from '../components/Loading';
 import Header from './Elements/Header';
 import ExamModal from './Elements/ExamModal';
-import {get_quiz} from '../../helper/api';
+import { get_quiz } from '../../helper/api';
+import ExamButton from './Elements/ExamButton';
 
-function Footer({children, borderColor}) {
-  return <View style={[styles.footer, {borderColor}]}>{children}</View>;
-}
-function Exam({route, navigation}) {
-  const {Theme} = React.useContext(ThemeContext);
-  const {quiz_rtl, quiz_title, quiz_subject, quiz_id, quiz_mcq} = route.params;
+function Exam({ route, navigation }) {
+  const { Theme } = React.useContext(ThemeContext);
+  const { quiz_rtl, quiz_title, quiz_subject, quiz_id, quiz_mcq } = route.params;
 
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const flatListRef = React.useRef(null);
 
   const QuizData = React.useRef([]);
@@ -49,7 +45,9 @@ function Exam({route, navigation}) {
 
   const [userChoice, setUserChoice] = React.useState('');
   const [isValid, setIsValid] = React.useState(false);
-  const [navText, setNavText] = React.useState('السؤال التالي');
+  const [navText, setNavText] = React.useState(
+    quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب',
+  );
   const [modalType, setModalType] = React.useState(false);
   const [examModal, setExamModal] = React.useState(false);
   const [time, setTime] = React.useState(0);
@@ -72,9 +70,7 @@ function Exam({route, navigation}) {
   }, [quiz_id]);
 
   React.useEffect(() => {
-    if (loading) {
-      return;
-    }
+    if (loading) { return; }
     flatListRef.current.scrollToIndex({
       index,
       viewOffset: 0,
@@ -93,40 +89,29 @@ function Exam({route, navigation}) {
           setNavText('إظهار النتيجة');
           return;
         }
-        if (skip_mode.current) {
-          setNavText('السؤال التالي');
-          return;
-        }
         setNavText('تخطي السؤال الأخير؟');
-      } else {
-        setNavText('السؤال التالي');
+        return;
       }
+      setNavText(quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب');
     }
-    function play_explanation_animation() {
-      const question_is_done = QuizData.current[index].review;
-      const has_explanation = QuizData.current[index].explanation.length > 5;
-      if (preview.current && has_explanation) {
-        return play_animation(explanation_animation, 300);
-      }
-      if (question_is_done && has_explanation) {
-        return play_animation(explanation_animation, 300);
-      }
-      explanation_animation.setValue(0);
-    }
-    function add_2skip_data() {
+
+    function update_skipped_questions() {
       const user_data = QuizData.current[index].user_answer;
       if (user_data.length === 0) {
         if (skip_data.current.map(i => i.index_id).includes(index) === false) {
           skip_data.current = [
             ...skip_data.current,
-            {index_id: index, done: false},
+            {
+              index_id: index,
+              done: false,
+            },
           ];
         }
       }
       return;
     }
 
-    add_2skip_data();
+    update_skipped_questions();
     reset_data();
     update_text();
     play_explanation_animation();
@@ -139,8 +124,20 @@ function Exam({route, navigation}) {
       return;
     }
     QuizData.current = quiz_data.data;
+    console.log(quiz_data.data);
     setLoading(false);
     play_animation(question_animation, 400);
+  }
+  function play_explanation_animation() {
+    const question_is_done = QuizData.current[index].review;
+    const has_explanation = QuizData.current[index].explanation.length > 5;
+    if (preview.current && has_explanation) {
+      return play_animation(explanation_animation, 300);
+    }
+    if (question_is_done && has_explanation) {
+      return play_animation(explanation_animation, 300);
+    }
+    explanation_animation.setValue(0);
   }
   function play_animation(animation, duration) {
     animation.setValue(0);
@@ -174,9 +171,7 @@ function Exam({route, navigation}) {
     }
     setUserChoice(c);
     setNavText('التأكد من الإجابة');
-    if (_user_data) {
-      play_animation(footer_animation, 1100);
-    }
+    if (_user_data) { play_animation(footer_animation, 1100); }
   }
   function check_correct_input() {
     const _correct_answer = QuizData.current[index].right_answer;
@@ -184,17 +179,6 @@ function Exam({route, navigation}) {
       correct_count.current += 1;
       correct.current = true;
     }
-  }
-  function update_footer_text() {
-    let _last_index = index === QuizData.current.length - 1;
-    if (
-      QuizData.current.every(question => question.review === true) ||
-      _last_index
-    ) {
-      setNavText('إظهار النتيجة');
-      return;
-    }
-    setNavText('السؤال التالي');
   }
   function validate() {
     const _question_done = QuizData.current[index].review;
@@ -208,20 +192,17 @@ function Exam({route, navigation}) {
     progress_value.current++;
     setIsValid(true);
     update_quiz_data();
-    update_footer_text();
+    setNavText('السؤال التالي');
     update_skip_data();
     check_correct_input();
+    play_explanation_animation();
     play_animation(footer_animation, 400);
   }
   function get_next_skip_index() {
-    if (skip_mode.current === false) {
-      return 0;
-    }
+    if (skip_mode.current === false) { return 0; }
     let _skip_data = skip_data.current;
     const _unsolved_data = _skip_data.filter(s => s.done === false);
-    if (_unsolved_data.length === 1) {
-      return _unsolved_data[0].index_id;
-    }
+    if (_unsolved_data.length === 1) { return _unsolved_data[0].index_id; }
     let bigger_indexes = [];
     let smaller_indexes = [];
     for (let i = 0; i < _skip_data.length; i++) {
@@ -236,9 +217,7 @@ function Exam({route, navigation}) {
     const output = [...bigger_indexes, ...smaller_indexes].filter(
       i => i.done === false,
     );
-    if (output.length === 0) {
-      return 0;
-    }
+    if (output.length === 0) { return 0; }
     return output[0].index_id;
   }
   function handle_modal() {
@@ -268,9 +247,7 @@ function Exam({route, navigation}) {
     const total = QuizData.current.length;
     let next_index = index + 1;
     let skip_index = get_next_skip_index();
-    if (next_index === total) {
-      next_index = total - 1;
-    }
+    if (next_index === total) { next_index = total - 1; }
     setIndex(skip_mode.current ? skip_index : next_index);
   }
   function handle_next() {
@@ -281,21 +258,17 @@ function Exam({route, navigation}) {
     handle_index();
   }
   function handle_previous() {
-    if (index === 0) {
-      return;
-    }
+    if (index === 0) { return; }
     const next_index = index - 1;
     direction.current = 'left';
     play_animation(number_animation, 500);
     setIndex(next_index);
   }
   function handle_next_button() {
-    if (userChoice.length !== 0 && isValid === false) {
-      return validate();
-    }
+    if (userChoice.length !== 0 && isValid === false) { return validate(); }
     handle_next();
   }
-  function Question({item}) {
+  function Question({ item }) {
     return (
       <Animated.View
         style={{
@@ -325,26 +298,28 @@ function Exam({route, navigation}) {
           {item.question}
         </Text>
         <Spacer vertical={16} />
-        {quiz_mcq ? (
-          <View style={styles.mcqContainer}>
-            {item.choices.map((choice, i) => {
-              return (
-                <Choice
-                  key={i}
-                  dir={quiz_rtl}
-                  data={choice}
-                  prefix={i}
-                  selectedChoice={userChoice}
-                  validation={isValid}
-                  review={item.review}
-                  correctAnswer={item.right_answer}
-                  userInput={item.user_answer}
-                  handlePress={handle_press}
-                />
-              );
-            })}
-          </View>
-        ) : null}
+        {
+          quiz_mcq ? (
+            <View style={styles.mcqContainer}>
+              {item.choices.map((choice, i) => {
+                return (
+                  <Choice
+                    key={i}
+                    dir={quiz_rtl}
+                    data={choice}
+                    prefix={i}
+                    selectedChoice={userChoice}
+                    validation={isValid}
+                    review={item.review}
+                    correctAnswer={item.right_answer}
+                    userInput={item.user_answer}
+                    handlePress={handle_press}
+                  />
+                );
+              })}
+            </View>
+          ) : null
+        }
         <Explanation
           rtl={quiz_rtl}
           animation={explanation_animation}
@@ -380,6 +355,16 @@ function Exam({route, navigation}) {
     timer.current = false;
     setModalType('score');
     setExamModal(true);
+  }
+  function show_answer() {
+    const is_done = QuizData.current[index].review;
+    setNavText('السؤال التالي');
+    play_animation(footer_animation, 300);
+    if (is_done) {
+      handle_next();
+    }
+    QuizData.current[index].review = true;
+    play_animation(explanation_animation, 300);
   }
 
   if (loading) {
@@ -463,21 +448,40 @@ function Exam({route, navigation}) {
           scrollEnabled={false}
           initialScrollIndex={index}
           pagingEnabled
-          style={styles.flatList}
+          contentContainerStyle={styles.flatList}
           renderItem={Question}
         />
       </ScrollView>
 
-      <Footer borderColor={Theme.grey.default}>
-        <NextButton
-          text={navText}
-          animation={footer_animation}
-          handlePress={handle_next_button}
-          correct={correct.current}
-          checked={isValid}
-        />
-        <PreviousButton index={index} onPress={handle_previous} />
-      </Footer>
+      <View
+        style={[
+          styles.footer,
+          {
+            borderColor: Theme.grey.default,
+          },
+        ]}>
+        {quiz_mcq ? (
+          <>
+            <ExamButton
+              text={navText}
+              textAnimation={footer_animation}
+              onPress={handle_next_button}
+              isCorrect={correct.current}
+              isChecked={isValid}
+              flex={3}
+              main
+            />
+            <ExamButton
+              text={`السـؤال ${'\n'} السابـق`}
+              onPress={handle_previous}
+              index={index}
+              isPrevious
+            />
+          </>
+        ) : (
+          <ExamButton text={navText} main onPress={show_answer} />
+        )}
+      </View>
     </View>
   );
 }
@@ -506,6 +510,11 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 13,
     fontFamily: 'ReadexPro-Regular',
+  },
+  interviewButtonContainer: {
+    marginTop: -4,
+    marginBottom: 4,
+    borderTopWidth: 0,
   },
   mcqContainer: {
     width: 24,
