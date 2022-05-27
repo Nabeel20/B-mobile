@@ -64,7 +64,7 @@ function App() {
               color: color_scheme === 'dark' ? '#ffffff' : '#141414',
             },
           ]}>
-          بــــلـــــــــــســــم
+          بلسم
         </Text>
         <ActivityIndicator
           size="small"

@@ -1,9 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { ThemeContext } from '../Theme';
+import {TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {defaultButtonStyle, ThemeContext} from '../Theme';
 
-export default function BackButton({ onPress, _style = {} }) {
-  const { Theme } = React.useContext(ThemeContext);
+export default function BackButton({onPress, _style = {}}) {
+  const {Theme} = React.useContext(ThemeContext);
 
   return (
     <TouchableOpacity
@@ -33,8 +33,7 @@ const styles = StyleSheet.create({
   container: {
     width: 40,
     height: 40,
-    borderRadius: 10,
-    borderBottomWidth: 2,
+    ...defaultButtonStyle,
     alignItems: 'center',
     justifyContent: 'center',
     margin: 8,
@@ -43,6 +42,6 @@ const styles = StyleSheet.create({
   image: {
     width: 24,
     height: 24,
-    transform: [{ scaleX: -1 }],
+    transform: [{scaleX: -1}],
   },
 });
