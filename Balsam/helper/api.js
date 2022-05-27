@@ -76,7 +76,7 @@ function get_categories(data) {
   return output;
 }
 async function get_data() {
-  const {data} = await fetch_data(
+  const { data } = await fetch_data(
     '1J9B9-Jbs8c4iUury3ds4ktZj7Mjn6I7gk1l6RHT5f0w',
   );
   const categories = get_categories(data);
@@ -178,9 +178,9 @@ function generate_unique_id() {
   );
 }
 function get_url(id) {
-  const base = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv`;
+  const base = `https://docs.google.com/spreadsheets/d/${id}/export?format=csv`;
   const query = encodeURIComponent('Select *');
   const url = `${base}&stq=${query}`;
   return url;
 }
-export {get_titles, get_quiz, get_data};
+export { get_titles, get_quiz, get_data };
