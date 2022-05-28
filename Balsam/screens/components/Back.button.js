@@ -12,7 +12,7 @@ export default function BackButton({onPress, _style = {}}) {
         styles.container,
         {
           backgroundColor: Theme.grey.default,
-          borderColor: Theme.grey.default,
+          borderColor: Theme.grey.accent_2,
         },
         _style,
       ]}>

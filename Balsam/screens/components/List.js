@@ -8,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {ThemeContext, Colors} from '../Theme';
+import {ThemeContext, Colors, defaultButtonStyle} from '../Theme';
 
 function EmptyList({onPress, theme}) {
   return (
@@ -49,7 +49,7 @@ function Card({
         styles.container,
         {
           backgroundColor: theme.grey.default,
-          borderColor: theme.grey.default,
+          borderColor: theme.grey.accent_2,
         },
       ]}>
       <View>
@@ -181,17 +181,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   container: {
-    borderRadius: 10,
+    ...defaultButtonStyle,
     padding: 14,
     margin: 8,
     flexDirection: 'row-reverse',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomWidth: 2,
   },
   title: {
     fontFamily: 'ReadexPro-Medium',
-    fontSize: 14,
+    fontSize: 16,
     padding: 4,
     textAlign: 'right',
   },
@@ -215,7 +214,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontFamily: 'ReadexPro-Regular',
-    fontSize: 14,
+    fontSize: 12,
     marginTop: 4,
   },
   update: {
