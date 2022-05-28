@@ -35,9 +35,9 @@ function EmptyList({onPress, theme}) {
 function Card({
   title,
   details,
-  has_updates,
+  has_updates = false,
   theme,
-  onHome,
+  onHome = false,
   number,
   onPress,
   show_numbers,

@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import List from './components/List';
-import {ThemeContext, Colors} from './Theme';
+import {ThemeContext, Colors, defaultButtonStyle} from './Theme';
 import {get_titles} from '../helper/api';
 import Loading from './components/Loading';
 
@@ -96,7 +96,7 @@ export default function Home({data, navigation}) {
           styles.settings,
           {
             backgroundColor: Theme.grey.default,
-            borderColor: Theme.grey.default,
+            borderColor: Theme.grey.accent_2,
           },
         ]}>
         <Image
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   settings: {
     width: 40,
     height: 40,
-    borderRadius: 10,
+    ...defaultButtonStyle,
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomWidth: 2,
@@ -220,9 +220,8 @@ const styles = StyleSheet.create({
   bookmark: {
     backgroundColor: Colors.blue_light,
     borderColor: Colors.blue,
-    borderBottomWidth: 2,
+    ...defaultButtonStyle,
     width: 45,
-    borderRadius: 10,
     height: 45,
     alignItems: 'center',
     justifyContent: 'center',
