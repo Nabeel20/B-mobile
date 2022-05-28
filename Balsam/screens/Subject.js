@@ -58,7 +58,7 @@ export default function Subject({route, navigation}) {
         }}
         _style={{alignSelf: 'flex-end'}}
       />
-      <View style={{height: '30%'}} />
+      <View style={{height: '20%'}} />
 
       <View style={styles.row}>
         <Text

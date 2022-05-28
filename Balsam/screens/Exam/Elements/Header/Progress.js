@@ -24,7 +24,7 @@ export default function Progress({step, dir}) {
         styles.container,
         {
           backgroundColor: Theme.grey.accent_1,
-          transform: [{scaleX: dir ? '-1' : '1'}],
+          transform: [{scaleX: dir ? -1 : 1}],
         },
       ]}>
       <Animated.View

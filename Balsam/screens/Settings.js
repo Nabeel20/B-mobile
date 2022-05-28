@@ -268,7 +268,7 @@ export default function Settings({navigation}) {
         onPress={() => navigation.goBack()}
         _style={{alignSelf: 'flex-end'}}
       />
-      <View style={{height: '35%'}} />
+      <View style={{height: '20%'}} />
       <Text
         style={[
           styles.title,

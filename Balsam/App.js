@@ -53,7 +53,7 @@ function App() {
         style={[
           styles.container,
           {
-            backgroundColor: color_scheme === 'dark' ? '#ffffff' : '#212121',
+            backgroundColor: color_scheme === 'dark' ? '#212121' : '#ffffff',
           },
         ]}>
         <Image
