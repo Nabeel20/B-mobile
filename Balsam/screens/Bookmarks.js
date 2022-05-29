@@ -10,10 +10,9 @@ import {
   Image,
 } from 'react-native';
 import BackButton from './components/Back.button';
-import { Colors, ThemeContext } from './Theme';
+import {Colors, ThemeContext} from './Theme';
 
-
-function Question({ data, onPress, theme }) {
+function Question({data, onPress, theme}) {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -25,40 +24,46 @@ function Question({ data, onPress, theme }) {
         },
       ]}>
       <View style={styles.subjectContainer}>
-        <Image source={require('../assets/book.icon.png')} style={styles.image} />
+        <Image
+          source={require('../assets/book.icon.png')}
+          style={styles.image}
+        />
         <Text style={styles.subject}>{data.subject}</Text>
       </View>
-      <Text style={[styles.text, { color: theme.text }]}>{data.question}</Text>
+      <Text style={[styles.text, {color: theme.text}]}>{data.question}</Text>
     </TouchableOpacity>
   );
 }
-function EmptyList({ Theme }) {
+function EmptyList({Theme}) {
   return (
     <View style={styles.emptyListContainer}>
-      <Image source={require('../assets/empty.icon.png')} style={styles.emptyImage} />
-      <Text style={[styles.text, { color: Theme.text }]}>
+      <Image
+        source={require('../assets/empty.icon.png')}
+        style={styles.emptyImage}
+      />
+      <Text style={[styles.text, {color: Theme.text}]}>
         لم تحفظ أي من الأسئلة
       </Text>
     </View>
   );
 }
 
-export default function Bookmarks({ navigation, route, data }) {
+export default function Bookmarks({navigation, route, data}) {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [dataIndex, setDataIndex] = React.useState(0);
-  const { Theme } = React.useContext(ThemeContext);
+  const {Theme} = React.useContext(ThemeContext);
   function open_question_modal(i) {
     setDataIndex(i);
     setModalVisible(true);
     return;
   }
-  const { subject } = route.params;
+  const {subject} = route.params;
   if (subject !== '') {
     data = data.filter(item => item.subject === subject);
     console.log(data);
   }
   return (
-    <View style={[styles.container, { backgroundColor: Theme.background }]}>
+    <View style={[styles.container, {backgroundColor: Theme.background}]}>
       <Modal
         animationType="slide"
         visible={modalVisible}
@@ -66,21 +71,18 @@ export default function Bookmarks({ navigation, route, data }) {
           setModalVisible(!modalVisible);
         }}>
         {data.length !== 0 ? (
-          <View style={[styles.container, { backgroundColor: Theme.background }]}>
+          <View style={[styles.container, {backgroundColor: Theme.background}]}>
             <View style={styles.header}>
-              <BackButton
-                onPress={() => setModalVisible(false)}
-                _style={{ alignSelf: 'flex-end' }}
-              />
+              <BackButton onPress={() => setModalVisible(false)} />
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
                 style={styles.deleteButton}>
-                <Text style={[styles.helperText, { color: Theme.text }]}>
+                <Text style={[styles.helperText, {color: Theme.text}]}>
                   إزالة من المحفوظات
                 </Text>
               </TouchableOpacity>
             </View>
-            <View style={{ height: '25%' }} />
+            <View style={{height: '25%'}} />
             <View style={styles.questionContainer}>
               <Image
                 source={require('../assets/info.icon.png')}
@@ -94,7 +96,7 @@ export default function Bookmarks({ navigation, route, data }) {
               <Text
                 style={[
                   styles.question,
-                  { color: Theme.text, marginBottom: 32 },
+                  {color: Theme.text, marginBottom: 32},
                 ]}>
                 {data[dataIndex].question}
               </Text>
@@ -102,18 +104,18 @@ export default function Bookmarks({ navigation, route, data }) {
 
             <ScrollView contentContainerStyle={styles.modalScroll}>
               <View
-                style={[styles.card, { backgroundColor: Colors.green_light }]}>
-                <Text style={[styles.text, { color: Colors.green }]}>
+                style={[styles.card, {backgroundColor: Colors.green_light}]}>
+                <Text style={[styles.text, {color: Colors.green}]}>
                   الإجابة الصحيحة
                 </Text>
-                <Text style={[styles.text, { color: Theme.text }]}>
+                <Text style={[styles.text, {color: Theme.text}]}>
                   {data[dataIndex].right_answer}
                 </Text>
               </View>
 
               <View
-                style={[styles.card, { backgroundColor: Theme.grey.default }]}>
-                <Text style={[styles.text, { color: Theme.grey.accent_2 }]}>
+                style={[styles.card, {backgroundColor: Theme.grey.default}]}>
+                <Text style={[styles.text, {color: Theme.grey.accent_2}]}>
                   باقي الخيارات
                 </Text>
                 {data[dataIndex].choices
@@ -122,7 +124,7 @@ export default function Bookmarks({ navigation, route, data }) {
                     return (
                       <Text
                         key={index}
-                        style={[styles.text, { color: Theme.text }]}>
+                        style={[styles.text, {color: Theme.text}]}>
                         • {choice}
                       </Text>
                     );
@@ -130,8 +132,8 @@ export default function Bookmarks({ navigation, route, data }) {
               </View>
               {data[dataIndex].explanation.length > 3 ? (
                 <View
-                  style={[styles.card, { backgroundColor: Theme.grey.default }]}>
-                  <Text style={[styles.text, { color: Theme.grey.accent_2 }]}>
+                  style={[styles.card, {backgroundColor: Theme.grey.default}]}>
+                  <Text style={[styles.text, {color: Theme.grey.accent_2}]}>
                     شرح السؤال
                   </Text>
                   <Text style={styles.text}>{data[dataIndex].explanation}</Text>
@@ -142,15 +144,12 @@ export default function Bookmarks({ navigation, route, data }) {
         ) : null}
       </Modal>
 
-      <BackButton
-        onPress={() => navigation.goBack()}
-        _style={{ alignSelf: 'flex-end' }}
-      />
-      <View style={{ height: '39%' }} />
+      <BackButton onPress={() => navigation.goBack()} />
+      <View style={{height: '39%'}} />
 
-      <Text style={[styles.title, { color: Theme.text }]}>
+      <Text style={[styles.title, {color: Theme.text}]}>
         {`المحفوظات${subject !== '' ? ': ' + subject : ''}`}
-        <Text style={[styles.helperText, { color: Theme.grey.accent_2 }]}>
+        <Text style={[styles.helperText, {color: Theme.grey.accent_2}]}>
           {'\n'}الأسئلة التي حفظتها
         </Text>
       </Text>
@@ -158,7 +157,7 @@ export default function Bookmarks({ navigation, route, data }) {
         data={data}
         ListEmptyComponent={() => <EmptyList Theme={Theme} />}
         keyExtractor={item => item.id}
-        renderItem={({ item, index }) => (
+        renderItem={({item, index}) => (
           <Question
             data={item}
             theme={Theme}

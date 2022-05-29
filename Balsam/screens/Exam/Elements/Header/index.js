@@ -24,7 +24,7 @@ export default function Header({timer, details, onNavigation, onClose}) {
   return (
     <>
       <View style={styles.headerContainer}>
-        <BackButton onPress={onNavigation} _style={{marginLeft: 8}} />
+        <BackButton onPress={onNavigation} />
         <View
           style={[styles.header, {flexDirection: rtl ? 'row-reverse' : 'row'}]}>
           {exit_point ? (

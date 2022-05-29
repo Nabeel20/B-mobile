@@ -165,10 +165,7 @@ export default function Settings({navigation}) {
             },
           ]}
           behavior="height">
-          <BackButton
-            onPress={() => navigation.goBack()}
-            _style={{alignSelf: 'flex-end'}}
-          />
+          <BackButton onPress={() => navigation.goBack()} />
           <View>
             <Text
               style={[
@@ -264,10 +261,7 @@ export default function Settings({navigation}) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-      <BackButton
-        onPress={() => navigation.goBack()}
-        _style={{alignSelf: 'flex-end'}}
-      />
+      <BackButton onPress={() => navigation.goBack()} />
       <View style={{height: '20%'}} />
       <Text
         style={[

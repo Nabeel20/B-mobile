@@ -1,8 +1,8 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Image} from 'react-native';
-import {defaultButtonStyle, ThemeContext} from '../Theme';
+import {ThemeContext} from '../Theme';
 
-export default function BackButton({onPress, _style = {}}) {
+export default function BackButton({onPress}) {
   const {Theme} = React.useContext(ThemeContext);
 
   return (
@@ -12,9 +12,7 @@ export default function BackButton({onPress, _style = {}}) {
         styles.container,
         {
           backgroundColor: Theme.grey.default,
-          borderColor: Theme.grey.accent_2,
         },
-        _style,
       ]}>
       <Image
         source={require('../../assets/arrow.png')}
@@ -33,11 +31,12 @@ const styles = StyleSheet.create({
   container: {
     width: 40,
     height: 40,
-    ...defaultButtonStyle,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
     margin: 8,
     padding: 8,
+    alignSelf: 'flex-end',
   },
   image: {
     width: 24,
