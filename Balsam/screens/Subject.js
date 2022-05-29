@@ -52,24 +52,9 @@ export default function Subject({route, navigation}) {
           backgroundColor: Theme.background,
         },
       ]}>
-      <BackButton
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
       <View style={{height: '20%'}} />
 
       <View style={styles.row}>
-        <Text
-          style={[
-            styles.title,
-            {
-              color: Theme.text,
-            },
-          ]}>
-          {title}
-        </Text>
-
         <TouchableOpacity
           style={styles.bookmarkButton}
           onPress={() =>
@@ -81,8 +66,21 @@ export default function Subject({route, navigation}) {
             style={styles.image}
           />
         </TouchableOpacity>
+        <BackButton
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
       </View>
-
+      <Text
+        style={[
+          styles.title,
+          {
+            color: Theme.text,
+          },
+        ]}>
+        {title}
+      </Text>
       <List
         animation={_animation}
         onHome={false}
@@ -118,24 +116,25 @@ const styles = StyleSheet.create({
   },
   bookmark: {
     fontFamily: 'ReadexPro-Regular',
-    fontSize: 12,
+    fontSize: 14,
     color: Colors.blue,
   },
   bookmarkButton: {
     padding: 8,
     borderRadius: 8,
+    margin: 8,
     alignSelf: 'flex-end',
-    marginBottom: 16,
     backgroundColor: Colors.blue_light,
     flexDirection: 'row',
   },
   row: {
-    marginBottom: 32,
-    marginRight: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   image: {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     tintColor: Colors.blue,
     marginLeft: 4,
   },
