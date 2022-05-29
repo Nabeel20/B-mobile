@@ -42,9 +42,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
     fontSize: 14,
-    fontWeight: '400',
     textAlign: 'right',
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Regular',
   },
 });
 export default SearchBar;

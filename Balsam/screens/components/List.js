@@ -8,7 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {ThemeContext, Colors, defaultButtonStyle} from '../Theme';
+import {ThemeContext, Colors} from '../Theme';
 
 function EmptyList({onPress, theme}) {
   return (
@@ -49,7 +49,6 @@ function Card({
         styles.container,
         {
           backgroundColor: theme.grey.default,
-          borderColor: theme.grey.accent_2,
         },
       ]}>
       <View>
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   container: {
-    ...defaultButtonStyle,
+    borderRadius: 10,
     padding: 14,
     margin: 8,
     flexDirection: 'row-reverse',

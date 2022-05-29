@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    fontFamily: 'readex pro',
+    fontFamily: 'ReadexPro-Bold',
     fontSize: 20,
     fontWeight: '500',
     alignSelf: 'flex-end',

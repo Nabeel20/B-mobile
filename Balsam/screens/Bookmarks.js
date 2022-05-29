@@ -20,7 +20,6 @@ function Question({data, onPress, theme}) {
         styles.listContentContainer,
         {
           backgroundColor: theme.grey.default,
-          borderColor: theme.grey.default,
         },
       ]}>
       <View style={styles.subjectContainer}>
@@ -184,7 +183,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 16,
     margin: 8,
-    borderBottomWidth: 2,
   },
   helperText: {
     fontFamily: 'ReadexPro-Regular',
@@ -240,11 +238,9 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     backgroundColor: Colors.red_light,
-    borderColor: Colors.red_light,
     height: 40,
     borderRadius: 8,
     padding: 8,
-    borderBottomWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },

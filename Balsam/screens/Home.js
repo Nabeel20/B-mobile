@@ -87,7 +87,6 @@ export default function Home({data, navigation}) {
           styles.settings,
           {
             backgroundColor: Theme.grey.default,
-            borderColor: Theme.grey.accent_2,
           },
         ]}>
         <Image
@@ -157,10 +156,9 @@ const styles = StyleSheet.create({
   settings: {
     width: 40,
     height: 40,
-    ...defaultButtonStyle,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomWidth: 2,
   },
   title: {
     fontSize: 20,

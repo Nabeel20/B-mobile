@@ -1,6 +1,6 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, Animated} from 'react-native';
-import {Colors, defaultButtonStyle, ThemeContext} from '../../Theme';
+import {Colors, ThemeContext} from '../../Theme';
 
 export default function ExamButton({
   isCorrect = false,
@@ -38,7 +38,6 @@ export default function ExamButton({
         styles.flexContainer,
         {
           backgroundColor: Theme.grey.default,
-          borderColor: Theme.grey.default,
           flex,
           marginLeft: isPrevious ? 4 : 8,
         },
@@ -48,7 +47,7 @@ export default function ExamButton({
           styles.text,
           {
             color: Theme.text,
-            fontWeight: main ? '600' : '400',
+            fontFamily: main ? 'ReadexPro-Medium' : 'ReadexPro-Regular',
             opacity: textAnimation.interpolate({
               inputRange: [0, 100],
               outputRange: [0, 1],
@@ -63,11 +62,10 @@ export default function ExamButton({
 const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
-    fontFamily: 'Readex Pro',
     fontSize: 16,
   },
   flexContainer: {
-    ...defaultButtonStyle,
+    borderRadius: 10,
     justifyContent: 'center',
     alignContent: 'center',
     padding: 8,
