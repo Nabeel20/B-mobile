@@ -56,7 +56,6 @@ export default function Subject({route, navigation}) {
         onPress={() => {
           navigation.goBack();
         }}
-        _style={{alignSelf: 'flex-end'}}
       />
       <View style={{height: '20%'}} />
 

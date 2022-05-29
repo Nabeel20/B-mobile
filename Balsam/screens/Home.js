@@ -218,13 +218,13 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   bookmark: {
-    backgroundColor: Colors.blue_light,
-    borderColor: Colors.blue,
-    ...defaultButtonStyle,
-    width: 45,
-    height: 45,
+    width: 50,
+    height: 50,
+    marginLeft: 16,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.blue_light,
   },
   clearButtonText: {
     fontFamily: 'ReadexPro-Medium',
