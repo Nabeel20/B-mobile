@@ -126,15 +126,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'flex-end',
     marginBottom: 16,
-    marginRight: 8,
     backgroundColor: Colors.blue_light,
     flexDirection: 'row',
   },
   row: {
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
-    alignItems: 'baseline',
-    marginBottom: 16,
+    marginBottom: 32,
+    marginRight: 8,
   },
   image: {
     width: 18,

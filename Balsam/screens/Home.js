@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   bookmarkIcon: {
-    width: 30,
-    height: 30,
+    width: 32,
+    height: 32,
   },
 });
