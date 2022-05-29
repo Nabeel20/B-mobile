@@ -3,8 +3,6 @@ import {
   View,
   StyleSheet,
   Text,
-  TextInput,
-  Pressable,
   Animated,
   Image,
   KeyboardAvoidingView,
@@ -14,6 +12,7 @@ import List from './components/List';
 import {ThemeContext, Colors, defaultButtonStyle} from './Theme';
 import {get_titles} from '../helper/api';
 import Loading from './components/Loading';
+import SearchBar from './components/SearchBar';
 
 function Title({color}) {
   const _Date = new Date();
@@ -26,16 +25,6 @@ function Title({color}) {
     greet = 'مساء الخير،';
   }
   return <Text style={[styles.title, {color}]}>{greet} نبيل</Text>;
-}
-function ClearButton({onPress, keywords, color}) {
-  if (keywords.length === 0) {
-    return null;
-  }
-  return (
-    <Pressable onPress={() => onPress()} style={styles.clearButtonContainer}>
-      <Text style={[styles.clearButtonText, {color}]}>مسح</Text>
-    </Pressable>
-  );
 }
 
 export default function Home({data, navigation}) {
@@ -55,6 +44,7 @@ export default function Home({data, navigation}) {
       duration: 450,
       useNativeDriver: false,
     }).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [played_once.current]);
 
   React.useEffect(() => {
@@ -66,6 +56,7 @@ export default function Home({data, navigation}) {
         useNativeDriver: false,
       }).start();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInput, played_once.current]);
 
   function clear_text_input() {
@@ -112,27 +103,9 @@ export default function Home({data, navigation}) {
       <View style={{height: '20%'}} />
       <Title color={Theme.text} />
       <View style={styles.searchContainer}>
-        <ClearButton
-          keywords={userInput}
-          onPress={clear_text_input}
-          color={Theme.grey.accent_2}
-        />
-        <TextInput
-          ref={textInput_ref}
-          style={[
-            styles.searchBar,
-            {
-              backgroundColor: Theme.grey.default,
-              color: Theme.grey.accent_2,
-              borderColor: Theme.grey.accent_1,
-            },
-          ]}
-          maxLength={40}
-          placeholder="...البحث في الملفات"
-          placeholderTextColor={Theme.grey.accent_2}
-          onChangeText={text => {
-            handle_user_input(text);
-          }}
+        <SearchBar
+          autoFocus={false}
+          onFocus={() => navigation.push('Search')}
         />
         <TouchableOpacity
           style={styles.bookmark}
