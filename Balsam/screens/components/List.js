@@ -51,7 +51,7 @@ function Card({
           backgroundColor: theme.grey.default,
         },
       ]}>
-      <View>
+      <View style={styles.list_texts}>
         <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
         {onHome && has_updates ? (
           <View style={styles.update}>
@@ -227,5 +227,8 @@ const styles = StyleSheet.create({
   starsIcon: {
     width: 18,
     height: 18,
+  },
+  list_texts: {
+    alignItems: 'flex-end',
   },
 });

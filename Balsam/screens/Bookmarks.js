@@ -144,7 +144,7 @@ export default function Bookmarks({navigation, route, data}) {
       </Modal>
 
       <BackButton onPress={() => navigation.goBack()} />
-      <View style={{height: '39%'}} />
+      <View style={{height: '20%'}} />
 
       <Text style={[styles.title, {color: Theme.text}]}>
         {`المحفوظات${subject !== '' ? ': ' + subject : ''}`}
