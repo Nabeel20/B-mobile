@@ -128,7 +128,6 @@ function Exam({route, navigation}) {
       return;
     }
     QuizData.current = quiz_data.data;
-    console.log(quiz_data.data);
     setLoading(false);
     play_animation(question_animation, 400);
   }
