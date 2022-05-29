@@ -17,6 +17,7 @@ import Exam from './screens/Exam';
 import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
 import {get_data} from './helper/api';
+import Search from './screens/Search';
 
 const Stack = createNativeStackNavigator();
 I18nManager.allowRTL(false);
@@ -93,6 +94,7 @@ function App() {
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen name="Subject" component={Subject} />
           <Stack.Screen name="Exam" component={Exam} />
+          <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Bookmarks">
             {props => <Bookmarks {...props} data={bookmarks_data.current} />}
           </Stack.Screen>
