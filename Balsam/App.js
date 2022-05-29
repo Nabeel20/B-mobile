@@ -87,6 +87,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Home"
+          animation="fade_from_bottom"
           screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home">
             {props => <Home {...props} data={home_data.current} />}
