@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import List from './components/List';
-import {ThemeContext, Colors, defaultButtonStyle} from './Theme';
+import {ThemeContext, Colors} from './Theme';
 import {get_titles} from '../helper/api';
 import Loading from './components/Loading';
 import SearchBar from './components/SearchBar';
@@ -29,13 +29,9 @@ function Title({color}) {
 
 export default function Home({data, navigation}) {
   const header_animation = React.useRef(new Animated.Value(100)).current;
-  const textInput_ref = React.useRef(null);
-  const played_once = React.useRef(false);
-
   const {Theme} = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
   const _status = React.useRef(true);
-  const [userInput, setInput] = React.useState('');
 
   React.useEffect(() => {
     header_animation.setValue(0);
@@ -45,32 +41,7 @@ export default function Home({data, navigation}) {
       useNativeDriver: false,
     }).start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [played_once.current]);
-
-  React.useEffect(() => {
-    if (userInput.length === 0 && played_once.current) {
-      header_animation.setValue(0);
-      Animated.timing(header_animation, {
-        toValue: 100,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userInput, played_once.current]);
-
-  function clear_text_input() {
-    textInput_ref.current.clear();
-    setInput('');
-    played_once.current = false;
-    textInput_ref.current.focus();
-  }
-  function handle_user_input(text) {
-    if (played_once.current === false) {
-      played_once.current = true;
-    }
-    setInput(text);
-  }
+  }, []);
 
   if (loading) {
     return (
@@ -120,7 +91,6 @@ export default function Home({data, navigation}) {
 
       <List
         animation={header_animation}
-        keywords={userInput}
         data={data}
         onPress={category => {
           if (category.rtl !== undefined) {
@@ -142,7 +112,6 @@ export default function Home({data, navigation}) {
             list: category.list,
           });
         }}
-        onClear={clear_text_input}
       />
     </KeyboardAvoidingView>
   );

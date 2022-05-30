@@ -10,25 +10,11 @@ import {
 } from 'react-native';
 import {ThemeContext, Colors} from '../Theme';
 
-function EmptyList({onPress, theme}) {
+function EmptyList({theme}) {
   return (
-    <View>
-      <Text style={[styles.list_empty_title, {color: theme.text}]}>
-        لا نتائج لعملية البحث
-      </Text>
-      <TouchableOpacity
-        onPress={onPress}
-        style={[
-          styles.list_empty_button,
-          {
-            backgroundColor: theme.grey.default,
-          },
-        ]}>
-        <Text style={[styles.list_empty_text, {color: theme.grey.accent_2}]}>
-          جرّب مرة أخرى{' '}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <Text style={[styles.list_empty_title, {color: theme.text}]}>
+      جار التحميل
+    </Text>
   );
 }
 
@@ -37,7 +23,6 @@ function Card({
   details,
   has_updates = false,
   theme,
-  onHome = false,
   number,
   onPress,
   show_numbers,
@@ -53,7 +38,7 @@ function Card({
       ]}>
       <View style={styles.list_texts}>
         <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
-        {onHome && has_updates ? (
+        {has_updates ? (
           <View style={styles.update}>
             <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
               <Text style={{color: Colors.red}}>جديد</Text> {details}
@@ -78,41 +63,9 @@ function Card({
   );
 }
 
-export default function SubjectList({
-  data,
-  keywords,
-  onPress,
-  onClear,
-  animation,
-  onHome = true,
-}) {
-  if (keywords === undefined) {
-    keywords = '';
-  }
-  if (keywords !== '') {
-    let output = [];
-    for (let index = 0; index < data.length; index++) {
-      const _category = data[index];
-      const _title = _category.title;
-      const _quizzes = _category.quizzes;
-      if (_title.includes(keywords)) {
-        output.push(_category);
-      }
-      for (let i = 0; i < _quizzes.length; i++) {
-        let previous_output = output.map(e => e.title);
-        if (
-          _quizzes[i].title.includes(keywords) &&
-          previous_output.includes(_quizzes[i].title) === false
-        ) {
-          output.push(_quizzes[i]);
-        }
-      }
-    }
-    data = output;
-  }
-
+export default function SubjectList({data, onPress, animation}) {
   const {Theme} = React.useContext(ThemeContext);
-  let _header = keywords !== 0 && data.length !== 0 && onHome;
+
   return (
     <Animated.View
       style={[
@@ -124,15 +77,9 @@ export default function SubjectList({
           }),
         },
       ]}>
-      {_header ? (
-        <Text style={[styles.list_title, {color: Theme.grey.accent_2}]}>
-          {keywords === '' ? 'المقررات' : 'نتائج البحث'}
-        </Text>
-      ) : null}
-
       <FlatList
         data={data}
-        ListEmptyComponent={<EmptyList onPress={onClear} theme={Theme} />}
+        ListEmptyComponent={<EmptyList theme={Theme} />}
         keyExtractor={item => item.id}
         renderItem={({
           item: {
@@ -159,7 +106,6 @@ export default function SubjectList({
             title={title}
             details={details}
             has_updates={has_updates}
-            onHome={onHome}
             number={number}
             theme={Theme}
             show_numbers={category !== undefined}
@@ -172,12 +118,6 @@ export default function SubjectList({
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-  },
-  list_title: {
-    fontSize: 14,
-    fontFamily: 'ReadexPro-Medium',
-    marginRight: -4,
-    marginBottom: 8,
   },
   container: {
     borderRadius: 10,
