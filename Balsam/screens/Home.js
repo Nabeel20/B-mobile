@@ -92,6 +92,7 @@ export default function Home({data, navigation}) {
       <List
         animation={header_animation}
         data={data}
+        finishedIDs={[]}
         onPress={category => {
           if (category.rtl !== undefined) {
             if (category.branch) {

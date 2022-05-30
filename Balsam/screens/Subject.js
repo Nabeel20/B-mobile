@@ -18,7 +18,7 @@ export default function Subject({route, navigation}) {
   const {Theme} = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
   const _status = React.useRef(true);
-  const {title, list} = route.params;
+  const {title, list, finishedIDs} = route.params;
 
   async function handle_data(id) {
     let _subjects = await get_titles(id);
@@ -83,8 +83,8 @@ export default function Subject({route, navigation}) {
       </Text>
       <List
         animation={_animation}
-        onHome={false}
         data={list}
+        finishedIDs={finishedIDs}
         onPress={data => {
           if (data.branch) {
             setLoading(true);

@@ -12,7 +12,7 @@ export default function BookmarksButton({id}) {
           backgroundColor: Theme.grey.default,
         },
       ]}
-      onPress={() => console.log(id)}>
+      onPress={() => null}>
       <Image
         source={require('../../../../assets/bookmarkIcon.png')}
         style={[styles.image, {tintColor: Theme.text}]}

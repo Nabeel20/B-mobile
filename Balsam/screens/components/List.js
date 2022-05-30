@@ -17,7 +17,16 @@ function EmptyList({theme}) {
     </Text>
   );
 }
+function Icon({type, color}) {
+  const icons = {
+    stars: require('../../assets/stars.icon.png'),
+    recommend: require('../../assets/recommended.icon.png'),
+  };
 
+  return (
+    <Image source={icons[type]} style={[styles.icon, {tintColor: color}]} />
+  );
+}
 function Card({
   title,
   details,
@@ -26,6 +35,8 @@ function Card({
   number,
   onPress,
   show_numbers,
+  editorChoice = false,
+  done = false,
 }) {
   return (
     <TouchableOpacity
@@ -37,35 +48,53 @@ function Card({
         },
       ]}>
       <View style={styles.list_texts}>
-        <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
-        {has_updates ? (
-          <View style={styles.update}>
-            <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
-              <Text style={{color: Colors.red}}>جديد</Text> {details}
-            </Text>
+        <View style={styles.title_container}>
+          {done ? (
             <Image
-              source={require('../../assets/starsIcon.png')}
-              style={[styles.starsIcon, {tintColor: Colors.red}]}
+              source={require('../../assets/check.icon.png')}
+              style={[styles.done_icon, {tintColor: theme.text}]}
             />
+          ) : null}
+          <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
+        </View>
+        {[has_updates, editorChoice, show_numbers].every(
+          condition => condition === false,
+        ) ? null : (
+          <View style={styles.icons_container}>
+            {has_updates ? (
+              <View style={styles.update}>
+                <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
+                  <Text style={{color: Colors.red}}>جديد</Text> {details}
+                </Text>
+                <Icon type="stars" color={Colors.red} />
+              </View>
+            ) : null}
+            {show_numbers ? (
+              <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
+                {number} سؤال
+              </Text>
+            ) : null}
+            {editorChoice ? (
+              <View style={styles.recommend_container}>
+                <Text style={[styles.subTitle, {color: Colors.green}]}>
+                  نصيحة
+                </Text>
+                <Icon icon="recommended" color={Colors.green} />
+              </View>
+            ) : null}
           </View>
-        ) : null}
-        {show_numbers ? (
-          <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
-            {number} سؤال
-          </Text>
-        ) : null}
+        )}
       </View>
       <Image
-        source={require('../../assets/arrow.png')}
+        source={require('../../assets/arrow.icon.png')}
         style={[styles.arrowIcon, {tintColor: theme.text}]}
       />
     </TouchableOpacity>
   );
 }
 
-export default function SubjectList({data, onPress, animation}) {
+export default function List({data, onPress, animation, finishedIDs = []}) {
   const {Theme} = React.useContext(ThemeContext);
-
   return (
     <Animated.View
       style={[
@@ -93,6 +122,8 @@ export default function SubjectList({data, onPress, animation}) {
             branch,
             url,
             number,
+            id,
+            editor_choice = false,
           },
         }) => (
           <Card
@@ -108,6 +139,8 @@ export default function SubjectList({data, onPress, animation}) {
             has_updates={has_updates}
             number={number}
             theme={Theme}
+            done={finishedIDs.includes(id)}
+            editorChoice={editor_choice}
             show_numbers={category !== undefined}
           />
         )}
@@ -154,7 +187,6 @@ const styles = StyleSheet.create({
   subTitle: {
     fontFamily: 'ReadexPro-Regular',
     fontSize: 12,
-    marginTop: 4,
   },
   update: {
     flexDirection: 'row',
@@ -164,11 +196,31 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  starsIcon: {
+  icon: {
     width: 18,
     height: 18,
+    marginLeft: 4,
   },
   list_texts: {
     alignItems: 'flex-end',
+  },
+  icons_container: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    padding: 4,
+    marginTop: 4,
+  },
+  recommend_container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  title_container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  done_icon: {
+    width: 20,
+    height: 20,
   },
 });

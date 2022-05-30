@@ -15,7 +15,7 @@ export default function BackButton({onPress}) {
         },
       ]}>
       <Image
-        source={require('../../assets/arrow.png')}
+        source={require('../../assets/arrow.icon.png')}
         style={[
           styles.image,
           {

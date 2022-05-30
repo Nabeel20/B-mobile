@@ -59,7 +59,6 @@ export default function Bookmarks({navigation, route, data}) {
   const {subject} = route.params;
   if (subject !== '') {
     data = data.filter(item => item.subject === subject);
-    console.log(data);
   }
   return (
     <View style={[styles.container, {backgroundColor: Theme.background}]}>

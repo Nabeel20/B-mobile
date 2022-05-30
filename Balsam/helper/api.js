@@ -32,7 +32,6 @@ async function fetch_data(id) {
       data: data,
     };
   } catch (err) {
-    console.log(err);
     return {
       status: false,
       error_message: 'Failed. ',
@@ -45,7 +44,7 @@ function get_subjects_json(data) {
   data = data.split('\n');
   let output = [];
   for (let index = 1; index < data.length; index++) {
-    const [title, category, rtl, mcq, branch, url, id, number] =
+    const [title, category, rtl, mcq, branch, url, id, number, recommend] =
       data[index].split(',');
     output.push({
       title: title.replace(/"/g, ''),
@@ -56,6 +55,7 @@ function get_subjects_json(data) {
       url: url.replace(/"/g, ''),
       id: id.replace(/"/g, ''),
       number: number.replace(/"/g, ''),
+      recommend: recommend.replace(/"/g, '') === 'TRUE' ? true : false,
     });
   }
   return output;
@@ -76,7 +76,7 @@ function get_categories(data) {
   return output;
 }
 async function get_data() {
-  const { data } = await fetch_data(
+  const {data} = await fetch_data(
     '1J9B9-Jbs8c4iUury3ds4ktZj7Mjn6I7gk1l6RHT5f0w',
   );
   const categories = get_categories(data);
@@ -183,4 +183,4 @@ function get_url(id) {
   const url = `${base}&stq=${query}`;
   return url;
 }
-export { get_titles, get_quiz, get_data };
+export {get_titles, get_quiz, get_data};
