@@ -18,20 +18,23 @@ export default function Subject({route, navigation}) {
   const {Theme} = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
   const _status = React.useRef(true);
-  const {title, list, finishedIDs} = route.params;
-
-  async function handle_data(id) {
-    let _subjects = await get_titles(id);
-    if (_subjects.status === false) {
-      _status.current = false;
+  const {title, list, finishedIDs, url} = route.params;
+  const [listData, setListData] = React.useState(list);
+  React.useEffect(() => {
+    if (url === undefined) {
       return;
     }
-    navigation.push('Subject', {
-      title: `${title}: ${_subjects.data[0].category}`,
-      list: _subjects.data,
-    });
-    setLoading(false);
-  }
+    async function handle_data(id) {
+      let _subjects = await get_titles(id);
+      if (_subjects.status === false) {
+        _status.current = false;
+        return;
+      }
+      setListData(_subjects.data);
+    }
+    handle_data();
+  }, [url]);
+
   function get_subject() {
     if (title.includes(':')) {
       const subject = title.split(':');
@@ -52,8 +55,6 @@ export default function Subject({route, navigation}) {
           backgroundColor: Theme.background,
         },
       ]}>
-      <View style={{height: '20%'}} />
-
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.bookmarkButton}
@@ -72,6 +73,7 @@ export default function Subject({route, navigation}) {
           }}
         />
       </View>
+      <View style={{height: '20%'}} />
       <Text
         style={[
           styles.title,
@@ -83,12 +85,15 @@ export default function Subject({route, navigation}) {
       </Text>
       <List
         animation={_animation}
-        data={list}
+        data={listData}
         finishedIDs={finishedIDs}
         onPress={data => {
           if (data.branch) {
-            setLoading(true);
-            handle_data(data.url);
+            navigation.push('Subject', {
+              title: `${data.subject}: ${data.title}`,
+              list: [],
+              url: data.url,
+            });
             return;
           }
           navigation.navigate('Exam', {
@@ -113,6 +118,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ReadexPro-Bold',
     fontSize: 21,
     marginRight: 8,
+    marginBottom: 16,
   },
   bookmark: {
     fontFamily: 'ReadexPro-Regular',

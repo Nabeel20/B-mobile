@@ -7,14 +7,18 @@ import {
   Animated,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {ThemeContext, Colors} from '../Theme';
 
 function EmptyList({theme}) {
   return (
-    <Text style={[styles.list_empty_title, {color: theme.text}]}>
-      جار التحميل
-    </Text>
+    <View>
+      <Text style={[styles.list_empty_title, {color: theme.text}]}>
+        جار التحميل
+      </Text>
+      <ActivityIndicator size="small" color={theme.text} />
+    </View>
   );
 }
 function Icon({type, color}) {
@@ -208,7 +212,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center',
     padding: 4,
-    marginTop: 4,
   },
   recommend_container: {
     flexDirection: 'row',

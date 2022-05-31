@@ -21,7 +21,6 @@ function SearchBar({onText, onFocus, autoFocus = true}) {
           backgroundColor: Theme.grey.default,
           color: Theme.grey.accent_2,
           borderColor: Theme.grey.accent_1,
-          transform: [],
         },
       ]}
       maxLength={40}

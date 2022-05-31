@@ -13,14 +13,43 @@ import {
 } from 'react-native';
 import Settings from './screens/Settings';
 import Subject from './screens/Subject';
-import Exam from './screens/Exam';
+//import Exam from './screens/Exam';
 import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
 import {get_data} from './helper/api';
 import Search from './screens/Search';
+import BackButton from './screens/components/Back.button';
 
 const Stack = createNativeStackNavigator();
 I18nManager.allowRTL(false);
+
+function Exam({route, navigation}) {
+  const {quiz_rtl, quiz_title, quiz_subject, quiz_id, quiz_mcq} = route.params;
+  const [data, setData] = React.useState('loading...');
+  React.useEffect(() => {
+    async function fetch_quiz_data(id) {
+      const quiz_data = await get_quiz(id);
+      if (quiz_data.status === false) {
+        return;
+      }
+      setData(quiz_data.data);
+    }
+    fetch_quiz_data();
+  }, [quiz_id]);
+  return (
+    <View style={{padding: 16}}>
+      <BackButton onPress={() => navigation.goBack()} />
+      <Text>
+        {JSON.stringify(
+          {quiz_rtl, quiz_title, quiz_subject, quiz_id, quiz_mcq},
+          null,
+          2,
+        )}
+      </Text>
+      <Text style={{marginTop: 20}}>{data}</Text>
+    </View>
+  );
+}
 
 function App() {
   const color_scheme = useColorScheme() || 'light';
