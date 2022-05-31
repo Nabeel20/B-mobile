@@ -16,7 +16,7 @@ import Subject from './screens/Subject';
 //import Exam from './screens/Exam';
 import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
-import {get_data} from './helper/api';
+import {get_data, get_quiz} from './helper/api';
 import Search from './screens/Search';
 import BackButton from './screens/components/Back.button';
 
