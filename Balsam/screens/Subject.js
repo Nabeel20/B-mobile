@@ -18,14 +18,14 @@ export default function Subject({route, navigation}) {
   const {Theme} = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
   const _status = React.useRef(true);
-  const {title, list, finishedIDs, url} = route.params;
-  const [listData, setListData] = React.useState(list);
+  const {title, finishedIDs, url} = route.params;
+  const [listData, setListData] = React.useState([]);
   React.useEffect(() => {
     if (url === undefined) {
       return;
     }
     async function handle_data(id) {
-      let _subjects = await get_titles(id);
+      let _subjects = await get_titles(url);
       if (_subjects.status === false) {
         _status.current = false;
         return;
@@ -91,7 +91,6 @@ export default function Subject({route, navigation}) {
           if (data.branch) {
             navigation.push('Subject', {
               title: `${data.subject}: ${data.title}`,
-              list: [],
               url: data.url,
             });
             return;

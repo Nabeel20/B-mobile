@@ -76,20 +76,17 @@ function get_categories(data) {
   return output;
 }
 async function get_data() {
-  const {data} = await fetch_data(
+  const {data, status, error_message} = await fetch_data(
     '1J9B9-Jbs8c4iUury3ds4ktZj7Mjn6I7gk1l6RHT5f0w',
   );
-  const categories = get_categories(data);
-  const urls = [];
-  categories.forEach(item => {
-    urls.push(fetch(get_url(item.url)));
-  });
-  const all_quizzes = await Promise.all(urls);
-  let all_quizzes_json = await Promise.all(all_quizzes.map(res => res.text()));
-  all_quizzes_json = all_quizzes_json.map(item => get_subjects_json(item));
-  for (let index = 0; index < categories.length; index++) {
-    categories[index].quizzes = all_quizzes_json[index];
+  if (status === false) {
+    return {
+      status,
+      error_message,
+      data: [],
+    };
   }
+  const categories = get_categories(data);
   return {
     status: true,
     error_message: 'None',
@@ -102,7 +99,7 @@ async function get_titles(id = '1yc8lsy3-5naSrOBB7ilcjG1hDWPzMutjH-WKQ1rGvR0') {
     return {
       status: false,
       error_message: 'Data is not valid',
-      data: undefined,
+      data: [],
     };
   }
   const home_data = get_subjects_json(titles.data);
@@ -110,7 +107,7 @@ async function get_titles(id = '1yc8lsy3-5naSrOBB7ilcjG1hDWPzMutjH-WKQ1rGvR0') {
     return {
       status: false,
       error_message: 'Data is not valid',
-      data: undefined,
+      data: [],
     };
   }
   return {
@@ -148,8 +145,8 @@ async function get_quiz(id) {
   if (quiz.status === false) {
     return {
       status: false,
-      error_message: 'Data is not valid',
-      data: undefined,
+      error_message: quiz.error_message,
+      data: [],
     };
   }
   const quiz_data = get_quiz_json(quiz.data);

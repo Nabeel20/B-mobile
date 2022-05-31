@@ -110,7 +110,7 @@ export default function Home({data, navigation}) {
           }
           navigation.navigate('Subject', {
             title: category.title,
-            list: category.list,
+            url: category.url,
           });
         }}
       />

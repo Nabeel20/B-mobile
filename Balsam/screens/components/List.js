@@ -119,7 +119,6 @@ export default function List({data, onPress, animation, finishedIDs = []}) {
             title,
             has_updates = false,
             details,
-            quizzes,
             category,
             rtl,
             mcq,
@@ -132,11 +131,7 @@ export default function List({data, onPress, animation, finishedIDs = []}) {
         }) => (
           <Card
             onPress={() => {
-              let props =
-                category === undefined
-                  ? {title, list: quizzes}
-                  : {title, subject: category, rtl, mcq, url, branch};
-              onPress(props);
+              onPress({title, subject: category, rtl, mcq, url, branch});
             }}
             title={title}
             details={details}
