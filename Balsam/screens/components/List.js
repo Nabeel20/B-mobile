@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'ReadexPro-Medium',
     fontSize: 16,
-    padding: 4,
+    paddingBottom: 2,
     textAlign: 'right',
   },
   list_empty_title: {

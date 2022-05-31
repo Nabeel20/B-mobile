@@ -30,6 +30,7 @@ function Exam({route, navigation}) {
     async function fetch_quiz_data(id) {
       const quiz_data = await get_quiz(id);
       if (quiz_data.status === false) {
+        setData(`failed: error log: ${quiz_data.error_message}`);
         return;
       }
       setData(quiz_data.data);
@@ -46,7 +47,9 @@ function Exam({route, navigation}) {
           2,
         )}
       </Text>
-      <Text style={{marginTop: 20}}>{data}</Text>
+      <Text style={{marginTop: 20, color: '#212121'}}>
+        {JSON.stringify(data)}
+      </Text>
     </View>
   );
 }
