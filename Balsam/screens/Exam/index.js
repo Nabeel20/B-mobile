@@ -125,11 +125,14 @@ function Exam({route, navigation}) {
   async function fetch_quiz_data(id) {
     const quiz_data = await get_quiz(id);
     if (quiz_data.status === false) {
+      status.current = quiz_data.error_message;
       return;
     }
-    QuizData.current = quiz_data.data;
-    setLoading(false);
-    play_animation(question_animation, 400);
+    if (quiz_data.status) {
+      QuizData.current = quiz_data.data;
+      setLoading(false);
+      play_animation(question_animation, 400);
+    }
   }
   function play_explanation_animation() {
     const question_is_done = QuizData.current[index].review;
@@ -316,7 +319,7 @@ function Exam({route, navigation}) {
         </Text>
         <Spacer vertical={16} />
         {quiz_mcq ? (
-          <View style={styles.mcqContainer}>
+          <View>
             {item.choices.map((choice, i) => {
               return (
                 <Choice
@@ -530,10 +533,6 @@ const styles = StyleSheet.create({
     marginTop: -4,
     marginBottom: 4,
     borderTopWidth: 0,
-  },
-  mcqContainer: {
-    width: 24,
-    height: 24,
   },
   flatList: {
     flex: 1,
