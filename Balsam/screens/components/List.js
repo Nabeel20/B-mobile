@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'ReadexPro-Medium',
     fontSize: 16,
-    paddingBottom: 2,
     textAlign: 'right',
   },
   list_empty_title: {
@@ -207,6 +206,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
     alignItems: 'center',
     padding: 4,
+    paddingTop: 8,
   },
   recommend_container: {
     flexDirection: 'row',
