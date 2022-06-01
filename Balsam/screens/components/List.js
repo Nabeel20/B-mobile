@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontFamily: 'ReadexPro-Regular',
-    fontSize: 12,
+    fontSize: 14,
   },
   update: {
     flexDirection: 'row',
