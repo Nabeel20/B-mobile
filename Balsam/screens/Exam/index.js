@@ -7,16 +7,17 @@ import {
   useWindowDimensions,
   Animated,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import Choice from './Choice';
 import Spacer from './Elements/Spacer';
 import Explanation from './Elements/Explanation';
-import {ThemeContext} from '../Theme';
 import Loading from '../components/Loading';
 import Header from './Elements/Header';
 import ExamModal from './Elements/ExamModal';
-import {get_quiz} from '../../helper/api';
 import ExamButton from './Elements/ExamButton';
+import {get_quiz} from '../../helper/api';
+import {ThemeContext} from '../Theme';
 
 function Exam({route, navigation}) {
   const {Theme} = React.useContext(ThemeContext);
@@ -66,7 +67,79 @@ function Exam({route, navigation}) {
   }, [timer]);
   React.useEffect(() => {
     timer.current = true;
-    fetch_quiz_data(quiz_id);
+    function get_quiz_json(data) {
+      data = data.split('\n');
+      let output = [];
+      for (let index = 1; index < data.length; index++) {
+        const [
+          question,
+          choice1,
+          choice2,
+          choice3,
+          choice4,
+          choice5,
+          explanation,
+        ] = data[index].split(',');
+        const choices = shuffle(
+          [choice1, choice2, choice3, choice4, choice5]
+            .map(c => c.replace(/"/g, ''))
+            .filter(c => c !== '-'),
+        );
+        output.push({
+          question: question.replace(/"/g, ''),
+          choices,
+          right_answer: choice1.replace(/"/g, ''),
+          review: false,
+          explanation: explanation.replace(/"/g, ''),
+          user_answer: '',
+          id: generate_unique_id(),
+        });
+      }
+      return shuffle(output);
+    }
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * i);
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
+    }
+    function generate_unique_id() {
+      function chr4() {
+        return Math.random().toString(16).slice(-4);
+      }
+      return (
+        chr4() +
+        chr4() +
+        '-' +
+        chr4() +
+        '-' +
+        chr4() +
+        '-' +
+        chr4() +
+        '-' +
+        chr4()
+      );
+    }
+    try {
+      if (typeof quiz_id !== 'string') {
+        return;
+      }
+      fetch(
+        `https://docs.google.com/spreadsheets/d/${quiz_id}/export?format=csv`,
+      )
+        .then(res => res.text())
+        .then(data => {
+          let quiz_data = get_quiz_json(data);
+          QuizData.current = quiz_data;
+          setLoading(false);
+          play_animation(question_animation, 400);
+        });
+    } catch (error) {
+      ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quiz_id]);
 
@@ -386,12 +459,7 @@ function Exam({route, navigation}) {
   }
 
   if (loading) {
-    return (
-      <Loading
-        status={status.current}
-        onPress={() => fetch_quiz_data(quiz_id)}
-      />
-    );
+    return <Loading />;
   }
 
   return (
@@ -528,11 +596,6 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 13,
     fontFamily: 'ReadexPro-Regular',
-  },
-  interviewButtonContainer: {
-    marginTop: -4,
-    marginBottom: 4,
-    borderTopWidth: 0,
   },
   flatList: {
     flex: 1,
