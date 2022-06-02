@@ -146,7 +146,7 @@ function Exam({route, navigation}) {
       return;
     }
     flatListRef.current.scrollToIndex({
-      quizIndex,
+      index: quizIndex,
       viewOffset: 0,
       viewPosition: 0,
       animated: false,
@@ -211,7 +211,7 @@ function Exam({route, navigation}) {
     Animated.timing(animation, {
       toValue: 100,
       duration,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
   }
   function update_quiz_data() {
@@ -239,7 +239,7 @@ function Exam({route, navigation}) {
     setUserChoice(c);
     setNavText('التأكد من الإجابة');
     if (_user_data) {
-      play_animation(footer_animation, 1100);
+      play_animation(footer_animation, 400);
     }
   }
   function check_correct_input() {
@@ -522,7 +522,7 @@ function Exam({route, navigation}) {
           scrollEnabled={false}
           initialScrollIndex={quizIndex}
           pagingEnabled
-          contentContainerStyle={styles.flatList}
+          showsHorizontalScrollIndicator={false}
           renderItem={Question}
         />
       </ScrollView>
