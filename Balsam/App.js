@@ -35,9 +35,6 @@ function App() {
     }
     async function handle_data() {
       try {
-        if (typeof quiz_id !== 'string') {
-          return;
-        }
         fetch(
           'https://docs.google.com/spreadsheets/d/1J9B9-Jbs8c4iUury3ds4ktZj7Mjn6I7gk1l6RHT5f0w/export?format=csv',
         )
