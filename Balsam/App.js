@@ -16,8 +16,6 @@ import Subject from './screens/Subject';
 import Exam from './screens/Exam';
 import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
-import {get_data} from './helper/api';
-import Search from './screens/Search';
 
 const Stack = createNativeStackNavigator();
 I18nManager.allowRTL(false);
@@ -26,23 +24,39 @@ function App() {
   const color_scheme = useColorScheme() || 'light';
   const home_data = React.useRef([]);
   const bookmarks_data = React.useRef([]);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
   const error_log = React.useRef('');
-  async function handle_data() {
-    let _subjects = await get_data();
-    if (_subjects.status === false) {
-      error_log.current = _subjects.error_message;
-      setLoading(false);
-      return;
-    }
-    home_data.current = _subjects.data;
-    setLoading(false);
-  }
+
   React.useEffect(() => {
     function load_bookmarks() {
       const BM = [];
       bookmarks_data.current = BM;
       return;
+    }
+    async function handle_data() {
+      fetch(
+        'https://docs.google.com/spreadsheets/d/1J9B9-Jbs8c4iUury3ds4ktZj7Mjn6I7gk1l6RHT5f0w/export?format=csv',
+      )
+        .then(res => res.text())
+        .then(data => {
+          home_data.current = get_categories(data);
+          setLoading(false);
+        });
+    }
+    function get_categories(data) {
+      data = data.split('\n');
+      let output = [];
+      for (let index = 1; index < data.length; index++) {
+        const [title, id, url, has_updates, details] = data[index].split(',');
+        output.push({
+          title: title.replace(/"/g, ''),
+          url: url.replace(/"/g, ''),
+          id: id.replace(/"/g, ''),
+          has_updates: has_updates.replace(/"/g, '') === 'TRUE' ? true : false,
+          details: details.replace(/"/g, ''),
+        });
+      }
+      return output;
     }
     load_bookmarks();
     handle_data();
@@ -95,7 +109,6 @@ function App() {
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen name="Subject" component={Subject} />
           <Stack.Screen name="Exam" component={Exam} />
-          <Stack.Screen name="Search" component={Search} />
           <Stack.Screen name="Bookmarks">
             {props => <Bookmarks {...props} data={bookmarks_data.current} />}
           </Stack.Screen>

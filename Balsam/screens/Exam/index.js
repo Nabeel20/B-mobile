@@ -16,7 +16,6 @@ import Loading from '../components/Loading';
 import Header from './Elements/Header';
 import ExamModal from './Elements/ExamModal';
 import ExamButton from './Elements/ExamButton';
-import {get_quiz} from '../../helper/api';
 import {ThemeContext} from '../Theme';
 
 function Exam({route, navigation}) {
@@ -27,7 +26,7 @@ function Exam({route, navigation}) {
   const flatListRef = React.useRef(null);
 
   const QuizData = React.useRef([]);
-  const [index, setIndex] = React.useState(0);
+  const [quizIndex, setQuizIndex] = React.useState(0);
 
   const timer = React.useRef(false);
   const skip_mode = React.useRef(false);
@@ -37,7 +36,6 @@ function Exam({route, navigation}) {
   const progress_value = React.useRef(0);
   const correct_count = React.useRef(0);
   const preview = React.useRef(false);
-  const status = React.useRef(true);
 
   const footer_animation = React.useRef(new Animated.Value(100)).current;
   const number_animation = React.useRef(new Animated.Value(100)).current;
@@ -144,11 +142,11 @@ function Exam({route, navigation}) {
   }, [quiz_id]);
 
   React.useEffect(() => {
-    if (loading) {
+    if (loading || QuizData.current.length === 0) {
       return;
     }
     flatListRef.current.scrollToIndex({
-      index,
+      quizIndex,
       viewOffset: 0,
       viewPosition: 0,
       animated: false,
@@ -159,7 +157,7 @@ function Exam({route, navigation}) {
       correct.current = false;
     }
     function update_text() {
-      const on_last_item = index === QuizData.current.length - 1;
+      const on_last_item = quizIndex === QuizData.current.length - 1;
       if (on_last_item) {
         if (QuizData.current.every(q => q.review)) {
           setNavText('إظهار النتيجة');
@@ -172,13 +170,15 @@ function Exam({route, navigation}) {
     }
 
     function update_skipped_questions() {
-      const user_data = QuizData.current[index].user_answer;
+      const user_data = QuizData.current[quizIndex].user_answer;
       if (user_data.length === 0) {
-        if (skip_data.current.map(i => i.index_id).includes(index) === false) {
+        if (
+          skip_data.current.map(i => i.index_id).includes(quizIndex) === false
+        ) {
           skip_data.current = [
             ...skip_data.current,
             {
-              index_id: index,
+              index_id: quizIndex,
               done: false,
             },
           ];
@@ -193,23 +193,11 @@ function Exam({route, navigation}) {
     play_explanation_animation();
     play_animation(question_animation, 400);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index]);
+  }, [quizIndex]);
 
-  async function fetch_quiz_data(id) {
-    const quiz_data = await get_quiz(id);
-    if (quiz_data.status === false) {
-      status.current = quiz_data.error_message;
-      return;
-    }
-    if (quiz_data.status) {
-      QuizData.current = quiz_data.data;
-      setLoading(false);
-      play_animation(question_animation, 400);
-    }
-  }
   function play_explanation_animation() {
-    const question_is_done = QuizData.current[index].review;
-    const has_explanation = QuizData.current[index].explanation.length > 5;
+    const question_is_done = QuizData.current[quizIndex].review;
+    const has_explanation = QuizData.current[quizIndex].explanation.length > 5;
     if (preview.current && has_explanation) {
       return play_animation(explanation_animation, 300);
     }
@@ -227,18 +215,18 @@ function Exam({route, navigation}) {
     }).start();
   }
   function update_quiz_data() {
-    QuizData.current[index].review = true;
-    QuizData.current[index].user_answer = userChoice;
+    QuizData.current[quizIndex].review = true;
+    QuizData.current[quizIndex].user_answer = userChoice;
   }
   function update_skip_data() {
-    if (skip_data.current.map(item => item.index_id).includes(index)) {
-      let i = skip_data.current.map(item => item.index_id).indexOf(index);
+    if (skip_data.current.map(item => item.index_id).includes(quizIndex)) {
+      let i = skip_data.current.map(item => item.index_id).indexOf(quizIndex);
       skip_data.current[i].done = true;
     }
   }
   function handle_press(c) {
     const _user_data = userChoice.length === 0;
-    const _question_done = QuizData.current[index].review;
+    const _question_done = QuizData.current[quizIndex].review;
     if (isValid) {
       return;
     }
@@ -255,14 +243,14 @@ function Exam({route, navigation}) {
     }
   }
   function check_correct_input() {
-    const _correct_answer = QuizData.current[index].right_answer;
+    const _correct_answer = QuizData.current[quizIndex].right_answer;
     if (userChoice === _correct_answer) {
       correct_count.current += 1;
       correct.current = true;
     }
   }
   function validate() {
-    const _question_done = QuizData.current[index].review;
+    const _question_done = QuizData.current[quizIndex].review;
     const _user_input = userChoice.length === 0;
     if (_question_done) {
       return;
@@ -292,10 +280,10 @@ function Exam({route, navigation}) {
     let smaller_indexes = [];
     for (let i = 0; i < _skip_data.length; i++) {
       const element = _skip_data[i];
-      if (element.index_id < index) {
+      if (element.index_id < quizIndex) {
         smaller_indexes.push(element);
       }
-      if (element.index_id > index) {
+      if (element.index_id > quizIndex) {
         bigger_indexes.push(element);
       }
     }
@@ -308,7 +296,7 @@ function Exam({route, navigation}) {
     return output[0].index_id;
   }
   function handle_modal() {
-    const on_last_index = index === QuizData.current.length - 1;
+    const on_last_index = quizIndex === QuizData.current.length - 1;
     const on_all_done = QuizData.current.every(question => question.review);
     const on_not_finished = skip_data.current.every(q => q.done) === false;
     if (on_all_done && !preview.current) {
@@ -332,12 +320,12 @@ function Exam({route, navigation}) {
   }
   function handle_index() {
     const total = QuizData.current.length;
-    let next_index = index + 1;
+    let next_index = quizIndex + 1;
     let skip_index = get_next_skip_index();
     if (next_index === total) {
       next_index = total - 1;
     }
-    setIndex(skip_mode.current ? skip_index : next_index);
+    setQuizIndex(skip_mode.current ? skip_index : next_index);
   }
   function handle_next() {
     handle_modal();
@@ -347,13 +335,13 @@ function Exam({route, navigation}) {
     handle_index();
   }
   function handle_previous() {
-    if (index === 0) {
+    if (quizIndex === 0) {
       return;
     }
-    const next_index = index - 1;
+    const next_index = quizIndex - 1;
     direction.current = 'left';
     play_animation(number_animation, 500);
-    setIndex(next_index);
+    setQuizIndex(next_index);
   }
   function handle_next_button() {
     if (userChoice.length !== 0 && isValid === false) {
@@ -423,7 +411,7 @@ function Exam({route, navigation}) {
     timer.current = true;
     skip_mode.current = true;
     const _next_index = get_next_skip_index();
-    setIndex(_next_index);
+    setQuizIndex(_next_index);
     setExamModal(false);
     return;
   }
@@ -431,7 +419,7 @@ function Exam({route, navigation}) {
     skip_mode.current = false;
     preview.current = true;
     timer.current = false;
-    setIndex(0);
+    setQuizIndex(0);
     QuizData.current.map(question => {
       if (question.review === false) {
         question.review = true;
@@ -448,13 +436,13 @@ function Exam({route, navigation}) {
     setExamModal(true);
   }
   function show_answer() {
-    const is_done = QuizData.current[index].review;
+    const is_done = QuizData.current[quizIndex].review;
     setNavText('السؤال التالي');
     play_animation(footer_animation, 300);
     if (is_done) {
       handle_next();
     }
-    QuizData.current[index].review = true;
+    QuizData.current[quizIndex].review = true;
     play_animation(explanation_animation, 300);
   }
 
@@ -501,8 +489,8 @@ function Exam({route, navigation}) {
             total_num: QuizData.current.length,
             progress_step:
               (100 / QuizData.current.length) * progress_value.current,
-            bookmark_id: QuizData.current[index]?.id,
-            index: index,
+            bookmark_id: QuizData.current[quizIndex]?.id,
+            index: quizIndex,
             exit_point: skip_mode.current || preview.current,
             animation: number_animation,
           }}
@@ -532,7 +520,7 @@ function Exam({route, navigation}) {
           ref={flatListRef}
           data={QuizData.current}
           scrollEnabled={false}
-          initialScrollIndex={index}
+          initialScrollIndex={quizIndex}
           pagingEnabled
           contentContainerStyle={styles.flatList}
           renderItem={Question}
@@ -560,7 +548,7 @@ function Exam({route, navigation}) {
             <ExamButton
               text={`السـؤال ${'\n'} السابـق`}
               onPress={handle_previous}
-              index={index}
+              index={quizIndex}
               isPrevious
             />
           </>

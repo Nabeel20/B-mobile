@@ -12,7 +12,6 @@ import List from './components/List';
 import {ThemeContext, Colors} from './Theme';
 import {get_titles} from '../helper/api';
 import Loading from './components/Loading';
-import SearchBar from './components/SearchBar';
 
 function Title({color}) {
   const _Date = new Date();
@@ -73,10 +72,6 @@ export default function Home({data, navigation}) {
       <View style={{height: '20%'}} />
       <Title color={Theme.text} />
       <View style={styles.searchContainer}>
-        <SearchBar
-          autoFocus={false}
-          onFocus={() => navigation.push('Search')}
-        />
         <TouchableOpacity
           style={styles.bookmark}
           onPress={() => navigation.navigate('Bookmarks', {subject: ''})}>
@@ -84,6 +79,7 @@ export default function Home({data, navigation}) {
             source={require('../assets/bookmarkIcon.png')}
             style={[styles.bookmarkIcon, {tintColor: Colors.blue}]}
           />
+          <Text style={styles.text}>المحفوظات</Text>
         </TouchableOpacity>
       </View>
 
@@ -159,22 +155,18 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   bookmark: {
-    width: 50,
-    height: 50,
-    marginLeft: 16,
+    flex: 1,
     borderRadius: 8,
+    height: 50,
+    padding: 16,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     backgroundColor: Colors.blue_light,
   },
-  clearButtonText: {
+  text: {
     fontFamily: 'ReadexPro-Medium',
-    fontSize: 14,
-  },
-  clearButtonContainer: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
+    fontSize: 17,
   },
   gearIcon: {
     width: 24,
