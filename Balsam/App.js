@@ -10,6 +10,7 @@ import {
   StyleSheet,
   I18nManager,
   useColorScheme,
+  ToastAndroid,
 } from 'react-native';
 import Settings from './screens/Settings';
 import Subject from './screens/Subject';
@@ -24,8 +25,7 @@ function App() {
   const color_scheme = useColorScheme() || 'light';
   const home_data = React.useRef([]);
   const bookmarks_data = React.useRef([]);
-  const [loading, setLoading] = React.useState(false);
-  const error_log = React.useRef('');
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     function load_bookmarks() {
@@ -34,14 +34,21 @@ function App() {
       return;
     }
     async function handle_data() {
-      fetch(
-        'https://docs.google.com/spreadsheets/d/1J9B9-Jbs8c4iUury3ds4ktZj7Mjn6I7gk1l6RHT5f0w/export?format=csv',
-      )
-        .then(res => res.text())
-        .then(data => {
-          home_data.current = get_categories(data);
-          setLoading(false);
-        });
+      try {
+        if (typeof quiz_id !== 'string') {
+          return;
+        }
+        fetch(
+          'https://docs.google.com/spreadsheets/d/1J9B9-Jbs8c4iUury3ds4ktZj7Mjn6I7gk1l6RHT5f0w/export?format=csv',
+        )
+          .then(res => res.text())
+          .then(data => {
+            home_data.current = get_categories(data);
+            setLoading(false);
+          });
+      } catch (error) {
+        ToastAndroid.show(JSON.stringify(error), ToastAndroid.LONG);
+      }
     }
     function get_categories(data) {
       data = data.split('\n');

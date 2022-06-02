@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'ReadexPro-Medium',
-    fontSize: 17,
+    fontSize: 16,
+    color: Colors.blue,
   },
   gearIcon: {
     width: 24,
