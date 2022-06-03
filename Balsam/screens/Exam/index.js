@@ -542,6 +542,7 @@ function Exam({route, navigation}) {
               onPress={handle_next_button}
               isCorrect={correct.current}
               isChecked={isValid}
+              onChoose={userChoice.length !== 0 && isValid === false}
               flex={3}
               main
             />

@@ -80,5 +80,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'ReadexPro-Regular',
     fontSize: 14,
+    color: '#212121',
   },
 });

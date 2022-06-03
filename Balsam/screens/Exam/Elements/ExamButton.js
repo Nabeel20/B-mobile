@@ -12,6 +12,7 @@ export default function ExamButton({
   flex = 1,
   isPrevious = false,
   main = false,
+  onChoose = false,
 }) {
   const {Theme} = React.useContext(ThemeContext);
   if (textAnimation === undefined) {
@@ -46,7 +47,7 @@ export default function ExamButton({
         style={[
           styles.text,
           {
-            color: isChecked ? Colors.blue : Theme.text,
+            color: onChoose ? Colors.blue : Theme.text,
             fontFamily: main ? 'ReadexPro-Medium' : 'ReadexPro-Regular',
             opacity: textAnimation.interpolate({
               inputRange: [0, 100],
