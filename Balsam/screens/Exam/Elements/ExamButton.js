@@ -29,6 +29,7 @@ export default function ExamButton({
     return (
       <Text style={{color: isCorrect ? Colors.green : Colors.red}}>
         {isCorrect ? 'إجابة صحيحة' : 'إجابة خاطئة'}
+        {'  '}
       </Text>
     );
   };

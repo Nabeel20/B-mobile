@@ -168,25 +168,6 @@ function Exam({route, navigation}) {
       }
       setNavText(quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب');
     }
-
-    function update_skipped_questions() {
-      const user_data = QuizData.current[quizIndex].user_answer;
-      if (user_data.length === 0) {
-        if (
-          skip_data.current.map(i => i.index_id).includes(quizIndex) === false
-        ) {
-          skip_data.current = [
-            ...skip_data.current,
-            {
-              index_id: quizIndex,
-              done: false,
-            },
-          ];
-        }
-      }
-      return;
-    }
-
     update_skipped_questions();
     reset_data();
     update_text();
@@ -195,6 +176,23 @@ function Exam({route, navigation}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizIndex]);
 
+  function update_skipped_questions() {
+    const user_data = QuizData.current[quizIndex].user_answer;
+    const unique_index_id =
+      skip_data.current.map(i => i.index_id).includes(quizIndex) === false;
+    if (user_data.length === 0) {
+      if (unique_index_id) {
+        skip_data.current = [
+          ...skip_data.current,
+          {
+            index_id: quizIndex,
+            done: false,
+          },
+        ];
+      }
+    }
+    return;
+  }
   function play_explanation_animation() {
     const question_is_done = QuizData.current[quizIndex].review;
     const has_explanation = QuizData.current[quizIndex].explanation.length > 5;
@@ -346,6 +344,9 @@ function Exam({route, navigation}) {
   function handle_next_button() {
     if (userChoice.length !== 0 && isValid === false) {
       return validate();
+    }
+    if (quizIndex === 0) {
+      update_skipped_questions();
     }
     handle_next();
   }
