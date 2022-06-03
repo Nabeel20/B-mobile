@@ -46,7 +46,7 @@ export default function ExamButton({
         style={[
           styles.text,
           {
-            color: Theme.text,
+            color: isChecked ? Colors.blue : Theme.text,
             fontFamily: main ? 'ReadexPro-Medium' : 'ReadexPro-Regular',
             opacity: textAnimation.interpolate({
               inputRange: [0, 100],

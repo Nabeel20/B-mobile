@@ -45,6 +45,7 @@ const icons = {
   'علم الأشعة': require('./icons/radiology.png'),
   الصدرية: require('./icons/respirology.png'),
   الرثوية: require('./icons/rheumatology.png'),
+  التشريح: require('./icons/body.png'),
 };
 function Icon({type, color}) {
   if (icons[type] === undefined) {
