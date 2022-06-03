@@ -43,7 +43,7 @@ export default function QuestionNumber({
             }),
           },
         ]}>
-        {number} /{total}
+        {number} / {total}
       </Animated.Text>
     </View>
   );
@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue_light,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 8,
     flexDirection: 'row',
   },
   numberText: {
     color: Colors.blue,
-    fontWeight: '500',
+    fontFamily: 'ReadexPro-Medium',
     textAlign: 'center',
+    fontSize: 16,
   },
 });
