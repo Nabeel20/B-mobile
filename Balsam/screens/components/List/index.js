@@ -22,8 +22,8 @@ function EmptyList({theme}) {
   );
 }
 const icons = {
-  stars: require('./icons/recommend.png'),
-  recommend: require('./icons/stars.png'),
+  stars: require('./icons/stars.png'),
+  recommend: require('./icons/recommend.png'),
   'الإسعاف والطورائ': require('./icons/accident_and_emergency.png'),
   القلبية: require('./icons/cardiology.png'),
   'العناية المشددة': require('./icons/critical_care.png'),
@@ -31,7 +31,7 @@ const icons = {
   الغدية: require('./icons/endocrinology.png'),
   الهضمية: require('./icons/gastroenterology.png'),
   'طب الشيخوخة': require('./icons/geriatrics.png'),
-  النسائية: require('./icons/geriatrics.png'),
+  النسائية: require('./icons/gynecology.png'),
   الدموية: require('./icons/hematology.png'),
   الجراحة: require('./icons/intensive_care_unit.png'),
   البولية: require('./icons/nephrology.png'),
@@ -113,7 +113,7 @@ function Card({
                 <Text style={[styles.subTitle, {color: Colors.green}]}>
                   نصيحة
                 </Text>
-                <Icon icon="recommended" color={Colors.green} />
+                <Icon icon="recommend" color={Colors.green} />
               </View>
             ) : null}
           </View>
