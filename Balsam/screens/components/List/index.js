@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {ThemeContext, Colors} from '../Theme';
+import {ThemeContext, Colors} from '../../Theme';
 
 function EmptyList({theme}) {
   return (
@@ -21,12 +21,35 @@ function EmptyList({theme}) {
     </View>
   );
 }
+const icons = {
+  stars: require('./icons/recommend.png'),
+  recommend: require('./icons/stars.png'),
+  'الإسعاف والطورائ': require('./icons/accident_and_emergency.png'),
+  القلبية: require('./icons/cardiology.png'),
+  'العناية المشددة': require('./icons/critical_care.png'),
+  'أنف أذن حنجرة': require('./icons/ears_nose_and_throat.png'),
+  الغدية: require('./icons/endocrinology.png'),
+  الهضمية: require('./icons/gastroenterology.png'),
+  'طب الشيخوخة': require('./icons/geriatrics.png'),
+  النسائية: require('./icons/geriatrics.png'),
+  الدموية: require('./icons/hematology.png'),
+  الجراحة: require('./icons/intensive_care_unit.png'),
+  البولية: require('./icons/nephrology.png'),
+  التوليد: require('./icons/obstetricsmonia.png'),
+  الأورام: require('./icons/oncology.png'),
+  العينية: require('./icons/opthalmology.png'),
+  الأوسكي: require('./icons/outpatient_department.png'),
+  الأطفال: require('./icons/pediatrics.png'),
+  'علم الأدوية': require('./icons/pharmacy.png'),
+  'الطب النفسي': require('./icons/psychology.png'),
+  'علم الأشعة': require('./icons/radiology.png'),
+  الصدرية: require('./icons/respirology.png'),
+  الرثوية: require('./icons/rheumatology.png'),
+};
 function Icon({type, color}) {
-  const icons = {
-    stars: require('../../assets/stars.icon.png'),
-    recommend: require('../../assets/recommended.icon.png'),
-  };
-
+  if (icons[type] === undefined) {
+    return null;
+  }
   return (
     <Image source={icons[type]} style={[styles.icon, {tintColor: color}]} />
   );
@@ -41,6 +64,7 @@ function Card({
   show_numbers,
   editorChoice = false,
   done = false,
+  onHome = false,
 }) {
   return (
     <TouchableOpacity
@@ -51,6 +75,12 @@ function Card({
           backgroundColor: theme.grey.default,
         },
       ]}>
+      {onHome ? (
+        <Image
+          source={icons[title]}
+          style={[styles.categoryIcon, {tintColor: theme.text}]}
+        />
+      ) : null}
       <View style={styles.list_texts}>
         <View style={styles.title_container}>
           {done ? (
@@ -97,7 +127,7 @@ function Card({
   );
 }
 
-export default function List({data, onPress, animation, finishedIDs = []}) {
+function List({data, onPress, onHome = false, animation, finishedIDs = []}) {
   const {Theme} = React.useContext(ThemeContext);
   return (
     <Animated.View
@@ -117,7 +147,7 @@ export default function List({data, onPress, animation, finishedIDs = []}) {
         renderItem={({
           item: {
             title,
-            has_updates = false,
+            has_updates,
             details,
             category,
             rtl,
@@ -126,7 +156,7 @@ export default function List({data, onPress, animation, finishedIDs = []}) {
             url,
             number,
             id,
-            editor_choice = false,
+            editor_choice,
           },
         }) => (
           <Card
@@ -138,6 +168,7 @@ export default function List({data, onPress, animation, finishedIDs = []}) {
             has_updates={has_updates}
             number={number}
             theme={Theme}
+            onHome={onHome}
             done={finishedIDs.includes(id)}
             editorChoice={editor_choice}
             show_numbers={category !== undefined}
@@ -201,6 +232,7 @@ const styles = StyleSheet.create({
   },
   list_texts: {
     alignItems: 'flex-end',
+    flex: 1,
   },
   icons_container: {
     flexDirection: 'row-reverse',
@@ -221,4 +253,11 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  categoryIcon: {
+    height: 32,
+    width: 32,
+    marginLeft: 4,
+  },
 });
+
+export {List};

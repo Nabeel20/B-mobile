@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
 } from 'react-native';
-import List from './components/List';
+import {List} from './components/List';
 import {ThemeContext, Colors} from './Theme';
 import {get_titles} from '../helper/api';
 import Loading from './components/Loading';

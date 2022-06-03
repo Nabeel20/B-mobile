@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import {get_titles} from '../helper/api';
-import List from './components/List';
+import {List} from './components/List';
 import BackButton from './components/Back.button';
 import {Colors, ThemeContext} from './Theme';
 import Loading from './components/Loading';
