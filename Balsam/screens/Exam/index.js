@@ -8,6 +8,7 @@ import {
   Animated,
   ScrollView,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import Choice from './Choice';
 import Spacer from './Elements/Spacer';
@@ -140,7 +141,6 @@ function Exam({route, navigation}) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quiz_id]);
-
   React.useEffect(() => {
     if (loading || QuizData.current.length === 0) {
       return;
@@ -175,6 +175,26 @@ function Exam({route, navigation}) {
     play_animation(question_animation, 400);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizIndex]);
+  React.useEffect(() => {
+    navigation.addListener('beforeRemove', e => {
+      if (progress_value.current === 0) {
+        return;
+      }
+      e.preventDefault();
+      Alert.alert(
+        'مستعد للرحيل :(',
+        'لم تنه الاختبار، هل أنت متأكد من المغادرة؟',
+        [
+          {text: 'أكمل الاختبار', style: 'cancel', onPress: () => {}},
+          {
+            text: 'عودة',
+            style: 'destructive',
+            onPress: () => navigation.dispatch(e.data.action),
+          },
+        ],
+      );
+    });
+  }, [navigation]);
 
   function update_skipped_questions() {
     const user_data = QuizData.current[quizIndex].user_answer;
