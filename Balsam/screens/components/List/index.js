@@ -13,7 +13,7 @@ import {ThemeContext, Colors} from '../../Theme';
 
 function EmptyList({theme}) {
   return (
-    <View>
+    <View style={styles.loader}>
       <Text style={[styles.list_empty_title, {color: theme.text}]}>
         جار التحميل
       </Text>
@@ -203,17 +203,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontSize: 18,
   },
-  list_empty_text: {
-    fontFamily: 'ReadexPro-Regular',
-    alignSelf: 'center',
-    fontSize: 14,
-  },
-  list_empty_button: {
-    borderRadius: 10,
-    padding: 14,
-    marginTop: 16,
-    alignSelf: 'center',
-  },
   subTitle: {
     fontFamily: 'ReadexPro-Regular',
     fontSize: 14,
@@ -258,6 +247,9 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
     marginLeft: 4,
+  },
+  loader: {
+    marginTop: 16,
   },
 });
 

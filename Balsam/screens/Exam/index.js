@@ -48,7 +48,7 @@ function Exam({route, navigation}) {
   const [navText, setNavText] = React.useState(
     quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب',
   );
-  const [modalType, setModalType] = React.useState(false);
+  const [onSkip, setOnSkip] = React.useState(false);
   const [examModal, setExamModal] = React.useState(false);
   const [time, setTime] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
@@ -320,19 +320,19 @@ function Exam({route, navigation}) {
     if (on_all_done && !preview.current) {
       timer.current = false;
       setExamModal(true);
-      setModalType('score');
+      setOnSkip(false);
       return;
     }
     if (on_last_index && preview.current) {
       timer.current = false;
       setExamModal(true);
-      setModalType('score');
+      setOnSkip(false);
       return;
     }
     if (on_last_index && !skip_mode.current && on_not_finished) {
       timer.current = false;
       setExamModal(true);
-      setModalType('skip');
+      setOnSkip(true);
       return;
     }
   }
@@ -453,7 +453,7 @@ function Exam({route, navigation}) {
     skip_mode.current = false;
     preview.current = false;
     timer.current = false;
-    setModalType('score');
+    setOnSkip(true);
     setExamModal(true);
   }
   function show_answer() {
@@ -481,7 +481,7 @@ function Exam({route, navigation}) {
       ]}>
       <ExamModal
         visible={examModal}
-        type={modalType}
+        onSkip={onSkip}
         details={{
           title: quiz_title,
           subject: quiz_subject,
@@ -493,9 +493,9 @@ function Exam({route, navigation}) {
           time: time,
           total_num: QuizData.current.length,
         }}
-        onPressPrimary={modalType === 'skip' ? resume_quiz : review_quiz}
+        onPressPrimary={onSkip ? resume_quiz : review_quiz}
         onPressSecondary={() =>
-          modalType === 'skip' ? skip_to_score() : navigation.goBack()
+          onSkip ? skip_to_score() : navigation.goBack()
         }
       />
       <ScrollView
