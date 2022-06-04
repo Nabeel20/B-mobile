@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.blue,
-    fontSize: 45,
+    fontSize: 32,
     fontFamily: 'ReadexPro-Bold',
     textAlign: 'center',
     marginBottom: 32,
