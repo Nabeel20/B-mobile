@@ -112,6 +112,7 @@ export default function ExamModal({
   details,
   onPressPrimary,
   onPressSecondary,
+  onRequestClose,
 }) {
   const {Theme} = React.useContext(ThemeContext);
   const animation = React.useRef(new Animated.Value(0)).current;
@@ -129,7 +130,10 @@ export default function ExamModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onSkip]);
   return (
-    <Modal animationType="slide" visible={visible}>
+    <Modal
+      animationType="slide"
+      visible={visible}
+      onRequestClose={onRequestClose}>
       <View
         style={[
           styles.modal,

@@ -497,6 +497,7 @@ function Exam({route, navigation}) {
         onPressSecondary={() =>
           onSkip ? skip_to_score() : navigation.goBack()
         }
+        onRequestClose={() => navigation.goBack()}
       />
       <ScrollView
         contentContainerStyle={styles.scrollView}
