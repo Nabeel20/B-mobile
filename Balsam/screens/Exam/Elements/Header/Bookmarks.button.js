@@ -1,21 +1,25 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Image} from 'react-native';
-import {ThemeContext} from '../../../Theme';
+import {Colors, ThemeContext} from '../../../Theme';
 
-export default function BookmarksButton({id}) {
+export default function BookmarksButton({status, onPress}) {
   const {Theme} = React.useContext(ThemeContext);
   return (
     <TouchableOpacity
       style={[
         styles.container,
         {
-          backgroundColor: Theme.grey.default,
+          backgroundColor: status ? Colors.blue_light : Theme.grey.default,
         },
       ]}
-      onPress={() => null}>
+      onPress={onPress}>
       <Image
-        source={require('../../../../assets/bookmarkIcon.png')}
-        style={[styles.image, {tintColor: Theme.text}]}
+        source={
+          status
+            ? require('../../../../assets/bookmarkIconFill.png')
+            : require('../../../../assets/bookmarkIcon.png')
+        }
+        style={[styles.image, {tintColor: status ? Colors.blue : Theme.text}]}
       />
     </TouchableOpacity>
   );

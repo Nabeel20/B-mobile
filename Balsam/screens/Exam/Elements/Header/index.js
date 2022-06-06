@@ -8,7 +8,13 @@ import BookmarksButton from './Bookmarks.button';
 import BackButton from '../../../components/Back.button';
 import {Colors} from '../../../Theme';
 
-export default function Header({timer, details, onNavigation, onClose}) {
+export default function Header({
+  timer,
+  details,
+  onNavigation,
+  onClose,
+  onBookmark,
+}) {
   const {
     title,
     subject,
@@ -19,7 +25,7 @@ export default function Header({timer, details, onNavigation, onClose}) {
     index,
     animation,
     direction,
-    bookmark_id,
+    bookmark_status,
   } = details;
   return (
     <>
@@ -49,7 +55,7 @@ export default function Header({timer, details, onNavigation, onClose}) {
           number={index + 1}
           RTL={rtl}
         />
-        <BookmarksButton id={bookmark_id} />
+        <BookmarksButton status={bookmark_status} onPress={onBookmark} />
       </View>
     </>
   );

@@ -28,7 +28,7 @@ function Exam({route, navigation}) {
 
   const QuizData = React.useRef([]);
   const [quizIndex, setQuizIndex] = React.useState(0);
-
+  const [bookmarks, updateBookmarks] = React.useState([]);
   const timer = React.useRef(false);
   const skip_mode = React.useRef(false);
   const skip_data = React.useRef([]);
@@ -78,6 +78,7 @@ function Exam({route, navigation}) {
           choice4,
           choice5,
           explanation,
+          id,
         ] = data[index].split(',');
         const choices = shuffle(
           [choice1, choice2, choice3, choice4, choice5]
@@ -91,7 +92,7 @@ function Exam({route, navigation}) {
           review: false,
           explanation: explanation.replace(/"/g, ''),
           user_answer: '',
-          id: generate_unique_id(),
+          id: id.replace(/"/g, ''),
         });
       }
       return shuffle(output);
@@ -104,23 +105,6 @@ function Exam({route, navigation}) {
         array[j] = temp;
       }
       return array;
-    }
-    function generate_unique_id() {
-      function chr4() {
-        return Math.random().toString(16).slice(-4);
-      }
-      return (
-        chr4() +
-        chr4() +
-        '-' +
-        chr4() +
-        '-' +
-        chr4() +
-        '-' +
-        chr4() +
-        '-' +
-        chr4()
-      );
     }
     try {
       if (typeof quiz_id !== 'string') {
@@ -466,7 +450,9 @@ function Exam({route, navigation}) {
     QuizData.current[quizIndex].review = true;
     play_animation(explanation_animation, 300);
   }
-
+  function add_to_bookmarks() {
+    return;
+  }
   if (loading) {
     return <Loading />;
   }
@@ -511,10 +497,12 @@ function Exam({route, navigation}) {
             total_num: QuizData.current.length,
             progress_step:
               (100 / QuizData.current.length) * progress_value.current,
-            bookmark_id: QuizData.current[quizIndex]?.id,
             index: quizIndex,
             exit_point: skip_mode.current || preview.current,
             animation: number_animation,
+            bookmark_status: bookmarks
+              .map(b => b.id)
+              .includes(QuizData.current[quizIndex].id),
           }}
           timer={
             <Text
@@ -529,6 +517,7 @@ function Exam({route, navigation}) {
           }
           onNavigation={() => navigation.goBack()}
           onClose={skip_to_score}
+          onBookmark={add_to_bookmarks}
         />
         <Spacer />
         <FlatList
