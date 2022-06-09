@@ -503,18 +503,8 @@ function Exam({route, navigation}) {
             bookmark_status: bookmarks
               .map(b => b.id)
               .includes(QuizData.current[quizIndex].id),
+            time: time,
           }}
-          timer={
-            <Text
-              style={[
-                styles.timerText,
-                {
-                  color: Theme.text,
-                },
-              ]}>
-              <Text>{time}</Text> {time >= 3 ? 'دقائق' : 'دقيقة'}
-            </Text>
-          }
           onNavigation={() => navigation.goBack()}
           onClose={skip_to_score}
           onBookmark={add_to_bookmarks}
@@ -592,10 +582,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'ReadexPro-Regular',
     textAlign: 'center',
-  },
-  timerText: {
-    fontSize: 13,
-    fontFamily: 'ReadexPro-Regular',
   },
   flatList: {
     flex: 1,

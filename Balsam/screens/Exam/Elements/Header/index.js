@@ -7,13 +7,7 @@ import BookmarksButton from './Bookmarks.button';
 import BackButton from '../../../components/Back.button';
 import {Colors, ThemeContext} from '../../../Theme';
 
-export default function Header({
-  timer,
-  details,
-  onNavigation,
-  onClose,
-  onBookmark,
-}) {
+export default function Header({details, onNavigation, onClose, onBookmark}) {
   const {
     title,
     subject,
@@ -25,6 +19,7 @@ export default function Header({
     animation,
     direction,
     bookmark_status,
+    time,
   } = details;
   const {Theme} = React.useContext(ThemeContext);
   return (
@@ -60,8 +55,15 @@ export default function Header({
               </Text>
             </Text>
           )}
-
-          {timer}
+          <Text
+            style={[
+              styles.timerText,
+              {
+                color: Theme.text,
+              },
+            ]}>
+            <Text>{time}</Text> {time >= 3 ? 'دقائق' : 'دقيقة'}
+          </Text>
         </View>
       </View>
       <Progress dir={rtl} step={progress_step} />
@@ -115,5 +117,9 @@ const styles = StyleSheet.create({
   quiz_title: {
     fontSize: 14,
     fontFamily: 'ReadexPro-Bold',
+  },
+  timerText: {
+    fontSize: 14,
+    fontFamily: 'ReadexPro-Regular',
   },
 });
