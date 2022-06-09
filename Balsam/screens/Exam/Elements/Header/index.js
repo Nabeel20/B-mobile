@@ -1,12 +1,11 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
-import MetaData from './MetaData';
 import Progress from './Progress';
 import Spacer from '../Spacer';
 import QuestionNumber from './QuestionNumber';
 import BookmarksButton from './Bookmarks.button';
 import BackButton from '../../../components/Back.button';
-import {Colors} from '../../../Theme';
+import {Colors, ThemeContext} from '../../../Theme';
 
 export default function Header({
   timer,
@@ -27,6 +26,7 @@ export default function Header({
     direction,
     bookmark_status,
   } = details;
+  const {Theme} = React.useContext(ThemeContext);
   return (
     <>
       <View style={styles.headerContainer}>
@@ -38,7 +38,27 @@ export default function Header({
               <Text style={styles.buttonText}>الانتقال للنتيجة</Text>
             </TouchableOpacity>
           ) : (
-            <MetaData title={title} subject={subject} />
+            <Text>
+              <Text
+                style={[
+                  styles.quiz_subject,
+                  {
+                    color: Theme.grey.accent_2,
+                  },
+                ]}>
+                {subject}
+              </Text>
+              {'\n'}
+              <Text
+                style={[
+                  styles.quiz_title,
+                  {
+                    color: Theme.text,
+                  },
+                ]}>
+                {title}
+              </Text>
+            </Text>
           )}
 
           {timer}
@@ -87,5 +107,13 @@ const styles = StyleSheet.create({
     fontFamily: 'ReadexPro-Regular',
     fontSize: 14,
     color: '#212121',
+  },
+  quiz_subject: {
+    fontSize: 12,
+    fontFamily: 'ReadexPro-Regular',
+  },
+  quiz_title: {
+    fontSize: 14,
+    fontFamily: 'ReadexPro-Bold',
   },
 });

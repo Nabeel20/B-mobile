@@ -8,7 +8,6 @@ import {
   Image,
   Animated,
 } from 'react-native';
-import MetaData from './Header/MetaData';
 import {ThemeContext, Colors} from '../../Theme';
 
 function Button({onPress, blue = false, text, theme}) {
@@ -161,7 +160,27 @@ export default function ExamModal({
           ]}>
           <View style={styles.spacer} />
           <View style={styles.meta}>
-            <MetaData title={title} subject={subject} />
+            <Text>
+              <Text
+                style={[
+                  styles.quiz_subject,
+                  {
+                    color: Theme.grey.accent_2,
+                  },
+                ]}>
+                {subject}
+              </Text>
+              {'\n'}
+              <Text
+                style={[
+                  styles.quiz_title,
+                  {
+                    color: Theme.text,
+                  },
+                ]}>
+                {title}
+              </Text>
+            </Text>
           </View>
           <View style={styles.spacer} />
           <View style={styles.spacer} />
@@ -313,5 +332,13 @@ const styles = StyleSheet.create({
   },
   center_text: {
     alignSelf: 'center',
+  },
+  quiz_subject: {
+    fontSize: 12,
+    fontFamily: 'ReadexPro-Regular',
+  },
+  quiz_title: {
+    fontSize: 14,
+    fontFamily: 'ReadexPro-Bold',
   },
 });
