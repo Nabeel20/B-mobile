@@ -24,7 +24,7 @@ export default function Loading({status = true, onPress}) {
         {status ? (
           <View>
             <Image
-              source={require('../../assets/loading.icon.png')}
+              source={require('../../assets/logo.png')}
               style={styles.image}
             />
             <Text
