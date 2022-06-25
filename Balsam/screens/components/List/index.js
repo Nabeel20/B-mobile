@@ -86,7 +86,7 @@ function Card({
         <View style={styles.title_container}>
           {done ? (
             <Image
-              source={require('../../assets/check.icon.png')}
+              source={require('../../../assets/done.png')}
               style={[styles.done_icon, {tintColor: theme.text}]}
             />
           ) : null}
