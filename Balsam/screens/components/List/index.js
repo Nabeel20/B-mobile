@@ -121,7 +121,7 @@ function Card({
         )}
       </View>
       <Image
-        source={require('../../assets/arrow.icon.png')}
+        source={require('../../../assets/arrow.png')}
         style={[styles.arrowIcon, {tintColor: theme.text}]}
       />
     </TouchableOpacity>
