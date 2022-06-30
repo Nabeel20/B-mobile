@@ -506,7 +506,9 @@ function Exam({route, navigation}) {
         onClose={skip_to_score}
         onBookmark={add_to_bookmarks}
       />
-      <ScrollView showsVerticalScrollIndicator={true}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        showsVerticalScrollIndicator={true}>
         <FlatList
           initialNumToRender={1}
           horizontal
@@ -582,6 +584,9 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
+  },
+  scrollView: {
+    padding: 16,
   },
 });
 
