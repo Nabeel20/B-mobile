@@ -469,8 +469,6 @@ function Exam({route, navigation}) {
         visible={examModal}
         onSkip={onSkip}
         details={{
-          title: quiz_title,
-          subject: quiz_subject,
           correct_num: correct_count.current,
           progress: (100 / QuizData.current.length) * correct_count.current,
           skipped_num: skip_data.current.filter(q => q.done === false).length,

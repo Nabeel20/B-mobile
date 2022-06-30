@@ -159,31 +159,6 @@ export default function ExamModal({
             },
           ]}>
           <View style={styles.spacer} />
-          <View style={styles.meta}>
-            <Text>
-              <Text
-                style={[
-                  styles.quiz_subject,
-                  {
-                    color: Theme.grey.accent_2,
-                  },
-                ]}>
-                {subject}
-              </Text>
-              {'\n'}
-              <Text
-                style={[
-                  styles.quiz_title,
-                  {
-                    color: Theme.text,
-                  },
-                ]}>
-                {title}
-              </Text>
-            </Text>
-          </View>
-          <View style={styles.spacer} />
-          <View style={styles.spacer} />
           <View style={styles.header}>
             <Image
               source={
@@ -216,16 +191,16 @@ export default function ExamModal({
           />
         </Animated.View>
 
-        <View>
+        <View style={styles.buttons_container}>
           <Button
             onPress={onPressPrimary}
             blue
-            text={onSkip ? 'حل باقي الأسئلة' : 'مراجعة الأسئلة'}
+            text={onSkip ? 'حل باقي الأسئلة' : 'راجع باقي الأسئلة'}
             theme={Theme}
           />
           <Button
             onPress={onPressSecondary}
-            text={onSkip ? 'انتقل للنتيجة' : 'عودة'}
+            text={onSkip ? 'انتقل للنتيجة' : 'أنه الامتحان'}
             theme={Theme}
           />
         </View>
@@ -237,7 +212,7 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     width: '100%',
-    padding: 24,
+    padding: 16,
   },
   meta: {
     alignSelf: 'flex-end',
@@ -247,7 +222,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: 'ReadexPro-Bold',
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 16,
   },
   header: {
     alignSelf: 'center',
@@ -260,9 +235,9 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 8,
-    width: '100%',
+    flex: 1,
     alignSelf: 'center',
-    borderRadius: 10,
+    borderRadius: 99,
     padding: 16,
   },
   buttonText: {
@@ -328,7 +303,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   spacer: {
-    height: '10%',
+    height: '30%',
   },
   center_text: {
     alignSelf: 'center',
@@ -340,5 +315,8 @@ const styles = StyleSheet.create({
   quiz_title: {
     fontSize: 14,
     fontFamily: 'ReadexPro-Bold',
+  },
+  buttons_container: {
+    flexDirection: 'row',
   },
 });
