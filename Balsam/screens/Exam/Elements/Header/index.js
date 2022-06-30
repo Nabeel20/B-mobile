@@ -23,7 +23,7 @@ export default function Header({details, onNavigation, onClose, onBookmark}) {
   } = details;
   const {Theme} = React.useContext(ThemeContext);
   return (
-    <>
+    <View style={styles.main_container}>
       <View style={styles.headerContainer}>
         <BackButton onPress={onNavigation} />
         <View
@@ -79,10 +79,14 @@ export default function Header({details, onNavigation, onClose, onBookmark}) {
         />
         <BookmarksButton status={bookmark_status} onPress={onBookmark} />
       </View>
-    </>
+    </View>
   );
 }
 const styles = StyleSheet.create({
+  main_container: {
+    padding: 16,
+    marginBottom: 8,
+  },
   headerContainer: {
     flexDirection: 'row-reverse',
     marginBottom: 8,

@@ -139,16 +139,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
   },
-  searchBar: {
-    flex: 1,
-    borderRadius: 10,
-    marginRight: 16,
-    borderWidth: 1,
-    padding: 8,
-    fontSize: 14,
-    textAlign: 'right',
-    fontFamily: 'ReadexPro-Regular',
-  },
   searchContainer: {
     flexDirection: 'row',
     alignSelf: 'center',
@@ -157,7 +147,9 @@ const styles = StyleSheet.create({
   bookmark: {
     flex: 1,
     borderRadius: 8,
+    // delete this 👇
     height: 50,
+    //
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',

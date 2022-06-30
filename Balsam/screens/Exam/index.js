@@ -485,31 +485,28 @@ function Exam({route, navigation}) {
         }
         onRequestClose={() => navigation.goBack()}
       />
-      <ScrollView
-        contentContainerStyle={styles.scrollView}
-        showsVerticalScrollIndicator={true}>
-        <Header
-          details={{
-            title: quiz_title,
-            subject: quiz_subject,
-            rtl: quiz_rtl,
-            direction: direction.current,
-            total_num: QuizData.current.length,
-            progress_step:
-              (100 / QuizData.current.length) * progress_value.current,
-            index: quizIndex,
-            exit_point: skip_mode.current || preview.current,
-            animation: number_animation,
-            bookmark_status: bookmarks
-              .map(b => b.id)
-              .includes(QuizData.current[quizIndex].id),
-            time: time,
-          }}
-          onNavigation={() => navigation.goBack()}
-          onClose={skip_to_score}
-          onBookmark={add_to_bookmarks}
-        />
-        <Spacer />
+      <Header
+        details={{
+          title: quiz_title,
+          subject: quiz_subject,
+          rtl: quiz_rtl,
+          direction: direction.current,
+          total_num: QuizData.current.length,
+          progress_step:
+            (100 / QuizData.current.length) * progress_value.current,
+          index: quizIndex,
+          exit_point: skip_mode.current || preview.current,
+          animation: number_animation,
+          bookmark_status: bookmarks
+            .map(b => b.id)
+            .includes(QuizData.current[quizIndex].id),
+          time: time,
+        }}
+        onNavigation={() => navigation.goBack()}
+        onClose={skip_to_score}
+        onBookmark={add_to_bookmarks}
+      />
+      <ScrollView showsVerticalScrollIndicator={true}>
         <FlatList
           initialNumToRender={1}
           horizontal
@@ -585,9 +582,6 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
-  },
-  scrollView: {
-    padding: 16,
   },
 });
 

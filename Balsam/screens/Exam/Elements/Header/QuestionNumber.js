@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   numberContainer: {
     width: 32 * 2,
     height: 32,
-    borderRadius: 8,
+    borderRadius: 32 / 2,
     backgroundColor: Colors.blue_light,
     alignItems: 'center',
     justifyContent: 'center',
