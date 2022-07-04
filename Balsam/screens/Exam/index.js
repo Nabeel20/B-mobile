@@ -21,7 +21,7 @@ import {ThemeContext} from '../Theme';
 
 function Exam({route, navigation}) {
   const {Theme} = React.useContext(ThemeContext);
-  const {quiz_rtl, quiz_title, quiz_subject, quiz_id, quiz_mcq} = route.params;
+  const {quiz_rtl, quiz_title, quiz_id, quiz_mcq} = route.params;
 
   const {width} = useWindowDimensions();
   const flatListRef = React.useRef(null);
@@ -29,29 +29,93 @@ function Exam({route, navigation}) {
   const QuizData = React.useRef([]);
   const [quizIndex, setQuizIndex] = React.useState(0);
   const [bookmarks, updateBookmarks] = React.useState([]);
-  const timer = React.useRef(false);
-  const skip_mode = React.useRef(false);
-  const skip_data = React.useRef([]);
+  const [timer, set_timer] = React.useState(false);
+  const [skip_mode, set_skip_mode] = React.useState(false);
+  const [skipped_questions, update_skipped_questions] = React.useState([]);
   const direction = React.useRef('right');
-  const correct = React.useRef(false);
+  const is_user_answer_correct = React.useRef(false);
   const progress_value = React.useRef(0);
   const correct_count = React.useRef(0);
-  const preview = React.useRef(false);
 
   const footer_animation = React.useRef(new Animated.Value(100)).current;
   const number_animation = React.useRef(new Animated.Value(100)).current;
   const explanation_animation = React.useRef(new Animated.Value(0)).current;
   const question_animation = React.useRef(new Animated.Value(100)).current;
 
-  const [userChoice, setUserChoice] = React.useState('');
-  const [isValid, setIsValid] = React.useState(false);
-  const [navText, setNavText] = React.useState(
+  const [selected_choice, update_selected_choice] = React.useState('');
+  const [selected_choice_checked, set_selected_choice_checked] =
+    React.useState(false);
+  const [footer_text, set_footer_text] = React.useState(
     quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب',
   );
-  const [onSkip, setOnSkip] = React.useState(false);
-  const [examModal, setExamModal] = React.useState(false);
+  const [exam_modal, set_exam_modal] = React.useState(false);
   const [time, setTime] = React.useState(0);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, set_loading] = React.useState(true);
+  const [scrollView_height, set_scrollView_height] = React.useState(0);
+  const questions_dimensions = React.useRef([]);
+  const Question = function ({item}) {
+    return (
+      <Animated.View
+        onLayout={({nativeEvent: LayoutEvent}) => {
+          questions_dimensions.current = [
+            ...questions_dimensions.current,
+            LayoutEvent.layout.height,
+          ];
+        }}
+        style={{
+          width: width - 32,
+          opacity: question_animation.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0, 1],
+          }),
+          transform: [
+            {
+              translateY: question_animation.interpolate({
+                inputRange: [0, 100],
+                outputRange: [10, 0],
+              }),
+            },
+          ],
+        }}
+        key={item.id}>
+        <Text
+          style={[
+            styles.title,
+            {
+              color: Theme.text,
+            },
+          ]}>
+          {item.question}
+        </Text>
+        <Spacer vertical={16} />
+        {quiz_mcq ? (
+          <View>
+            {item.choices.map((choice, i) => {
+              return (
+                <Choice
+                  key={i}
+                  rtl={quiz_rtl}
+                  choice={choice}
+                  prefix={i}
+                  selectedChoice={selected_choice}
+                  checked={selected_choice_checked}
+                  done={item.done}
+                  correctAnswer={item.correct_answer}
+                  user_choice={item.user_answer}
+                  handlePress={handle_press}
+                />
+              );
+            })}
+          </View>
+        ) : null}
+        <Explanation
+          rtl={quiz_rtl}
+          animation={explanation_animation}
+          text={item.explanation}
+        />
+      </Animated.View>
+    );
+  };
 
   React.useEffect(() => {
     let interval;
@@ -65,7 +129,7 @@ function Exam({route, navigation}) {
     return () => clearInterval(interval);
   }, [timer]);
   React.useEffect(() => {
-    timer.current = true;
+    set_timer(true);
     function get_quiz_json(data) {
       data = data.split('\n');
       let output = [];
@@ -88,8 +152,8 @@ function Exam({route, navigation}) {
         output.push({
           question: question.replace(/"/g, ''),
           choices,
-          right_answer: choice1.replace(/"/g, ''),
-          review: false,
+          correct_answer: choice1.replace(/"/g, ''),
+          done: false,
           explanation: explanation.replace(/"/g, ''),
           user_answer: '',
           id: id.replace(/"/g, ''),
@@ -117,7 +181,7 @@ function Exam({route, navigation}) {
         .then(data => {
           let quiz_data = get_quiz_json(data);
           QuizData.current = quiz_data;
-          setLoading(false);
+          set_loading(false);
           play_animation(question_animation, 400);
         });
     } catch (error) {
@@ -136,32 +200,55 @@ function Exam({route, navigation}) {
       animated: false,
     });
     function reset_data() {
-      setIsValid(false);
-      setUserChoice('');
-      correct.current = false;
+      set_selected_choice_checked(false);
+      update_selected_choice('');
+      is_user_answer_correct.current = false;
     }
     function update_text() {
       const on_last_item = quizIndex === QuizData.current.length - 1;
       if (on_last_item) {
-        if (QuizData.current.every(q => q.review)) {
-          setNavText('إظهار النتيجة');
+        if (QuizData.current.every(q => q.done)) {
+          set_footer_text('إظهار النتيجة');
           return;
         }
-        setNavText('تخطي السؤال الأخير؟');
+        set_footer_text('تخطي السؤال الأخير؟');
         return;
       }
-      setNavText(quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب');
+      set_footer_text(quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب');
     }
-    update_skipped_questions();
+
+    function handle_modal() {
+      const on_last_question = quizIndex === QuizData.current.length - 1;
+      const all_questions_done = QuizData.current.every(
+        question => question.done,
+      );
+      const has_skipped_questions = skipped_questions.length > 0;
+      if (on_last_question && skip_mode === false && has_skipped_questions) {
+        set_timer(false);
+        set_skip_mode(true);
+        return;
+      }
+      if (all_questions_done) {
+        set_timer(false);
+        set_exam_modal(true);
+        return;
+      }
+    }
+    add_to_skipped_questions();
     reset_data();
     update_text();
+    handle_modal();
     play_explanation_animation();
     play_animation(question_animation, 400);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizIndex]);
   React.useEffect(() => {
     navigation.addListener('beforeRemove', e => {
-      if (progress_value.current === 0) {
+      if (
+        progress_value.current === 0 ||
+        QuizData.current.every(q => q.done === true) ||
+        (exam_modal && skip_mode === false)
+      ) {
         return;
       }
       e.preventDefault();
@@ -178,31 +265,11 @@ function Exam({route, navigation}) {
         ],
       );
     });
-  }, [navigation]);
+  }, [navigation, exam_modal, skip_mode]);
 
-  function update_skipped_questions() {
-    const user_data = QuizData.current[quizIndex].user_answer;
-    const unique_index_id =
-      skip_data.current.map(i => i.index_id).includes(quizIndex) === false;
-    if (user_data.length === 0) {
-      if (unique_index_id) {
-        skip_data.current = [
-          ...skip_data.current,
-          {
-            index_id: quizIndex,
-            done: false,
-          },
-        ];
-      }
-    }
-    return;
-  }
   function play_explanation_animation() {
-    const question_is_done = QuizData.current[quizIndex].review;
+    const question_is_done = QuizData.current[quizIndex].done;
     const has_explanation = QuizData.current[quizIndex].explanation.length > 5;
-    if (preview.current && has_explanation) {
-      return play_animation(explanation_animation, 300);
-    }
     if (question_is_done && has_explanation) {
       return play_animation(explanation_animation, 300);
     }
@@ -216,127 +283,106 @@ function Exam({route, navigation}) {
       useNativeDriver: true,
     }).start();
   }
-  function update_quiz_data() {
-    QuizData.current[quizIndex].review = true;
-    QuizData.current[quizIndex].user_answer = userChoice;
+
+  function add_to_skipped_questions() {
+    if (
+      QuizData.current[quizIndex].done === false &&
+      skipped_questions.includes(quizIndex) === false
+    ) {
+      update_skipped_questions([...new Set([...skipped_questions, quizIndex])]);
+    }
+    return;
   }
-  function update_skip_data() {
-    if (skip_data.current.map(item => item.index_id).includes(quizIndex)) {
-      let i = skip_data.current.map(item => item.index_id).indexOf(quizIndex);
-      skip_data.current[i].done = true;
-    }
-  }
-  function handle_press(c) {
-    const _user_data = userChoice.length === 0;
-    const _question_done = QuizData.current[quizIndex].review;
-    if (isValid) {
+
+  function handle_press(choice) {
+    if (selected_choice_checked) {
       return;
     }
-    if (_question_done) {
+    if (QuizData.current[quizIndex].done) {
       return;
     }
-    if (preview.current) {
-      return;
-    }
-    setUserChoice(c);
-    setNavText('التأكد من الإجابة');
-    if (_user_data) {
+    update_selected_choice(choice);
+    set_footer_text('التأكد من الإجابة');
+    if (selected_choice.length === 0) {
       play_animation(footer_animation, 400);
     }
   }
-  function check_correct_input() {
-    const _correct_answer = QuizData.current[quizIndex].right_answer;
-    if (userChoice === _correct_answer) {
-      correct_count.current += 1;
-      correct.current = true;
-    }
-  }
+
   function validate() {
-    const _question_done = QuizData.current[quizIndex].review;
-    const _user_input = userChoice.length === 0;
-    if (_question_done) {
+    if (QuizData.current[quizIndex].done) {
       return;
     }
-    if (_user_input) {
+    if (selected_choice.length === 0) {
       return;
     }
+    function check_answer() {
+      const _correct_answer = QuizData.current[quizIndex].correct_answer;
+      if (selected_choice === _correct_answer) {
+        correct_count.current += 1;
+        is_user_answer_correct.current = true;
+      }
+    }
+    function update_QuizData() {
+      QuizData.current[quizIndex].done = true;
+      QuizData.current[quizIndex].user_answer = selected_choice;
+    }
+
     progress_value.current++;
-    setIsValid(true);
-    update_quiz_data();
-    setNavText('السؤال التالي');
-    update_skip_data();
-    check_correct_input();
+    update_QuizData();
+    if (skipped_questions.includes(quizIndex)) {
+      update_skipped_questions(
+        skipped_questions.filter(item => item !== quizIndex),
+      );
+    }
+    check_answer();
+    set_selected_choice_checked(true);
+    set_footer_text('السؤال التالي');
     play_explanation_animation();
     play_animation(footer_animation, 400);
   }
-  function get_next_skip_index() {
-    if (skip_mode.current === false) {
-      return 0;
-    }
-    let _skip_data = skip_data.current;
-    const _unsolved_data = _skip_data.filter(s => s.done === false);
-    if (_unsolved_data.length === 1) {
-      return _unsolved_data[0].index_id;
-    }
-    let bigger_indexes = [];
-    let smaller_indexes = [];
-    for (let i = 0; i < _skip_data.length; i++) {
-      const element = _skip_data[i];
-      if (element.index_id < quizIndex) {
-        smaller_indexes.push(element);
+
+  function update_index() {
+    function next_skip_index() {
+      if (skip_mode === false) {
+        return 0;
       }
-      if (element.index_id > quizIndex) {
-        bigger_indexes.push(element);
+
+      if (skipped_questions.length === 1) {
+        return skipped_questions[0];
       }
+      let bigger_indexes = [];
+      let smaller_indexes = [];
+      for (let i = 0; i < skipped_questions.length; i++) {
+        const element = skipped_questions[i];
+        if (element < quizIndex) {
+          smaller_indexes.push(element);
+        }
+        if (element > quizIndex) {
+          bigger_indexes.push(element);
+        }
+      }
+      const output = [...bigger_indexes, ...smaller_indexes];
+      console.log('** ', output);
+      if (output.length === 0) {
+        return 0;
+      }
+      return output[0];
     }
-    const output = [...bigger_indexes, ...smaller_indexes].filter(
-      i => i.done === false,
-    );
-    if (output.length === 0) {
-      return 0;
-    }
-    return output[0].index_id;
-  }
-  function handle_modal() {
-    const on_last_index = quizIndex === QuizData.current.length - 1;
-    const on_all_done = QuizData.current.every(question => question.review);
-    const on_not_finished = skip_data.current.every(q => q.done) === false;
-    if (on_all_done && !preview.current) {
-      timer.current = false;
-      setExamModal(true);
-      setOnSkip(false);
-      return;
-    }
-    if (on_last_index && preview.current) {
-      timer.current = false;
-      setExamModal(true);
-      setOnSkip(false);
-      return;
-    }
-    if (on_last_index && !skip_mode.current && on_not_finished) {
-      timer.current = false;
-      setExamModal(true);
-      setOnSkip(true);
-      return;
-    }
-  }
-  function handle_index() {
     const total = QuizData.current.length;
     let next_index = quizIndex + 1;
-    let skip_index = get_next_skip_index();
+    let skip_index = next_skip_index();
     if (next_index === total) {
       next_index = total - 1;
     }
-    setQuizIndex(skip_mode.current ? skip_index : next_index);
+    setQuizIndex(skip_mode ? skip_index : next_index);
   }
-  function handle_next() {
-    handle_modal();
+  function next_question() {
     direction.current = 'right';
     play_animation(number_animation, 400);
     play_animation(footer_animation, 400);
-    handle_index();
+    update_index();
   }
-  function handle_previous() {
+  function previous_question() {
     if (quizIndex === 0) {
       return;
     }
@@ -345,114 +391,54 @@ function Exam({route, navigation}) {
     play_animation(number_animation, 500);
     setQuizIndex(next_index);
   }
-  function handle_next_button() {
-    if (userChoice.length !== 0 && isValid === false) {
+  function handle_footer() {
+    if (selected_choice.length !== 0 && selected_choice_checked === false) {
       return validate();
     }
     if (quizIndex === 0) {
-      update_skipped_questions();
+      add_to_skipped_questions();
     }
-    handle_next();
+    next_question();
   }
-  function Question({item}) {
-    return (
-      <Animated.View
-        style={{
-          width: width - 32,
-          opacity: question_animation.interpolate({
-            inputRange: [0, 100],
-            outputRange: [0, 1],
-          }),
-          transform: [
-            {
-              translateY: question_animation.interpolate({
-                inputRange: [0, 100],
-                outputRange: [10, 0],
-              }),
-            },
-          ],
-        }}
-        key={item.id}>
-        <Spacer />
-        <Text
-          style={[
-            styles.title,
-            {
-              color: Theme.text,
-            },
-          ]}>
-          {item.question}
-        </Text>
-        <Spacer vertical={16} />
-        {quiz_mcq ? (
-          <View>
-            {item.choices.map((choice, i) => {
-              return (
-                <Choice
-                  key={i}
-                  dir={quiz_rtl}
-                  data={choice}
-                  prefix={i}
-                  selectedChoice={userChoice}
-                  validation={isValid}
-                  review={item.review}
-                  correctAnswer={item.right_answer}
-                  userInput={item.user_answer}
-                  handlePress={handle_press}
-                />
-              );
-            })}
-          </View>
-        ) : null}
-        <Explanation
-          rtl={quiz_rtl}
-          animation={explanation_animation}
-          text={item.explanation}
-        />
-      </Animated.View>
-    );
-  }
+
   function resume_quiz() {
-    timer.current = true;
-    skip_mode.current = true;
-    const _next_index = get_next_skip_index();
-    setQuizIndex(_next_index);
-    setExamModal(false);
+    set_timer(true);
+    set_skip_mode(true);
+    set_exam_modal(false);
+    update_index();
     return;
   }
   function review_quiz() {
-    skip_mode.current = false;
-    preview.current = true;
-    timer.current = false;
+    set_skip_mode(false);
+    set_timer(false);
     setQuizIndex(0);
     QuizData.current.map(question => {
-      if (question.review === false) {
-        question.review = true;
+      if (question.done === false) {
+        question.done = true;
         question.user_answer = '';
       }
     });
-    setExamModal(false);
+    set_exam_modal(false);
   }
   function skip_to_score() {
-    skip_mode.current = false;
-    preview.current = false;
-    timer.current = false;
-    setOnSkip(true);
-    setExamModal(true);
+    set_timer(false);
+    set_skip_mode(false);
+    set_exam_modal(true);
   }
-  function show_answer() {
-    const is_done = QuizData.current[quizIndex].review;
-    setNavText('السؤال التالي');
+  function interview_question() {
+    // refactor
+    set_footer_text('السؤال التالي');
     play_animation(footer_animation, 300);
-    if (is_done) {
-      handle_next();
+    if (QuizData.current[quizIndex].done) {
+      return next_question();
     }
-    QuizData.current[quizIndex].review = true;
+    QuizData.current[quizIndex].done = true;
     play_animation(explanation_animation, 300);
   }
   function add_to_bookmarks() {
     return;
   }
+
   if (loading) {
     return <Loading />;
   }
@@ -466,34 +452,32 @@ function Exam({route, navigation}) {
         },
       ]}>
       <ExamModal
-        visible={examModal}
-        onSkip={onSkip}
+        visible={exam_modal}
+        onSkip={skip_mode}
         details={{
           correct_num: correct_count.current,
           progress: (100 / QuizData.current.length) * correct_count.current,
-          skipped_num: skip_data.current.filter(q => q.done === false).length,
-          no_input:
-            QuizData.current.filter(q => q.review === true).length === 0,
+          skipped_num: skipped_questions.length,
+          no_input: QuizData.current.filter(q => q.done === true).length === 0,
           time: time,
           total_num: QuizData.current.length,
         }}
-        onPressPrimary={onSkip ? resume_quiz : review_quiz}
+        onPressPrimary={skip_mode ? resume_quiz : review_quiz}
         onPressSecondary={() =>
-          onSkip ? skip_to_score() : navigation.goBack()
+          skip_mode ? skip_to_score() : navigation.goBack()
         }
         onRequestClose={() => navigation.goBack()}
       />
       <Header
         details={{
           title: quiz_title,
-          subject: quiz_subject,
           rtl: quiz_rtl,
           direction: direction.current,
           total_num: QuizData.current.length,
           progress_step:
             (100 / QuizData.current.length) * progress_value.current,
           index: quizIndex,
-          exit_point: skip_mode.current || preview.current,
+          exit_point: skip_mode.current,
           animation: number_animation,
           bookmark_status: bookmarks
             .map(b => b.id)
@@ -504,8 +488,15 @@ function Exam({route, navigation}) {
         onClose={skip_to_score}
         onBookmark={add_to_bookmarks}
       />
+
       <ScrollView
         contentContainerStyle={styles.scrollView}
+        onLayout={({nativeEvent: LayoutEvent}) =>
+          set_scrollView_height(LayoutEvent.layout.height)
+        }
+        scrollEnabled={
+          questions_dimensions.current[quizIndex] > scrollView_height
+        }
         showsVerticalScrollIndicator={true}>
         <FlatList
           initialNumToRender={1}
@@ -535,24 +526,27 @@ function Exam({route, navigation}) {
         {quiz_mcq ? (
           <>
             <ExamButton
-              text={navText}
+              text={footer_text}
               textAnimation={footer_animation}
-              onPress={handle_next_button}
-              isCorrect={correct.current}
-              isChecked={isValid}
-              onChoose={userChoice.length !== 0 && isValid === false}
+              onPress={handle_footer}
+              isCorrect={is_user_answer_correct}
+              isChecked={selected_choice_checked}
+              onChoose={
+                selected_choice.length !== 0 &&
+                selected_choice_checked === false
+              }
               flex={3}
               main
             />
             <ExamButton
               text={`السـؤال ${'\n'} السابـق`}
-              onPress={handle_previous}
+              onPress={previous_question}
               index={quizIndex}
               isPrevious
             />
           </>
         ) : (
-          <ExamButton text={navText} main onPress={show_answer} />
+          <ExamButton text={footer_text} main onPress={interview_question} />
         )}
       </View>
     </View>
@@ -585,6 +579,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     padding: 16,
+    paddingTop: 0,
   },
 });
 

@@ -85,7 +85,6 @@ export default function Header({details, onNavigation, onClose, onBookmark}) {
 const styles = StyleSheet.create({
   main_container: {
     padding: 16,
-    marginBottom: 8,
   },
   headerContainer: {
     flexDirection: 'row-reverse',

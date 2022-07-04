@@ -3,15 +3,15 @@ import {TouchableOpacity, Text, Animated, View, StyleSheet} from 'react-native';
 import {ThemeContext, Colors} from '../Theme';
 
 export default function Choice({
-  data,
+  choice,
   prefix,
   selectedChoice,
-  validation,
-  userInput,
-  review,
+  checked,
+  done,
   correctAnswer,
   handlePress,
-  dir,
+  rtl,
+  user_choice,
 }) {
   const prefixes = {
     0: 'A',
@@ -20,18 +20,18 @@ export default function Choice({
     3: 'D',
     4: 'E',
   };
-  let correct = review && data === correctAnswer;
-  let wrong = review && data === userInput;
-  let chosen = !validation && data === selectedChoice;
+  let correct = done && choice === correctAnswer;
+  let wrong = done && choice === user_choice;
+  let chosen = !checked && choice === selectedChoice;
   const {Theme} = React.useContext(ThemeContext);
 
   return (
-    <TouchableOpacity onPress={() => handlePress(data)}>
+    <TouchableOpacity onPress={() => handlePress(choice)}>
       <View
         style={[
           styles.container,
           {
-            flexDirection: dir ? 'row-reverse' : 'row',
+            flexDirection: rtl ? 'row-reverse' : 'row',
             backgroundColor: Theme.grey.default,
             borderColor: chosen
               ? Colors.blue
@@ -78,7 +78,7 @@ export default function Choice({
               color: Theme.text,
             },
           ]}>
-          {data}
+          {choice}
         </Text>
       </View>
     </TouchableOpacity>
