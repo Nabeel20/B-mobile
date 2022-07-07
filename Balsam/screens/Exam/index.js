@@ -53,6 +53,7 @@ function Exam({route, navigation}) {
   const [loading, set_loading] = React.useState(true);
   const [scrollView_height, set_scrollView_height] = React.useState(0);
   const questions_dimensions = React.useRef([]);
+  const scrollView_ref = React.useRef(null);
   const Question = function ({item}) {
     return (
       <Animated.View
@@ -239,6 +240,7 @@ function Exam({route, navigation}) {
     update_text();
     handle_modal();
     play_explanation_animation();
+    scrollView_ref.current?.scrollTo({y: 0, animated: false});
     play_animation(question_animation, 400);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizIndex]);
@@ -490,6 +492,7 @@ function Exam({route, navigation}) {
       />
 
       <ScrollView
+        ref={scrollView_ref}
         contentContainerStyle={styles.scrollView}
         onLayout={({nativeEvent: LayoutEvent}) =>
           set_scrollView_height(LayoutEvent.layout.height)
