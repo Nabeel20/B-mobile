@@ -8,7 +8,6 @@ import {
   Animated,
   ScrollView,
   ToastAndroid,
-  Alert,
 } from 'react-native';
 import Choice from './Choice';
 import Spacer from './Elements/Spacer';
@@ -48,12 +47,18 @@ function Exam({route, navigation}) {
   const [footer_text, set_footer_text] = React.useState(
     quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب',
   );
-  const [exam_modal, set_exam_modal] = React.useState(false);
+  const [skip_modal, set_skip_modal] = React.useState(false);
+  const [score_modal, set_score_modal] = React.useState(false);
+  const [exit_modal, set_exit_modal] = React.useState(false);
+
   const [time, setTime] = React.useState(0);
   const [loading, set_loading] = React.useState(true);
+
   const [scrollView_height, set_scrollView_height] = React.useState(0);
   const questions_dimensions = React.useRef([]);
   const scrollView_ref = React.useRef(null);
+  const exit_event_ref = React.useRef(null);
+
   const Question = function ({item}) {
     return (
       <Animated.View
@@ -65,6 +70,7 @@ function Exam({route, navigation}) {
         }}
         style={{
           width: width - 32,
+          margin: 2,
           opacity: question_animation.interpolate({
             inputRange: [0, 100],
             outputRange: [0, 1],
@@ -218,27 +224,9 @@ function Exam({route, navigation}) {
       set_footer_text(quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب');
     }
 
-    function handle_modal() {
-      const on_last_question = quizIndex === QuizData.current.length - 1;
-      const all_questions_done = QuizData.current.every(
-        question => question.done,
-      );
-      const has_skipped_questions = skipped_questions.length > 0;
-      if (on_last_question && skip_mode === false && has_skipped_questions) {
-        set_timer(false);
-        set_skip_mode(true);
-        return;
-      }
-      if (all_questions_done) {
-        set_timer(false);
-        set_exam_modal(true);
-        return;
-      }
-    }
     add_to_skipped_questions();
     reset_data();
     update_text();
-    handle_modal();
     play_explanation_animation();
     scrollView_ref.current?.scrollTo({y: 0, animated: false});
     play_animation(question_animation, 400);
@@ -246,29 +234,23 @@ function Exam({route, navigation}) {
   }, [quizIndex]);
   React.useEffect(() => {
     navigation.addListener('beforeRemove', e => {
+      exit_event_ref.current = e.data.action;
       if (
         progress_value.current === 0 ||
         QuizData.current.every(q => q.done === true) ||
-        (exam_modal && skip_mode === false)
+        exit_modal
       ) {
         return;
       }
       e.preventDefault();
-      Alert.alert(
-        'مستعد للرحيل :(',
-        'لم تنه الاختبار، هل أنت متأكد من المغادرة؟',
-        [
-          {text: 'أكمل الاختبار', style: 'cancel', onPress: () => {}},
-          {
-            text: 'عودة',
-            style: 'destructive',
-            onPress: () => navigation.dispatch(e.data.action),
-          },
-        ],
-      );
+      set_exit_modal(true);
     });
-  }, [navigation, exam_modal, skip_mode]);
-
+  }, [navigation, exit_modal]);
+  React.useEffect(() => {
+    setTimeout(() => {
+      set_loading(false);
+    }, 1500);
+  }, []);
   function play_explanation_animation() {
     const question_is_done = QuizData.current[quizIndex].done;
     const has_explanation = QuizData.current[quizIndex].explanation.length > 5;
@@ -364,7 +346,6 @@ function Exam({route, navigation}) {
         }
       }
       const output = [...bigger_indexes, ...smaller_indexes];
-      console.log('** ', output);
       if (output.length === 0) {
         return 0;
       }
@@ -400,14 +381,37 @@ function Exam({route, navigation}) {
     if (quizIndex === 0) {
       add_to_skipped_questions();
     }
+    function handle_modal() {
+      const on_last_question = quizIndex === QuizData.current.length - 1;
+      const all_questions_done = QuizData.current.every(
+        question => question.done,
+      );
+      if (all_questions_done && skip_mode) {
+        set_score_modal(true);
+        return;
+      }
+      if (on_last_question && all_questions_done) {
+        set_score_modal(true);
+        return;
+      }
+      if (
+        on_last_question &&
+        skipped_questions.length > 0 &&
+        skip_mode === false
+      ) {
+        set_skip_modal(true);
+        return;
+      }
+    }
+    handle_modal();
     next_question();
   }
 
   function resume_quiz() {
     set_timer(true);
     set_skip_mode(true);
-    set_exam_modal(false);
     update_index();
+    set_skip_modal(false);
     return;
   }
   function review_quiz() {
@@ -420,12 +424,14 @@ function Exam({route, navigation}) {
         question.user_answer = '';
       }
     });
-    set_exam_modal(false);
+    set_score_modal(false);
   }
   function skip_to_score() {
-    set_timer(false);
+    update_skipped_questions([]);
     set_skip_mode(false);
-    set_exam_modal(true);
+    set_timer(false);
+    set_skip_modal(false);
+    set_score_modal(true);
   }
   function interview_question() {
     // refactor
@@ -454,33 +460,85 @@ function Exam({route, navigation}) {
         },
       ]}>
       <ExamModal
-        visible={exam_modal}
-        onSkip={skip_mode}
+        visible={exit_modal}
         details={{
-          correct_num: correct_count.current,
-          progress: (100 / QuizData.current.length) * correct_count.current,
-          skipped_num: skipped_questions.length,
-          no_input: QuizData.current.filter(q => q.done === true).length === 0,
-          time: time,
-          total_num: QuizData.current.length,
+          title: '?هل تود المغادرة',
+          sub_title: 'لم تنته بعد من الامتحان',
+          correct_answers_number: 0,
+          skipped_questions_number: 0,
+          questions_number: 0,
+          no_user_input: false,
+          time,
         }}
-        onPressPrimary={skip_mode ? resume_quiz : review_quiz}
-        onPressSecondary={() =>
-          skip_mode ? skip_to_score() : navigation.goBack()
-        }
+        buttons={[
+          {
+            text: 'leave quiz',
+            color: 'red',
+          },
+          {
+            text: 'continue',
+            color: undefined,
+          },
+        ]}
+        onPress={[
+          () => {
+            navigation.dispatch(exit_event_ref.current);
+          },
+          () => set_exit_modal(false),
+        ]}
         onRequestClose={() => navigation.goBack()}
       />
+      <ExamModal
+        visible={skip_modal}
+        details={{
+          title: 'الخطوة التالية؟',
+          sub_title: `تجاوزت ${skipped_questions.length} من الأسئلة`,
+          correct_answers_number: 0,
+          skipped_questions_number: skipped_questions.length,
+          questions_number: 0,
+          no_user_input: false,
+          time,
+        }}
+        buttons={[
+          {text: 'حل الباقي', color: 'blue'},
+          {text: 'انتقل للنتيجة', color: undefined},
+        ]}
+        onPress={[resume_quiz, skip_to_score]}
+        onRequestClose={() => navigation.goBack()}
+      />
+      <ExamModal
+        visible={score_modal}
+        details={{
+          title: 'الله يعطيك العافية',
+          sub_title: '',
+          correct_answers_number: correct_count.current,
+          skipped_questions_number: skipped_questions.length,
+          questions_number: QuizData.current.length,
+          no_user_input: QuizData.current.every(q => q.done === false),
+          time,
+        }}
+        buttons={[
+          {
+            text: 'راجع الأسئلة',
+            color: undefined,
+          },
+        ]}
+        onPress={[review_quiz]}
+        exitButton
+        onRequestClose={() => navigation.goBack()}
+      />
+
       <Header
         details={{
-          title: quiz_title,
-          rtl: quiz_rtl,
+          quiz_title,
+          quiz_rtl,
           direction: direction.current,
-          total_num: QuizData.current.length,
+          questions_number: QuizData.current.length,
           progress_step:
             (100 / QuizData.current.length) * progress_value.current,
-          index: quizIndex,
-          exit_point: skip_mode.current,
-          animation: number_animation,
+          current_index: quizIndex,
+          exit_point: skip_mode,
+          number_animation,
           bookmark_status: bookmarks
             .map(b => b.id)
             .includes(QuizData.current[quizIndex].id),
