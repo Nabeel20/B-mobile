@@ -246,11 +246,7 @@ function Exam({route, navigation}) {
       set_exit_modal(true);
     });
   }, [navigation, exit_modal]);
-  React.useEffect(() => {
-    setTimeout(() => {
-      set_loading(false);
-    }, 1500);
-  }, []);
+
   function play_explanation_animation() {
     const question_is_done = QuizData.current[quizIndex].done;
     const has_explanation = QuizData.current[quizIndex].explanation.length > 5;
