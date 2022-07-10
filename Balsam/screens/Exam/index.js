@@ -70,7 +70,6 @@ function Exam({route, navigation}) {
         }}
         style={{
           width: width - 32,
-          margin: 2,
           opacity: question_animation.interpolate({
             inputRange: [0, 100],
             outputRange: [0, 1],
@@ -406,7 +405,7 @@ function Exam({route, navigation}) {
   function resume_quiz() {
     set_timer(true);
     set_skip_mode(true);
-    update_index();
+    setQuizIndex(skipped_questions[0] === undefined ? 0 : skipped_questions[0]);
     set_skip_modal(false);
     return;
   }
@@ -423,7 +422,6 @@ function Exam({route, navigation}) {
     set_score_modal(false);
   }
   function skip_to_score() {
-    update_skipped_questions([]);
     set_skip_mode(false);
     set_timer(false);
     set_skip_modal(false);
