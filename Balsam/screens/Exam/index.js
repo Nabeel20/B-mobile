@@ -435,20 +435,31 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
   }
   function add_to_bookmarks() {
     let question_id = QuizData.current[quizIndex].id;
+    let _bookmarks = JSON.parse(storage.getString('bookmarks'));
     if (bookmarksIDs.includes(question_id) === false) {
       bookmarksIDs.push(question_id);
       set_bookmarks_status(true);
-      let _bookmarks = JSON.parse(storage.getString('bookmarks'));
       _bookmarks.push({
         ...QuizData.current[quizIndex],
         subject: quiz_subject,
         title: quiz_title,
       });
       storage.set('bookmarks', JSON.stringify(_bookmarks));
-      ToastAndroid.show('تمت الإضافة للمحفوظات', ToastAndroid.LONG);
+      ToastAndroid.showWithGravity(
+        'تمت الإضافة للمحفوظات',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
     } else {
-      bookmarksIDs = bookmarksIDs.filter(item => item !== question_id);
+      bookmarksIDs = bookmarksIDs.filter(b => b !== question_id);
       set_bookmarks_status(false);
+      _bookmarks = _bookmarks.filter(item => item.id !== question_id);
+      storage.set('bookmarks', JSON.stringify(_bookmarks));
+      ToastAndroid.showWithGravity(
+        'تمت الإزالة من المحفوظات',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
     }
     return;
   }
