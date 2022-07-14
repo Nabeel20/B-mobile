@@ -7,7 +7,7 @@ import {
 const ThemeContext = React.createContext();
 const Colors = {
   green: '#10B981',
-  green_light: '#bbf7d0',
+  green_light: '#bbf7d0', //"#A7F3D0",
   red: '#DC2626',
   red_light: '#FECACA',
   blue: '#0284C7',
@@ -19,6 +19,11 @@ const ButtonStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   margin: 4,
+};
+const ButtonStyleText = {
+  fontSize: 16,
+  fontFamily: 'Readex pro',
+  fontWeight: 600,
 };
 function ThemeProvider({children}) {
   const [darkTheme, setTheme] = React.useState(false);
@@ -115,4 +120,4 @@ function ThemeProvider({children}) {
   );
 }
 
-export {ThemeContext, ThemeProvider, Colors};
+export {ThemeContext, ThemeProvider, Colors, ButtonStyle, ButtonStyleText};
