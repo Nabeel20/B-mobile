@@ -3,27 +3,20 @@ import {
   Text as NativeText,
   View as ViewNative,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 const ThemeContext = React.createContext();
 const Colors = {
   green: '#10B981',
-  green_light: '#bbf7d0', //"#A7F3D0",
-  red: '#DC2626',
+  green_light: '#bbf7d0',
   red_light: '#FECACA',
   blue: '#0284C7',
   blue_light: '#BFDBFE',
 };
-
-const ButtonStyle = {
-  padding: 14,
-  alignItems: 'center',
-  justifyContent: 'center',
-  margin: 4,
-};
-const ButtonStyleText = {
-  fontSize: 16,
-  fontFamily: 'Readex pro',
-  fontWeight: 600,
+const fonts = {
+  regular: 'ReadexPro-Regular',
+  medium: 'ReadexPro-Medium',
+  bold: 'ReadexPro-Bold',
 };
 function ThemeProvider({children}) {
   const [darkTheme, setTheme] = React.useState(false);
@@ -43,12 +36,14 @@ function ThemeProvider({children}) {
     size = 14,
     padding,
     textChildren,
+    weight,
   }) {
     return (
       <NativeText
         style={[
           {
-            fontFamily: 'Readex pro',
+            fontFamily:
+              fonts[weight] === undefined ? fonts.regular : fonts[weight],
             color:
               Colors[color] === undefined
                 ? secondary
@@ -87,8 +82,8 @@ function ThemeProvider({children}) {
                 : background_colors[color],
             borderRadius: round ? 99 : 8,
             flex: flex === undefined ? null : 1,
-            ...ButtonStyle,
           },
+          styles.default_button,
           style,
         ]}>
         {buttonChildren}
@@ -119,5 +114,12 @@ function ThemeProvider({children}) {
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
-
-export {ThemeContext, ThemeProvider, Colors, ButtonStyle, ButtonStyleText};
+const styles = StyleSheet.create({
+  default_button: {
+    padding: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 4,
+  },
+});
+export {ThemeContext, ThemeProvider, Colors};
