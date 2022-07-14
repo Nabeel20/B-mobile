@@ -1,106 +1,114 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Animated,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import {get_titles} from '../helper/api';
-import {List} from './components/List';
+import {StyleSheet} from 'react-native';
+import {List} from './components/List/index';
+import {ThemeContext} from './Theme';
 import BackButton from './components/Back.button';
-import {Colors, ThemeContext} from './Theme';
 import Loading from './components/Loading';
 
 export default function Subject({route, navigation}) {
-  const _animation = React.useRef(new Animated.Value(100)).current;
-  const {Theme} = React.useContext(ThemeContext);
+  const {Button, Text, View} = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
-  const _status = React.useRef(true);
-  const {title, finishedIDs, url} = route.params;
-  const [listData, setListData] = React.useState([]);
+  const {title: subject_title, list, url: subject_url} = route.params;
+  const [list_data, set_list_data] = React.useState(list);
+  const [loading_error, set_loading_error] = React.useState(false);
+  function get_subjects_json(data) {
+    data = data.split('\n');
+    let output = [];
+    for (let index = 1; index < data.length; index++) {
+      const [
+        title,
+        category,
+        rtl,
+        mcq,
+        branch,
+        url,
+        id,
+        number,
+        editor_choice,
+      ] = data[index].split(',');
+      output.push({
+        title: title.replace(/"/g, ''),
+        category: category.replace(/"/g, ''),
+        rtl: rtl.replace(/"/g, '') === 'TRUE' ? true : false,
+        mcq: mcq.replace(/"/g, '') === 'TRUE' ? true : false,
+        branch: branch.replace(/"/g, '') === 'TRUE' ? true : false,
+        url: url.replace(/"/g, ''),
+        id: id.replace(/"/g, ''),
+        number: number.replace(/"/g, ''),
+        editor_choice:
+          editor_choice.replace(/"/g, '').slice(0, 4) === 'TRUE' ? true : false,
+      });
+    }
+    return output;
+  }
   React.useEffect(() => {
-    if (url === undefined) {
+    if (subject_url === undefined) {
       return;
     }
-    async function handle_data(id) {
-      let _subjects = await get_titles(url);
-      if (_subjects.status === false) {
-        _status.current = false;
-        return;
+    async function handle_data() {
+      try {
+        fetch(
+          `https://docs.google.com/spreadsheets/d/${subject_url}/export?format=csv`,
+        )
+          .then(res => res.text())
+          .then(data => set_list_data(get_subjects_json(data)));
+      } catch (error) {
+        set_loading_error(true);
       }
-      setListData(_subjects.data);
     }
     handle_data();
-  }, [url]);
-
+  }, [subject_url]);
   function get_subject() {
-    if (title.includes(':')) {
-      const subject = title.split(':');
+    if (subject_title.includes(':')) {
+      const subject = subject_title.split(':');
       return subject[0];
     }
-    return title;
+    return subject_title;
   }
   if (loading) {
-    return (
-      <Loading status={_status.current} onPress={() => setLoading(false)} />
-    );
+    return <Loading status={loading_error} onPress={() => setLoading(false)} />;
   }
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: Theme.background,
-        },
-      ]}>
+    <View style={styles.container}>
       <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.bookmarkButton}
+        <Button
+          color="blue"
+          round
           onPress={() =>
             navigation.navigate('Bookmarks', {subject: get_subject()})
           }>
-          <Text style={styles.bookmark}>المحفوظات</Text>
-          <Image
-            source={require('../assets/bookmarksIcon.png')}
-            style={styles.image}
-          />
-        </TouchableOpacity>
+          <Text color="blue">المحفوظات</Text>
+        </Button>
         <BackButton
           onPress={() => {
             navigation.goBack();
           }}
         />
       </View>
-      <View style={{height: '20%'}} />
-      <Text
-        style={[
-          styles.title,
-          {
-            color: Theme.text,
-          },
-        ]}>
-        {title}
+
+      <View style={styles.header_spacer} />
+
+      <Text style={styles.title} weight="medium">
+        {subject_title}
       </Text>
+
       <List
-        animation={_animation}
-        data={listData}
-        finishedIDs={finishedIDs}
-        onPress={data => {
-          if (data.branch) {
+        data={list_data}
+        onPress={list_item => {
+          if (list_item.branch) {
             navigation.push('Subject', {
-              title: `${data.subject}: ${data.title}`,
-              url: data.url,
+              title: `${list_item.subject}: ${list_item.title}`,
+              list: [],
+              url: list_item.url,
             });
             return;
           }
           navigation.navigate('Exam', {
-            quiz_rtl: data.rtl,
-            quiz_title: data.title,
-            quiz_subject: data.subject,
-            quiz_id: data.url,
-            quiz_mcq: data.mcq,
+            quiz_rtl: list_item.rtl,
+            quiz_title: list_item.title,
+            quiz_subject: list_item.subject,
+            quiz_id: list_item.url,
+            quiz_mcq: list_item.mcq,
           });
         }}
       />
@@ -111,36 +119,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    height: '100%',
   },
   title: {
-    fontFamily: 'ReadexPro-Bold',
-    fontSize: 21,
+    fontSize: 24,
     marginRight: 8,
     marginBottom: 16,
-  },
-  bookmark: {
-    fontFamily: 'ReadexPro-Regular',
-    fontSize: 14,
-    color: Colors.blue,
-  },
-  bookmarkButton: {
-    padding: 8,
-    borderRadius: 8,
-    margin: 8,
-    alignSelf: 'flex-end',
-    backgroundColor: Colors.blue_light,
-    flexDirection: 'row',
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  image: {
-    width: 20,
-    height: 20,
-    tintColor: Colors.blue,
-    marginLeft: 4,
+  header_spacer: {
+    height: '20%',
   },
 });
