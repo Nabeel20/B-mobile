@@ -18,16 +18,15 @@ import ExamModal from './Elements/ExamModal';
 import ExamButton from './Elements/ExamButton';
 import {ThemeContext} from '../Theme';
 
-function Exam({route, navigation}) {
+function Exam({route, navigation, storage, bookmarksIDs}) {
   const {Theme} = React.useContext(ThemeContext);
-  const {quiz_rtl, quiz_title, quiz_id, quiz_mcq} = route.params;
+  const {quiz_rtl, quiz_title, quiz_subject, quiz_id, quiz_mcq} = route.params;
 
   const {width} = useWindowDimensions();
   const flatListRef = React.useRef(null);
 
-  const QuizData = React.useRef([]);
+  const QuizData = React.useRef([{id: undefined}]);
   const [quizIndex, setQuizIndex] = React.useState(0);
-  const [bookmarks, updateBookmarks] = React.useState([]);
   const [timer, set_timer] = React.useState(false);
   const [skip_mode, set_skip_mode] = React.useState(false);
   const [skipped_questions, update_skipped_questions] = React.useState([]);
@@ -53,6 +52,7 @@ function Exam({route, navigation}) {
 
   const [time, setTime] = React.useState(0);
   const [loading, set_loading] = React.useState(true);
+  const [bookmark_status, set_bookmarks_status] = React.useState(false);
 
   const [scrollView_height, set_scrollView_height] = React.useState(0);
   const questions_dimensions = React.useRef([]);
@@ -222,6 +222,7 @@ function Exam({route, navigation}) {
       }
       set_footer_text(quiz_mcq ? 'السؤال التالي' : 'إظهار الجواب');
     }
+    set_bookmarks_status(bookmarksIDs.includes(QuizData.current[quizIndex].id));
 
     add_to_skipped_questions();
     reset_data();
@@ -272,7 +273,6 @@ function Exam({route, navigation}) {
     }
     return;
   }
-
   function handle_press(choice) {
     if (selected_choice_checked) {
       return;
@@ -286,7 +286,6 @@ function Exam({route, navigation}) {
       play_animation(footer_animation, 400);
     }
   }
-
   function validate() {
     if (QuizData.current[quizIndex].done) {
       return;
@@ -319,7 +318,6 @@ function Exam({route, navigation}) {
     play_explanation_animation();
     play_animation(footer_animation, 400);
   }
-
   function update_index() {
     function next_skip_index() {
       if (skip_mode === false) {
@@ -401,7 +399,6 @@ function Exam({route, navigation}) {
     handle_modal();
     next_question();
   }
-
   function resume_quiz() {
     set_timer(true);
     set_skip_mode(true);
@@ -428,7 +425,6 @@ function Exam({route, navigation}) {
     set_score_modal(true);
   }
   function interview_question() {
-    // refactor
     set_footer_text('السؤال التالي');
     play_animation(footer_animation, 300);
     if (QuizData.current[quizIndex].done) {
@@ -438,6 +434,22 @@ function Exam({route, navigation}) {
     play_animation(explanation_animation, 300);
   }
   function add_to_bookmarks() {
+    let question_id = QuizData.current[quizIndex].id;
+    if (bookmarksIDs.includes(question_id) === false) {
+      bookmarksIDs.push(question_id);
+      set_bookmarks_status(true);
+      let _bookmarks = JSON.parse(storage.getString('bookmarks'));
+      _bookmarks.push({
+        ...QuizData.current[quizIndex],
+        subject: quiz_subject,
+        title: quiz_title,
+      });
+      storage.set('bookmarks', JSON.stringify(_bookmarks));
+      ToastAndroid.show('تمت الإضافة للمحفوظات', ToastAndroid.LONG);
+    } else {
+      bookmarksIDs = bookmarksIDs.filter(item => item !== question_id);
+      set_bookmarks_status(false);
+    }
     return;
   }
 
@@ -519,7 +531,10 @@ function Exam({route, navigation}) {
         ]}
         onPress={[review_quiz]}
         exitButton
-        onRequestClose={() => navigation.goBack()}
+        onRequestClose={() => {
+          navigation.goBack();
+          set_exit_modal(false);
+        }}
       />
 
       <Header
@@ -533,9 +548,7 @@ function Exam({route, navigation}) {
           current_index: quizIndex,
           exit_point: skip_mode,
           number_animation,
-          bookmark_status: bookmarks
-            .map(b => b.id)
-            .includes(QuizData.current[quizIndex].id),
+          bookmark_status,
           time: time,
         }}
         onNavigation={() => navigation.goBack()}
@@ -635,6 +648,7 @@ const styles = StyleSheet.create({
   scrollView: {
     padding: 16,
     paddingTop: 0,
+    marginHorizontal: 1,
   },
 });
 
