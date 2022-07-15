@@ -485,15 +485,16 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
           skipped_questions_number: 0,
           questions_number: 0,
           no_user_input: false,
+          icon: 'leaving',
           time,
         }}
         buttons={[
           {
-            text: 'leave quiz',
+            text: 'غادر الاختبار',
             color: 'red',
           },
           {
-            text: 'continue',
+            text: 'أكمل البقية',
             color: undefined,
           },
         ]}
@@ -514,10 +515,11 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
           skipped_questions_number: skipped_questions.length,
           questions_number: 0,
           no_user_input: false,
+          icon: 'thinking',
           time,
         }}
         buttons={[
-          {text: 'حل الباقي', color: 'blue'},
+          {text: 'أكمل البقية', color: 'blue'},
           {text: 'انتقل للنتيجة', color: undefined},
         ]}
         onPress={[resume_quiz, skip_to_score]}
@@ -532,6 +534,9 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
           skipped_questions_number: skipped_questions.length,
           questions_number: QuizData.current.length,
           no_user_input: QuizData.current.every(q => q.done === false),
+          icon: QuizData.current.every(q => q.done === false)
+            ? 'noInput'
+            : 'confetti',
           time,
         }}
         buttons={[
