@@ -10,8 +10,8 @@ import {
 import {ThemeContext, Colors} from '../../Theme';
 
 const ICONS_LIST = {
-  stars: require('./icons/stars.png'),
-  recommend: require('./icons/recommend.png'),
+  stars: require('./icons/stars-icon.png'),
+  recommend: require('./icons/recommend-icon.png'),
   done: require('./icons/done-icon.png'),
   // critical_care: require('./icons/'),
   // cardiology: require('./icons/'),
