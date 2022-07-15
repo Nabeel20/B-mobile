@@ -6,51 +6,22 @@ import {
   Share,
   Modal,
   Image,
+  ToastAndroid,
 } from 'react-native';
 import BackButton from './components/Back.button';
-import {ThemeContext, Colors} from './Theme';
+import {ThemeContext} from './Theme';
 
 export default function Settings({navigation}) {
-  const [message, updateMessage] = React.useState('');
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [options, setOptions] = React.useState(false);
-  const [toast, setToast] = React.useState(false);
-  const status = React.useRef(false);
-  const input_ref = React.useRef(null);
-  const send_count = React.useRef(0);
-
-  const {Theme, Button, Text, View, darkTheme, setTheme} =
+  const [modal_visible, set_modal_visible] = React.useState(false);
+  const [happy_message_sent, set_happy_message_sent] = React.useState(false);
+  const [sad_message_sent, set_sad_message_sent] = React.useState(false);
+  const {Button, Text, View, darkTheme, setTheme} =
     React.useContext(ThemeContext);
 
   function change_theme() {
-    //setTheme(!darkTheme)
-    setOptions(!options);
+    setTheme(!darkTheme);
   }
 
-  function open_chat() {
-    Linking.openURL('http://t.me/Balsam_dev');
-  }
-  function send_message() {
-    setToast(true);
-    updateMessage('');
-    send_count.current += 1;
-    input_ref.current.clear();
-    status.current = true;
-    if (send_count.current >= 5) {
-      setToast(true);
-      status.current = false;
-    }
-  }
-  function handle_input(text) {
-    if (toast) {
-      status.current = false;
-      setToast(false);
-    }
-    updateMessage(text);
-  }
-  function change_year() {
-    setOptions(options => !options);
-  }
   const OPTIONS = [
     {
       title: 'من نحن',
@@ -62,7 +33,7 @@ export default function Settings({navigation}) {
     {
       title: 'تواصل معنا',
       function() {
-        return setModalVisible(true);
+        return set_modal_visible(true);
       },
       source: require('../assets/hand.png'),
     },
@@ -75,111 +46,123 @@ export default function Settings({navigation}) {
               'تطبيق بلسم | بلسم لكل مشاكل الأسئلة الطبية حمله عن طريق قناتنا على التلغرام: ',
           });
         } catch (error) {
-          alert(error.message);
+          ToastAndroid.showWithGravity(
+            'للاسف لم تشارك أحداً',
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER,
+          );
         }
       },
       source: require('../assets/hand_shake.png'),
     },
   ];
-
+  function send_happy_message() {
+    if (happy_message_sent) {
+      return;
+    }
+    set_happy_message_sent(true);
+  }
+  function send_sad_message() {
+    if (sad_message_sent) {
+      return;
+    }
+    set_sad_message_sent(true);
+  }
   return (
     <View style={styles.container} background>
-      {/* <Modal
+      <Modal
         animationType="slide"
-        visible={modalVisible}
+        visible={modal_visible}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
-          setToast(false);
-          status.current = false;
-        }}
-      >
-        <KeyboardAvoidingView
-          style={[styles.modalView, {
-            backgroundColor: Theme.background,
-          }]}
-          behavior="height">
-          <BackButton onPress={() => setModalVisible(!modalVisible)} _style={{ alignSelf: 'flex-end' }} />
-          <View>
-            <Text style={[styles.title, {
-              color: Theme.text,
-            }]}>الإعدادات{"\n"}
-              <Text style={[styles.helperText, {
-                color: Theme.grey.accent_2,
-              }]}>يسعدنا أن نسمع منك :)</Text>
-            </Text>
+          set_modal_visible(!modal_visible);
+        }}>
+        <View style={styles.container} background>
+          <BackButton onPress={() => set_modal_visible(!modal_visible)} />
+          <View style={styles.header_spacer} />
+          <Text style={styles.title} weight="bold">
+            تواصل معنا
+          </Text>
+          <ScrollView>
+            <Text style={styles.header}>يعجبك شيء ما</Text>
+            <Button
+              onPress={send_happy_message}
+              style={happy_message_sent ? null : styles.button}>
+              <Text weight="medium" style={styles.button_text}>
+                {happy_message_sent ? 'شكراً من القلب' : 'اضغط لإرسال ابتسامة'}
+              </Text>
+              {happy_message_sent ? null : (
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/happy-icon.png')}
+                />
+              )}
+            </Button>
 
-            <View style={{ marginHorizontal: 8 }}>
-              <Title
-                title='رسالة مجهولة الهوية'
-                subTitle='نحترم خصوصية النقد ونشجع الأفكار الجديدة دون أن يكون العامل الشخصي عقبة بالطريق:'
-                theme={Theme} />
+            <Text style={styles.header}>لا يعجبني شيء ما</Text>
+            <Button
+              onPress={send_sad_message}
+              style={sad_message_sent ? null : styles.button}>
+              <Text weight="medium" style={styles.button_text}>
+                {sad_message_sent
+                  ? 'نتمنى أن تخبرنا السبب'
+                  : 'اضغط لإرسال عتاب'}
+              </Text>
+              {sad_message_sent ? null : (
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/mad-icon.png')}
+                />
+              )}
+            </Button>
 
-
-
-
-              <TextInput
-                multiline
-                ref={input_ref}
-                placeholder="أفكارك ومقترحاتك..."
-                numberOfLines={3}
-                maxLength={1500}
-                placeholderTextColor={Theme.grey.accent_2}
-                style={[styles.input, {
-                  backgroundColor: Theme.grey.default,
-                  borderColor: Theme.grey.accent_1,
-                  color: Theme.grey.accent_2,
-                }]}
-                onChangeText={(text) => handle_input(text)}
+            <Text style={[styles.header, styles.spacer]}>أرسل مقترح</Text>
+            <Button
+              onPress={() =>
+                Linking.openURL('https://forms.gle/xf6tJbr2Qg7ytFqaA')
+              }
+              style={styles.button}>
+              <Text weight="medium" style={styles.button_text}>
+                رابط مجهول الهوية
+              </Text>
+              <Image
+                style={styles.icon}
+                source={require('../assets/angle-icon.png')}
               />
-              <TouchableOpacity
-                disabled={message.length < 5}
-                style={[
-                  styles.button,
-                  {
-                    opacity: message.length < 5 ? "50%" : "100%",
-                    backgroundColor: Theme.grey.default,
-                  }
-                ]}
-                onPress={send_message}
-              >
-                <Text style={[styles.text, { color: Theme.text }]}>إرسال</Text>
-              </TouchableOpacity>
+            </Button>
 
-              {toast ? (
-                <Text
-                  style={[
-                    styles.helperText,
-                    {
-                      color: status.current ? Colors.green : Colors.red,
-                      alignSelf: "center"
-                    }
-                  ]}
-                >
-                  {status.current
-                    ? "شكراً لك، تم إرسال الرسالة"
-                    : "فشلت عملية الإرسال :("}
-                </Text>
-              ) : null}
-            </View>
+            <Button
+              onPress={() => Linking.openURL('http://t.me/Balsam_dev')}
+              style={styles.button}>
+              <Text weight="medium" style={styles.button_text}>
+                دردش معنا على التلغرام
+              </Text>
+              <Image
+                style={styles.icon}
+                source={require('../assets/super-happy-icon.png')}
+              />
+            </Button>
 
-
-            <View style={{ height: 32 }} />
-            <Title
-              title='راسلنا على التلغرم'
-              subTitle='دردش معنا! نرد على جميع الرسائل'
-              theme={Theme} />
-
-            <TouchableOpacity style={[styles.button, {
-              backgroundColor: Theme.grey.default,
-            }]} onPress={open_chat}>
-              <Text style={[styles.text, { color: Theme.text }]}>التواصل شخصيا على التلغرام</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-
-      </Modal> */}
+            <Text style={[styles.header, styles.spacer]}>
+              بلسم على وسائل التواصل
+            </Text>
+            <Button
+              onPress={() => Linking.openURL('https://t.me/Balsam_app')}
+              style={styles.button}>
+              <Text weight="medium" style={styles.button_text}>
+                تلغرام
+              </Text>
+            </Button>
+            <Button onPress={send_happy_message} style={styles.button}>
+              <Text weight="medium" style={styles.button_text}>
+                انستغرام
+              </Text>
+            </Button>
+          </ScrollView>
+        </View>
+      </Modal>
 
       <BackButton onPress={() => navigation.goBack()} />
+      <View style={styles.header_spacer} />
       <Text style={styles.title} weight="medium">
         الإعدادات
       </Text>
@@ -187,7 +170,7 @@ export default function Settings({navigation}) {
         <Text weight="medium" size={16}>
           واجهة المستخدم
         </Text>
-        <Text weight="bold" size={16} secondary>
+        <Text weight="medium" size={16} secondary>
           {darkTheme ? 'عاتمة' : 'مشرقة'}
         </Text>
       </Button>
@@ -200,7 +183,7 @@ export default function Settings({navigation}) {
         </Text>
       </Button>
 
-      <ScrollView contentContainerStyle={{marginTop: 16}}>
+      <ScrollView contentContainerStyle={styles.scroll_view}>
         {OPTIONS.map((item, index) => {
           return (
             <Button onPress={item.function} key={index} style={styles.button}>
@@ -222,18 +205,34 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     alignSelf: 'flex-end',
-    marginTop: '20%',
     marginRight: 16,
     marginBottom: 16,
   },
   button: {
     justifyContent: 'space-between',
     flexDirection: 'row-reverse',
-    padding: 20,
-    marginBottom: 14,
+    padding: 18,
+    marginBottom: 10,
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 32,
+    height: 32,
+  },
+  header: {
+    fontSize: 17,
+    margin: 4,
+    marginBottom: 8,
+  },
+  spacer: {
+    marginTop: 32,
+  },
+  button_text: {
+    fontSize: 16,
+  },
+  header_spacer: {
+    height: '20%',
+  },
+  scroll_view: {
+    marginTop: 16,
   },
 });
