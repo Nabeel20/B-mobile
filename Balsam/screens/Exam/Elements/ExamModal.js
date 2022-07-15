@@ -1,133 +1,33 @@
 import React from 'react';
-import {
-  Modal,
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Image,
-  Animated,
-} from 'react-native';
-import {ThemeContext, Colors} from '../../Theme';
+import {Modal, View, StyleSheet, Image} from 'react-native';
+import BackButton from '../../components/Back.button';
+import {ThemeContext} from '../../Theme';
 
-function Button({onPress, blue = false, text, theme}) {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.button,
-        {
-          backgroundColor: blue ? Colors.blue_light : theme.grey.default,
-        },
-      ]}>
-      <Text
-        style={[
-          styles.buttonText,
-          {
-            color: blue ? Colors.blue : theme.text,
-          },
-        ]}>
-        {text}
-      </Text>
-    </TouchableOpacity>
-  );
-}
-function Details({
-  onSkip,
-  noInput,
-  skippedNum,
-  totalNum,
-  time,
-  correctNum,
-  Theme,
-}) {
-  if (noInput) {
-    return (
-      <Text
-        style={[
-          styles.helper_text,
-          styles.center_text,
-          {color: Theme.grey.accent_2},
-        ]}>
-        لم تحل أي من الأسئلة :/
-      </Text>
-    );
-  }
-  if (onSkip) {
-    return (
-      <Text
-        style={[
-          styles.helper_text,
-          styles.center_text,
-          {color: Theme.grey.accent_2},
-        ]}>
-        تجاوزت {skippedNum} سؤال
-      </Text>
-    );
-  }
-
-  return (
-    <View style={styles.score_container}>
-      <Text style={[styles.score_text, {color: Theme.text}]}>
-        النتائج {' \n '}
-        <Text style={[styles.helper_text, {color: Theme.grey.accent_2}]}>
-          من أصل {totalNum}
-        </Text>
-      </Text>
-      <View style={styles.cards_container}>
-        <View style={[styles.card, styles.green_background]}>
-          <Text style={[styles.score_text, styles.green_text]}>
-            {correctNum}
-          </Text>
-          <Text style={[styles.helper_text, styles.green_text]}>صح</Text>
-        </View>
-        <View style={[styles.card, styles.red_background]}>
-          <Text style={[styles.score_text, styles.red_text]}>
-            {totalNum - Math.abs(skippedNum - correctNum)}
-          </Text>
-          <Text style={[styles.helper_text, styles.red_text]}>خطأ</Text>
-        </View>
-        <View style={[styles.card, styles.blue_background]}>
-          <Text style={[styles.score_text, styles.blue_text]}>{time}</Text>
-          <Text style={[styles.helper_text, styles.blue_text]}>دقيقة</Text>
-        </View>
-      </View>
-      {skippedNum > 0 ? (
-        <Text
-          style={[
-            styles.helper_text,
-            styles.skip_warning,
-            {color: Theme.grey.accent_2},
-          ]}>
-          تجاوزت {skippedNum} سؤال
-        </Text>
-      ) : null}
-    </View>
-  );
-}
 export default function ExamModal({
-  visible,
-  onSkip,
+  visible = false,
   details,
-  onPressPrimary,
-  onPressSecondary,
+  buttons = ['', ''],
+  onPress = [],
+  exitButton = false,
   onRequestClose,
 }) {
-  const {Theme} = React.useContext(ThemeContext);
-  const animation = React.useRef(new Animated.Value(0)).current;
-  const {title, subject, correct_num, total_num, skipped_num, no_input, time} =
-    details;
-  React.useEffect(() => {
-    Animated.timing(animation, {
-      toValue: 100,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    return () => {
-      animation.setValue(0);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onSkip]);
+  const {Theme, Text, Button} = React.useContext(ThemeContext);
+  const ICONS = {
+    thinking: require('../../../assets/thinking-icon.png'),
+    confetti: require('../../../assets/confetti-icon.png'),
+    noInput: require('../../../assets/faceless-icon.png'),
+    leaving: require('../../../assets/sad-icon.png'),
+  };
+  const {
+    title,
+    sub_title,
+    correct_answers_number,
+    skipped_questions_number,
+    questions_number,
+    no_user_input,
+    icon,
+    time,
+  } = details;
   return (
     <Modal
       animationType="slide"
@@ -135,188 +35,119 @@ export default function ExamModal({
       onRequestClose={onRequestClose}>
       <View
         style={[
-          styles.modal,
+          styles.container,
           {
             backgroundColor: Theme.background,
           },
         ]}>
-        <Animated.View
-          style={[
-            styles.container,
-            {
-              opacity: animation.interpolate({
-                inputRange: [0, 100],
-                outputRange: [0, 1],
-              }),
-              transform: [
-                {
-                  translateY: animation.interpolate({
-                    inputRange: [0, 100],
-                    outputRange: [10, 0],
-                  }),
-                },
-              ],
-            },
-          ]}>
-          <View style={styles.spacer} />
+        {exitButton ? <BackButton onPress={onRequestClose} /> : null}
+        <View style={styles.main}>
           <View style={styles.header}>
-            <Image
-              source={
-                onSkip
-                  ? require('../../../assets/thinking.png')
-                  : no_input
-                  ? require('../../../assets/no_input.png')
-                  : require('../../../assets/celebration.png')
-              }
-              style={styles.image}
-            />
-            <Text
-              style={[
-                styles.title,
-                {
-                  color: onSkip ? Colors.green : Colors.blue,
-                },
-              ]}>
-              {onSkip ? 'الخطوة التالية؟' : 'الله يعطيك العافية'}
+            <Image source={ICONS[icon]} style={styles.image} />
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.sub_title} secondary>
+              {sub_title}
             </Text>
           </View>
-          <Details
-            correctNum={correct_num}
-            skippedNum={skipped_num}
-            totalNum={total_num}
-            noInput={no_input}
-            time={time}
-            onSkip={onSkip}
-            Theme={Theme}
-          />
-        </Animated.View>
+          {questions_number > 0 && no_user_input === false ? (
+            <View style={styles.score_container}>
+              <Text>النتائج من أصل {questions_number} سؤال</Text>
+              <View style={styles.score_title}>
+                <Text color="green" style={styles.score_title}>
+                  {correct_answers_number}{' '}
+                  <Text style={styles.score_subtitle} color="green">
+                    صح
+                  </Text>
+                </Text>
+                <View
+                  style={[
+                    styles.divider,
+                    {backgroundColor: Theme.grey.default},
+                  ]}
+                />
+                <Text color="red" style={styles.score_title}>
+                  {questions_number -
+                    skipped_questions_number -
+                    correct_answers_number}{' '}
+                  <Text color="red" style={styles.score_subtitle}>
+                    خطأ
+                  </Text>
+                </Text>
+              </View>
 
-        <View style={styles.buttons_container}>
-          <Button
-            onPress={onPressPrimary}
-            blue
-            text={onSkip ? 'حل باقي الأسئلة' : 'راجع باقي الأسئلة'}
-            theme={Theme}
-          />
-          <Button
-            onPress={onPressSecondary}
-            text={onSkip ? 'انتقل للنتيجة' : 'أنه الامتحان'}
-            theme={Theme}
-          />
+              <Text>خلال {time} دقيقة</Text>
+              {skipped_questions_number > 0 ? (
+                <Text secondary>تجاوزت {skipped_questions_number} سؤال</Text>
+              ) : null}
+            </View>
+          ) : null}
+          {no_user_input ? (
+            <Text secondary>لم تجب على أي من الأسئلة</Text>
+          ) : null}
+        </View>
+        <View style={styles.footer}>
+          {buttons.map((btn, index) => {
+            return (
+              <Button
+                key={index}
+                onPress={onPress[index]}
+                round
+                flex
+                color={btn.color}>
+                <Text color={btn.color} weight="medium" size={16}>
+                  {btn.text}
+                </Text>
+              </Button>
+            );
+          })}
         </View>
       </View>
     </Modal>
   );
 }
+
 const styles = StyleSheet.create({
-  modal: {
-    flex: 1,
-    width: '100%',
-    padding: 16,
-  },
-  meta: {
-    alignSelf: 'flex-end',
-  },
-  title: {
-    color: Colors.blue,
-    fontSize: 32,
-    fontFamily: 'ReadexPro-Bold',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  header: {
-    alignSelf: 'center',
-  },
-  text: {
-    fontSize: 18,
-    fontFamily: 'ReadexPro-Regular',
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  button: {
-    margin: 8,
-    flex: 1,
-    alignSelf: 'center',
-    borderRadius: 99,
-    padding: 16,
-  },
-  buttonText: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontFamily: 'ReadexPro-Regular',
-  },
-  image: {
-    width: 80,
-    height: 80,
-    alignSelf: 'center',
-  },
   container: {
     flex: 1,
+    padding: 16,
   },
-  score_text: {
-    fontFamily: 'ReadexPro-Medium',
-    fontSize: 16,
-    marginBottom: 16,
+  image: {
+    width: 72,
+    height: 72,
+    padding: 8,
   },
-  card_text: {
-    fontFamily: 'ReadexPro-Medium',
-    fontSize: 16,
-  },
-  helper_text: {
-    fontFamily: 'ReadexPro-Regular',
-    fontSize: 14,
-  },
-  score_container: {
-    marginHorizontal: 16,
-  },
-  cards_container: {
-    flexDirection: 'row-reverse',
+  main: {
+    flex: 1,
     justifyContent: 'space-evenly',
   },
-  card: {
-    width: 60,
-    height: 60,
-    padding: 8,
-    borderRadius: 8,
+  score_container: {
+    marginHorizontal: 8,
+  },
+  header: {
     alignItems: 'center',
   },
-  green_background: {
-    backgroundColor: Colors.green_light,
-  },
-  red_background: {
-    backgroundColor: Colors.red_light,
-  },
-  blue_background: {
-    backgroundColor: Colors.blue_light,
-  },
-  green_text: {
-    color: Colors.green,
-  },
-  red_text: {
-    color: Colors.red,
-  },
-  blue_text: {
-    color: Colors.blue,
-  },
-  skip_warning: {
-    marginTop: 16,
-    alignSelf: 'center',
-  },
-  spacer: {
-    height: '30%',
-  },
-  center_text: {
-    alignSelf: 'center',
-  },
-  quiz_subject: {
-    fontSize: 12,
-    fontFamily: 'ReadexPro-Regular',
-  },
-  quiz_title: {
-    fontSize: 14,
-    fontFamily: 'ReadexPro-Bold',
-  },
-  buttons_container: {
+  footer: {
     flexDirection: 'row',
+  },
+  title: {
+    fontSize: 32,
+    fontFamily: 'Readex Pro',
+    fontWeight: 600,
+    marginBottom: 8,
+  },
+  sub_title: {
+    fontSize: 16,
+    fontFamily: 'Readex Pro',
+  },
+  divider: {
+    height: 2,
+    margin: 4,
+    borderRadius: 1,
+  },
+  score_title: {
+    fontSize: 40,
+  },
+  score_subtitle: {
+    fontSize: 16,
   },
 });
