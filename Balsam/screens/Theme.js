@@ -9,6 +9,7 @@ const ThemeContext = React.createContext();
 const Colors = {
   green: '#10B981',
   green_light: '#bbf7d0',
+  red: '#DC2626',
   red_light: '#FECACA',
   blue: '#0284C7',
   blue_light: '#BFDBFE',
@@ -35,14 +36,15 @@ function ThemeProvider({children}) {
     secondary,
     size = 14,
     padding,
-    textChildren,
+    children: textChildren,
     weight,
   }) {
     return (
       <NativeText
         style={[
           {
-            fontFamily:
+            fontFamily: 'readex pro',
+            fontWeight:
               fonts[weight] === undefined ? fonts.regular : fonts[weight],
             color:
               Colors[color] === undefined
@@ -62,24 +64,24 @@ function ThemeProvider({children}) {
   const Button = function ({
     onPress,
     style,
-    color,
-    buttonChildren,
+    color = 'grey',
+    children: buttonChildren,
     round,
     flex,
   }) {
     const background_colors = {
       blue: Colors.blue_light,
       red: Colors.red_light,
+      grey: Theme.grey.default,
+      'grey-light': Theme.grey.accent_1,
+      'grey-dark': Theme.grey.accent_2,
     };
     return (
       <TouchableOpacity
         onPress={onPress}
         style={[
           {
-            backgroundColor:
-              Colors[color] === undefined
-                ? Theme.grey.default
-                : background_colors[color],
+            backgroundColor: background_colors[color],
             borderRadius: round ? 99 : 8,
             flex: flex === undefined ? null : 1,
           },
@@ -90,7 +92,7 @@ function ThemeProvider({children}) {
       </TouchableOpacity>
     );
   };
-  const View = function ({background = false, style, viewChildren}) {
+  const View = function ({background = false, style, children: viewChildren}) {
     return (
       <ViewNative
         style={[
