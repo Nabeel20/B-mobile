@@ -19,7 +19,6 @@ import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
 
 const Stack = createNativeStackNavigator();
-I18nManager.allowRTL(false);
 
 function App() {
   const color_scheme = useColorScheme() || 'light';
@@ -76,7 +75,7 @@ function App() {
           },
         ]}>
         <Image
-          source={require('./assets/logo.png')}
+          source={require('./assets/logo-icon.png')}
           style={[
             styles.logo,
             {tintColor: color_scheme === 'dark' ? '#ffffff' : '#212121'},
