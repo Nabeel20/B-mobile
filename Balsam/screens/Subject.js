@@ -8,35 +8,26 @@ import Loading from './components/Loading';
 export default function Subject({route, navigation}) {
   const {Button, Text, View} = React.useContext(ThemeContext);
   const [loading, setLoading] = React.useState(false);
-  const {title: subject_title, list, url: subject_url} = route.params;
-  const [list_data, set_list_data] = React.useState(list);
+  const {title: subject_title, url: subject_url} = route.params;
+  const [list_data, set_list_data] = React.useState([]);
   const [loading_error, set_loading_error] = React.useState(false);
   function get_subjects_json(data) {
     data = data.split('\n');
     let output = [];
     for (let index = 1; index < data.length; index++) {
-      const [
-        title,
-        category,
-        rtl,
-        mcq,
-        branch,
-        url,
-        id,
-        number,
-        editor_choice,
-      ] = data[index].split(',');
+      const [title, rtl, mcq, branch, editor_choice, is_new, number, url, id] =
+        data[index].split(',');
       output.push({
         title: title.replace(/"/g, ''),
-        category: category.replace(/"/g, ''),
         rtl: rtl.replace(/"/g, '') === 'TRUE' ? true : false,
         mcq: mcq.replace(/"/g, '') === 'TRUE' ? true : false,
         branch: branch.replace(/"/g, '') === 'TRUE' ? true : false,
+        number: number.replace(/"/g, ''),
+        is_new: is_new.replace(/"/g, '') === 'TRUE' ? true : false,
         url: url.replace(/"/g, ''),
         id: id.replace(/"/g, ''),
-        number: number.replace(/"/g, ''),
         editor_choice:
-          editor_choice.replace(/"/g, '').slice(0, 4) === 'TRUE' ? true : false,
+          editor_choice.replace(/"/g, '') === 'TRUE' ? true : false,
       });
     }
     return output;
@@ -97,8 +88,7 @@ export default function Subject({route, navigation}) {
         onPress={list_item => {
           if (list_item.branch) {
             navigation.push('Subject', {
-              title: `${list_item.subject}: ${list_item.title}`,
-              list: [],
+              title: `${subject_title}: ${list_item.title}`,
               url: list_item.url,
             });
             return;
@@ -106,7 +96,7 @@ export default function Subject({route, navigation}) {
           navigation.navigate('Exam', {
             quiz_rtl: list_item.rtl,
             quiz_title: list_item.title,
-            quiz_subject: list_item.subject,
+            quiz_subject: subject_title,
             quiz_id: list_item.url,
             quiz_mcq: list_item.mcq,
           });
