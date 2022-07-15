@@ -529,7 +529,9 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
         visible={score_modal}
         details={{
           title: 'الله يعطيك العافية',
-          sub_title: '',
+          sub_title: QuizData.current.every(q => q.done === false)
+            ? 'لم تجب على أي من الأسئلة'
+            : '',
           correct_answers_number: correct_count.current,
           skipped_questions_number: skipped_questions.length,
           questions_number: QuizData.current.length,
