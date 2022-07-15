@@ -123,6 +123,7 @@ export default function Bookmarks({navigation, route, storage}) {
       </Modal>
 
       <BackButton onPress={() => navigation.goBack()} />
+      <View style={styles.header_spacer} />
       <Text style={styles.title} weight="bold">
         {`المحفوظات${subject !== '' ? ': ' + subject : ''}`}
       </Text>
@@ -156,7 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginRight: 16,
     marginBottom: 16,
-    marginTop: '20%',
   },
   list_card: {
     margin: 8,
@@ -214,5 +214,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.green,
     borderRadius: 5,
     margin: 4,
+  },
+  header_spacer: {
+    height: '20%',
   },
 });

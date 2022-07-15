@@ -80,13 +80,6 @@ export default function Settings({navigation}) {
       },
       source: require('../assets/hand_shake.png'),
     },
-    {
-      title: 'قناة التلغرام',
-      function() {
-        return Linking.openURL('https://t.me/Balsam_app');
-      },
-      source: require('../assets/channel.png'),
-    },
   ];
 
   return (

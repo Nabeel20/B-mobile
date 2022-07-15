@@ -47,6 +47,7 @@ export default function Home({data, navigation, storage}) {
           ]}
         />
       </Button>
+      <View style={styles.header_spacer} />
       <View style={styles.header}>
         <Text style={styles.title} weight="bold">
           {greeting}
@@ -91,7 +92,6 @@ const styles = StyleSheet.create({
     width: 24,
   },
   header: {
-    marginTop: '20%',
     alignItems: 'flex-end',
     marginBottom: 32,
   },
@@ -99,5 +99,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 8,
     marginRight: 8,
+  },
+  header_spacer: {
+    height: '20%',
   },
 });
