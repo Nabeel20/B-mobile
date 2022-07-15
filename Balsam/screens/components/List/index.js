@@ -3,254 +3,254 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Text,
   Animated,
   Image,
-  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import {ThemeContext, Colors} from '../../Theme';
 
-function EmptyList({theme}) {
-  return (
-    <View style={styles.loader}>
-      <Text style={[styles.list_empty_title, {color: theme.text}]}>
-        جار التحميل
-      </Text>
-      <ActivityIndicator size="small" color={theme.text} />
-    </View>
-  );
-}
-const icons = {
+const ICONS_LIST = {
   stars: require('./icons/stars.png'),
   recommend: require('./icons/recommend.png'),
-  'الإسعاف والطورائ': require('./icons/accident_and_emergency.png'),
-  القلبية: require('./icons/cardiology.png'),
-  'العناية المشددة': require('./icons/critical_care.png'),
-  'أنف أذن حنجرة': require('./icons/ears_nose_and_throat.png'),
-  الغدية: require('./icons/endocrinology.png'),
-  الهضمية: require('./icons/gastroenterology.png'),
-  'طب الشيخوخة': require('./icons/geriatrics.png'),
-  النسائية: require('./icons/gynecology.png'),
-  الدموية: require('./icons/hematology.png'),
-  الجراحة: require('./icons/intensive_care_unit.png'),
-  البولية: require('./icons/nephrology.png'),
-  التوليد: require('./icons/obstetricsmonia.png'),
-  الأورام: require('./icons/oncology.png'),
-  العينية: require('./icons/opthalmology.png'),
-  الأوسكي: require('./icons/outpatient_department.png'),
-  الأطفال: require('./icons/pediatrics.png'),
-  'علم الأدوية': require('./icons/pharmacy.png'),
-  'الطب النفسي': require('./icons/psychology.png'),
-  'علم الأشعة': require('./icons/radiology.png'),
-  الصدرية: require('./icons/respirology.png'),
-  الرثوية: require('./icons/rheumatology.png'),
-  التشريح: require('./icons/body.png'),
+  done: require('./icons/done-icon.png'),
+  // critical_care: require('./icons/'),
+  // cardiology: require('./icons/'),
+  // ear_nose_throat: require('./icons/'),
+  // endocrinology: require('./icons/'),
+  // gastroenterology: require('./icons/'),
+  // geriatrics: require('./icons/'),
+  // gynecology: require('./icons/'),
+  // hematology: require('./icons/'),
+  // hepatology: require('./icons/'),
+  // intensive_care_unit: require('./icons/'),
+  // nephrology: require('./icons/'),
+  // obstetricsmonia: require('./icons/'),
+  // oncology: require('./icons/'),
+  // outpatient: require('./icons/'),
+  // opthalmology: require('./icons/'),
+  // pediatrics: require('./icons/'),
+  // pharmacy: require('./icons/'),
+  // psychology: require('./icons/'),
+  // radiology: require('./icons/'),
+  // respirology: require('./icons/'),
+  // rheumatology: require('./icons/'),
+  // accident_emergency: require('./icons/'),
+  // anatomy: require('./icons/'),
+  // bacteria: require('./icons/'),
+  // physiology: require('./icons/'),
+  // histology: require('./icons/'),
 };
-function Icon({type, color}) {
-  if (icons[type] === undefined) {
+function Icon({icon, color, style}) {
+  const icon_colors = {
+    red: Colors.red,
+    green: Colors.green,
+  };
+  let tintColor = icon_colors[color] ?? color;
+  if (ICONS_LIST[icon] === undefined) {
     return null;
   }
   return (
-    <Image source={icons[type]} style={[styles.icon, {tintColor: color}]} />
+    <Image
+      source={ICONS_LIST[icon]}
+      style={[styles.icon, {tintColor}, style]}
+    />
   );
 }
-function Card({
-  title,
-  details,
-  has_updates = false,
-  theme,
-  number,
-  onPress,
-  show_numbers,
-  editorChoice = false,
-  done = false,
-  onHome = false,
-}) {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[
-        styles.container,
-        {
-          backgroundColor: theme.grey.default,
-        },
-      ]}>
-      {onHome ? (
+function List({data, doneIds = [], onPress, onHome}) {
+  const list_animation = React.useRef(new Animated.Value(100)).current;
+  const {Theme, Button, Text} = React.useContext(ThemeContext);
+  React.useEffect(() => {
+    if (data.length === 0) {
+      return;
+    }
+    list_animation.setValue(0);
+    Animated.timing(list_animation, {
+      toValue: 100,
+      duration: 500,
+      delay: 50,
+      useNativeDriver: false,
+    }).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+  const EmptyList = function () {
+    return (
+      <View style={styles.empty_state}>
         <Image
-          source={icons[title]}
-          style={[styles.categoryIcon, {tintColor: theme.text}]}
+          source={require('../../../assets/happy-icon.png')}
+          style={styles.empty_state_icon}
         />
-      ) : null}
-      <View style={styles.list_texts}>
-        <View style={styles.title_container}>
-          {done ? (
-            <Image
-              source={require('../../../assets/done.png')}
-              style={[styles.done_icon, {tintColor: theme.text}]}
-            />
-          ) : null}
-          <Text style={[styles.title, {color: theme.text}]}>{title}</Text>
-        </View>
-        {[has_updates, editorChoice, show_numbers].every(
-          condition => condition === false,
-        ) ? null : (
-          <View style={styles.icons_container}>
-            {has_updates ? (
-              <View style={styles.update}>
-                <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
-                  <Text style={{color: Colors.red}}>جديد</Text> {details}
-                </Text>
-                <Icon type="stars" color={Colors.red} />
-              </View>
+        <Text style={styles.empty_state_text}>
+          صبراً من فضلك جار التحميل...
+        </Text>
+        <ActivityIndicator size="small" color={Theme.text} />
+      </View>
+    );
+  };
+  const Tag = function ({color, text = '', icon = false}) {
+    return (
+      <View style={styles.row}>
+        <Text
+          secondary
+          style={styles.sub_title}
+          color={color === 'green' ? 'green' : ''}>
+          {icon === 'stars' ? (
+            <Text secondary color={color}>
+              جديد
+            </Text>
+          ) : null}{' '}
+          {text}
+        </Text>
+        {icon ? <Icon icon={icon} color={color} /> : null}
+      </View>
+    );
+  };
+  const Card = function ({item}) {
+    const {
+      title,
+      has_updates = false,
+      details,
+      is_new,
+      rtl,
+      mcq,
+      branch,
+      url,
+      number,
+      id,
+      editor_choice = false,
+    } = item;
+    const title_done = doneIds.length > 0 ? doneIds.includes(id) : false;
+
+    return (
+      <Button
+        onPress={() => onPress({title, rtl, mcq, url, branch})}
+        style={styles.card}>
+        {onHome ? (
+          <Icon style={styles.category_icon} icon="done" color={Theme.text} />
+        ) : null}
+        <View style={styles.text_container}>
+          <View style={styles.title_container}>
+            {title_done ? <Icon icon="done" color={Theme.text} /> : null}
+            <Text weight="medium" style={styles.title}>
+              {title}
+            </Text>
+          </View>
+          <View style={styles.row}>
+            {editor_choice && onHome === false ? (
+              <Tag icon="recommend" text="نصيحة" color="green" />
             ) : null}
-            {show_numbers ? (
-              <Text style={[styles.subTitle, {color: theme.grey.accent_2}]}>
+            {onHome ? null : (
+              <Text secondary style={styles.sub_title}>
                 {number} سؤال
               </Text>
+            )}
+            {has_updates && onHome ? (
+              <Tag icon="stars" text={details} color="red" />
             ) : null}
-            {editorChoice ? (
-              <View style={styles.recommend_container}>
-                <Text style={[styles.subTitle, {color: Colors.green}]}>
-                  نصيحة
-                </Text>
-                <Icon icon="recommend" color={Colors.green} />
-              </View>
-            ) : null}
+            {is_new ? <Tag icon="stars" color="red" /> : null}
           </View>
-        )}
-      </View>
-      <Image
-        source={require('../../../assets/arrow.png')}
-        style={[styles.arrowIcon, {tintColor: theme.text}]}
-      />
-    </TouchableOpacity>
-  );
-}
+        </View>
+        <Image
+          source={require('../../../assets/arrow.png')}
+          style={[styles.arrow_icon, {tintColor: Theme.text}]}
+        />
+      </Button>
+    );
+  };
 
-function List({data, onPress, onHome = false, animation, finishedIDs = []}) {
-  const {Theme} = React.useContext(ThemeContext);
   return (
     <Animated.View
       style={[
-        styles.main,
         {
-          opacity: animation.interpolate({
+          opacity: list_animation.interpolate({
             inputRange: [0, 100],
-            outputRange: [0, 1],
+            outputRange: [0, 100],
           }),
+          transform: [
+            {
+              translateY: list_animation.interpolate({
+                inputRange: [0, 100],
+                outputRange: [10, 0],
+              }),
+            },
+          ],
         },
+        styles.container,
       ]}>
       <FlatList
+        contentContainerStyle={styles.container}
         data={data}
-        ListEmptyComponent={<EmptyList theme={Theme} />}
+        ListEmptyComponent={EmptyList}
         keyExtractor={item => item.id}
-        renderItem={({
-          item: {
-            title,
-            has_updates,
-            details,
-            category,
-            rtl,
-            mcq,
-            branch,
-            url,
-            number,
-            id,
-            editor_choice,
-          },
-        }) => (
-          <Card
-            onPress={() => {
-              onPress({title, subject: category, rtl, mcq, url, branch});
-            }}
-            title={title}
-            details={details}
-            has_updates={has_updates}
-            number={number}
-            theme={Theme}
-            onHome={onHome}
-            done={finishedIDs.includes(id)}
-            editorChoice={editor_choice}
-            show_numbers={category !== undefined}
-          />
-        )}
+        renderItem={Card}
       />
     </Animated.View>
   );
 }
+
 const styles = StyleSheet.create({
-  main: {
+  container: {
     flex: 1,
   },
-  container: {
+  empty_state: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  empty_state_text: {
+    fontSize: 18,
+    margin: 16,
+    alignSelf: 'center',
+  },
+  empty_state_icon: {
+    height: 72,
+    width: 72,
+    alignSelf: 'center',
+  },
+  card: {
     borderRadius: 10,
     padding: 14,
     margin: 8,
     flexDirection: 'row-reverse',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    flex: 1,
+  },
+  arrow_icon: {
+    height: 24,
+    width: 24,
   },
   title: {
-    fontFamily: 'ReadexPro-Medium',
     fontSize: 16,
     textAlign: 'right',
+    marginLeft: 4,
   },
-  list_empty_title: {
-    fontFamily: 'ReadexPro-Regular',
-    alignSelf: 'center',
-    marginTop: 24,
-    marginBottom: 8,
-    fontSize: 18,
+  title_container: {
+    flexDirection: 'row',
+    alignItems: 'end',
+    margin: 4,
   },
-  subTitle: {
-    fontFamily: 'ReadexPro-Regular',
-    fontSize: 14,
-  },
-  update: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  arrowIcon: {
-    width: 24,
-    height: 24,
+    margin: 2,
   },
   icon: {
     width: 18,
     height: 18,
+    marginHorizontal: 2,
+  },
+  category_icon: {
+    width: 24,
+    height: 24,
     marginLeft: 4,
   },
-  list_texts: {
+  sub_title: {
+    fontFamily: 'readex pro',
+    fontSize: 14,
+    marginHorizontal: 2,
+  },
+  text_container: {
     alignItems: 'flex-end',
     flex: 1,
   },
-  icons_container: {
-    flexDirection: 'row-reverse',
-    alignItems: 'center',
-    padding: 4,
-    paddingTop: 8,
-  },
-  recommend_container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  title_container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  done_icon: {
-    width: 20,
-    height: 20,
-  },
-  categoryIcon: {
-    height: 32,
-    width: 32,
-    marginLeft: 4,
-  },
-  loader: {
-    marginTop: 16,
-  },
 });
-
 export {List};
