@@ -104,11 +104,11 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
                   choice={choice}
                   prefix={i}
                   selectedChoice={selected_choice}
-                  checked={selected_choice_checked}
-                  done={item.done}
+                  isChoiceChecked={selected_choice_checked}
+                  isQuestionDone={item.done}
                   correctAnswer={item.correct_answer}
-                  user_choice={item.user_answer}
-                  handlePress={handle_press}
+                  userChoice={item.user_answer}
+                  onPress={handle_press}
                 />
               );
             })}
@@ -140,7 +140,7 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
       data = data.split('\n');
       let output = [];
       for (let index = 1; index < data.length; index++) {
-        const [
+        let [
           question,
           choice1,
           choice2,
@@ -155,8 +155,10 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
             .map(c => c.replace(/"/g, ''))
             .filter(c => c !== '-'),
         );
+        question = question.replace(/"/g, '');
+        question = question.replace(/#/g, '\n');
         output.push({
-          question: question.replace(/"/g, ''),
+          question: question,
           choices,
           correct_answer: choice1.replace(/"/g, ''),
           done: false,
