@@ -8,7 +8,6 @@ import {
   Image,
   ActivityIndicator,
   StyleSheet,
-  I18nManager,
   useColorScheme,
   ToastAndroid,
 } from 'react-native';

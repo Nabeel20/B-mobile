@@ -1,17 +1,17 @@
 import React from 'react';
-import {TouchableOpacity, Text, Animated, View, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {ThemeContext, Colors} from '../Theme';
 
 export default function Choice({
   choice,
   prefix,
   selectedChoice,
-  checked,
-  done,
+  isChoiceChecked,
+  isQuestionDone,
   correctAnswer,
-  handlePress,
+  onPress,
   rtl,
-  user_choice,
+  userChoice,
 }) {
   const prefixes = {
     0: 'A',
@@ -20,68 +20,50 @@ export default function Choice({
     3: 'D',
     4: 'E',
   };
-  let correct = done && choice === correctAnswer;
-  let wrong = done && choice === user_choice;
-  let chosen = !checked && choice === selectedChoice;
-  const {Theme} = React.useContext(ThemeContext);
-
+  let correct = isQuestionDone && choice === correctAnswer;
+  let wrong = isQuestionDone && choice === userChoice;
+  let chosen = isChoiceChecked === false && choice === selectedChoice;
+  const {Theme, View, Text, Button} = React.useContext(ThemeContext);
   return (
-    <TouchableOpacity onPress={() => handlePress(choice)}>
+    <Button
+      onPress={() => onPress(choice)}
+      style={[
+        styles.container,
+        // eslint-disable-next-line react-native/no-inline-styles
+        {
+          flexDirection: rtl ? 'row-reverse' : 'row',
+          borderColor: chosen
+            ? Colors.blue
+            : correct
+            ? Colors.green
+            : wrong
+            ? Colors.red
+            : Theme.grey.accent_1,
+        },
+      ]}>
       <View
         style={[
-          styles.container,
+          styles.circle,
           {
-            flexDirection: rtl ? 'row-reverse' : 'row',
-            backgroundColor: Theme.grey.default,
-            borderColor: chosen
-              ? Colors.blue
+            backgroundColor: chosen
+              ? Colors.blue_light
               : correct
-              ? Colors.green
+              ? Colors.green_light
               : wrong
-              ? Colors.red
+              ? Colors.red_light
               : Theme.grey.accent_1,
           },
         ]}>
-        <View
-          style={[
-            styles.circle,
-            {
-              backgroundColor: chosen
-                ? Colors.blue_light
-                : correct
-                ? Colors.green_light
-                : wrong
-                ? Colors.red_light
-                : Theme.grey.accent_1,
-            },
-          ]}>
-          <Animated.Text
-            style={[
-              styles.prefix,
-              {
-                color: chosen
-                  ? Colors.blue
-                  : correct
-                  ? Colors.green
-                  : wrong
-                  ? Colors.red
-                  : Theme.grey.accent_2,
-              },
-            ]}>
-            {prefixes[prefix]}
-          </Animated.Text>
-        </View>
         <Text
-          style={[
-            styles.text,
-            {
-              color: Theme.text,
-            },
-          ]}>
-          {choice}
+          secondary={chosen === false}
+          color={
+            chosen ? 'blue' : correct ? 'green' : wrong ? 'red' : undefined
+          }>
+          {prefixes[prefix]}
         </Text>
       </View>
-    </TouchableOpacity>
+      <Text style={styles.text}>{choice}</Text>
+    </Button>
   );
 }
 const styles = StyleSheet.create({
