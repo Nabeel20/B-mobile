@@ -10,7 +10,6 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Choice from './Choice';
-import Spacer from './Elements/Spacer';
 import Explanation from './Elements/Explanation';
 import Loading from '../components/Loading';
 import Header from './Elements/Header';
@@ -93,7 +92,7 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
           ]}>
           {item.question}
         </Text>
-        <Spacer vertical={16} />
+        <View style={styles.spacer} />{' '}
         {quiz_mcq ? (
           <View>
             {item.choices.map((choice, i) => {
@@ -615,21 +614,17 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
               text={footer_text}
               textAnimation={footer_animation}
               onPress={handle_footer}
-              isCorrect={is_user_answer_correct}
-              isChecked={selected_choice_checked}
-              onChoose={
+              correctChoice={is_user_answer_correct}
+              selectedChoiceChecked={selected_choice_checked}
+              choiceSelected={
                 selected_choice.length !== 0 &&
                 selected_choice_checked === false
               }
-              flex={3}
-              main
+              large
             />
-            <ExamButton
-              text={`السـؤال ${'\n'} السابـق`}
-              onPress={previous_question}
-              index={quizIndex}
-              isPrevious
-            />
+            {quizIndex === 0 ? null : (
+              <ExamButton text="السؤال السابق " onPress={previous_question} />
+            )}
           </>
         ) : (
           <ExamButton text={footer_text} main onPress={interview_question} />
@@ -667,6 +662,9 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 0,
     marginHorizontal: 1,
+  },
+  spacer: {
+    height: 16,
   },
 });
 

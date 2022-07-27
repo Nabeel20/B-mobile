@@ -11,7 +11,7 @@ export default function Progress({step, dir}) {
       toValue: percent,
       duration: 300,
       delays: 500,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
   };
   React.useEffect(() => {

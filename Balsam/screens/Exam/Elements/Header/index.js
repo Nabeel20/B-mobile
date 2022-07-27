@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import Progress from './Progress';
-import Spacer from '../Spacer';
 import QuestionNumber from './QuestionNumber';
 import BookmarksButton from './Bookmarks.button';
 import BackButton from '../../../components/Back.button';
@@ -67,8 +66,7 @@ export default function Header({details, onNavigation, onClose, onBookmark}) {
         </View>
       </View>
       <Progress dir={rtl} step={progress_step} />
-      <Spacer vertical={10} />
-
+      <View style={styles.spacer} />
       <View style={[styles.row, {flexDirection: rtl ? 'row-reverse' : 'row'}]}>
         <QuestionNumber
           total={total_num}
@@ -124,5 +122,8 @@ const styles = StyleSheet.create({
   timerText: {
     fontSize: 14,
     fontFamily: 'ReadexPro-Regular',
+  },
+  spacer: {
+    height: 10,
   },
 });

@@ -1,55 +1,45 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text, Animated} from 'react-native';
+import {StyleSheet, Animated} from 'react-native';
 import {Colors, ThemeContext} from '../../Theme';
 
 export default function ExamButton({
-  isCorrect = false,
-  onPress,
+  correctChoice = false,
   textAnimation,
-  isChecked = false,
+  selectedChoiceChecked = false,
   text,
-  index = 1,
-  flex = 1,
-  isPrevious = false,
-  main = false,
-  onChoose = false,
+  large = false,
+  choiceSelected,
+  onPress,
 }) {
-  const {Theme} = React.useContext(ThemeContext);
+  const {Theme, Text, Button} = React.useContext(ThemeContext);
   if (textAnimation === undefined) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     textAnimation = React.useRef(new Animated.Value(100)).current;
   }
-  if (index === 0) {
-    return null;
-  }
+
   const Status = () => {
-    if (!isChecked) {
+    if (!selectedChoiceChecked) {
       return null;
     }
     return (
-      <Text style={{color: isCorrect ? Colors.green : Colors.red}}>
-        {isCorrect ? 'إجابة صحيحة' : 'إجابة خاطئة'}
-        {'  '}
+      <Text style={{color: correctChoice ? Colors.green : Colors.red}}>
+        {correctChoice ? 'إجابة صحيحة' : 'إجابة خاطئة'}
       </Text>
     );
   };
+
   return (
-    <TouchableOpacity
-      onPress={() => onPress()}
-      style={[
-        styles.flexContainer,
-        {
-          backgroundColor: Theme.grey.default,
-          flex,
-          marginLeft: isPrevious ? 4 : 8,
-        },
-      ]}>
+    <Button
+      onPress={onPress}
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={[styles.button, {flex: large ? 3 : 1, marginLeft: large ? 4 : 8}]}>
       <Animated.Text
         style={[
           styles.text,
+          // eslint-disable-next-line react-native/no-inline-styles
           {
-            color: onChoose ? Colors.blue : Theme.text,
-            fontFamily: main ? 'ReadexPro-Medium' : 'ReadexPro-Regular',
+            color: choiceSelected ? Colors.blue : Theme.text,
+            fontFamily: large ? 'ReadexPro-Medium' : 'ReadexPro-Regular',
             opacity: textAnimation.interpolate({
               inputRange: [0, 100],
               outputRange: [0, 1],
@@ -58,7 +48,7 @@ export default function ExamButton({
         ]}>
         <Status /> {text}
       </Animated.Text>
-    </TouchableOpacity>
+    </Button>
   );
 }
 const styles = StyleSheet.create({
@@ -66,7 +56,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
-  flexContainer: {
+  button: {
     borderRadius: 10,
     justifyContent: 'center',
     alignContent: 'center',
