@@ -1,71 +1,37 @@
 import React from 'react';
-import {Text, Animated, StyleSheet, View} from 'react-native';
+import {Animated, StyleSheet, View} from 'react-native';
 import {ThemeContext} from '../../Theme';
-function Divider({rtl, theme}) {
+
+export default function Explanation({rtl, children, animation}) {
+  const {Theme, Text} = React.useContext(ThemeContext);
   return (
-    <View
+    <Animated.View
       style={[
         styles.container,
         {
-          flexDirection: rtl ? 'row-reverse' : 'row',
+          transform: [
+            {
+              translateY: animation.interpolate({
+                inputRange: [0, 100],
+                outputRange: [20, 0],
+              }),
+            },
+          ],
+          opacity: animation.interpolate({
+            inputRange: [0, 100],
+            outputRange: [0, 1],
+          }),
         },
       ]}>
       <View
-        style={[
-          styles.before <
-            {
-              backgroundColor: theme.grey.accent_1,
-            },
-        ]}
-      />
-      <Text
-        style={[
-          styles.text,
-          {
-            color: theme.grey.accent_2,
-          },
-        ]}>
-        {rtl ? 'شرح السؤال' : 'Explanation'}
-      </Text>
-      <View
-        style={[
-          styles.after,
-          {
-            backgroundColor: theme.grey.accent_1,
-          },
-        ]}
-      />
-    </View>
-  );
-}
-export default function Explanation({rtl, text, animation}) {
-  const {Theme} = React.useContext(ThemeContext);
-  return (
-    <Animated.View
-      style={{
-        transform: [
-          {
-            translateY: animation.interpolate({
-              inputRange: [0, 100],
-              outputRange: [20, 0],
-            }),
-          },
-        ],
-        opacity: animation.interpolate({
-          inputRange: [0, 100],
-          outputRange: [0, 1],
-        }),
-      }}>
-      <Divider rtl={rtl} theme={Theme} />
-      <Text
-        style={[
-          styles.explanation,
-          {
-            color: Theme.text,
-          },
-        ]}>
-        {text}
-      </Text>
+        // eslint-disable-next-line react-native/no-inline-styles
+        style={[styles.divider, {flexDirection: rtl ? 'row' : 'row-reverse'}]}>
+        <Text secondary weight="medium">
+          {rtl ? 'التوضيح' : 'Explanation'}
+        </Text>
+        <View style={[styles.line, {backgroundColor: Theme.grey.default}]} />
+      </View>
+      <Text style={styles.explanation}>{children}</Text>
     </Animated.View>
   );
 }
@@ -73,24 +39,16 @@ const styles = StyleSheet.create({
   explanation: {
     fontSize: 16,
     margin: 8,
-    fontFamily: 'ReadexPro-Regular',
   },
   container: {
     alignItems: 'center',
   },
-  before: {
-    height: 4,
-    flex: 4,
-    margin: 8,
-    borderRadius: 10,
+  divider: {
+    alignItems: 'center',
   },
-  after: {
-    height: 4,
+  line: {
+    height: 3,
     flex: 1,
-    margin: 8,
-    borderRadius: 10,
-  },
-  text: {
-    fontFamily: 'ReadexPro-Medium',
+    marginHorizontal: 8,
   },
 });

@@ -114,11 +114,9 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
             })}
           </View>
         ) : null}
-        <Explanation
-          rtl={quiz_rtl}
-          animation={explanation_animation}
-          text={item.explanation}
-        />
+        <Explanation rtl={quiz_rtl} animation={explanation_animation}>
+          {item.explanation}
+        </Explanation>
       </Animated.View>
     );
   };
