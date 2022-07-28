@@ -56,6 +56,8 @@ export default function Choice({
         ]}>
         <Text
           secondary={chosen === false}
+          type="medium"
+          style={styles.prefix}
           color={
             chosen ? 'blue' : correct ? 'green' : wrong ? 'red' : undefined
           }>
@@ -90,8 +92,6 @@ const styles = StyleSheet.create({
     fontFamily: 'ReadexPro-Medium',
   },
   prefix: {
-    fontFamily: 'ReadexPro-Medium',
-    fontSize: 14,
     textAlign: 'center',
   },
 });
