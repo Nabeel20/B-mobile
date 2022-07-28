@@ -122,11 +122,11 @@ function List({data, doneIds = [], onPress, onHome}) {
         onPress={() => onPress({title, rtl, mcq, url, branch})}
         style={styles.card}>
         {onHome ? (
-          <Icon style={styles.category_icon} icon="done" color={Theme.text} />
+          <Icon style={styles.category_icon} icon={icon} color={Theme.text} />
         ) : null}
         <View style={styles.text_container}>
           <View style={styles.title_container}>
-            {title_done ? <Icon icon={icon} color={Theme.text} /> : null}
+            {title_done ? <Icon icon="done" color={Theme.text} /> : null}
             <Text weight="medium" style={styles.title}>
               {title}
             </Text>

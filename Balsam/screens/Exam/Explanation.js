@@ -1,6 +1,6 @@
 import React from 'react';
 import {Animated, StyleSheet, View} from 'react-native';
-import {ThemeContext} from '../../Theme';
+import {ThemeContext} from '../Theme';
 
 export default function Explanation({rtl, children, animation}) {
   const {Theme, Text} = React.useContext(ThemeContext);

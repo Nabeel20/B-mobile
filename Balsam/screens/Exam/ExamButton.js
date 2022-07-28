@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Animated} from 'react-native';
-import {Colors, ThemeContext} from '../../Theme';
+import {Colors, ThemeContext} from '../Theme';
 
 export default function ExamButton({
   correctChoice = false,
