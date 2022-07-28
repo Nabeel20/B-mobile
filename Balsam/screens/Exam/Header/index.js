@@ -1,73 +1,53 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import Progress from './Progress';
 import Number from './Number';
-import BookmarksButton from './Bookmarks.button';
-import BackButton from '../../../components/Back.button';
-import {Colors, ThemeContext} from '../../../Theme';
+import BackButton from '../../components/Back.button';
+import {Colors, ThemeContext} from '../../Theme';
 
 export default function Header({details, onNavigation, onClose, onBookmark}) {
   const {
-    title,
-    subject,
-    rtl,
-    total_num,
-    exit_point,
-    progress_step,
-    index,
-    animation,
+    quiz_title,
+    quiz_rtl,
     direction,
+    questions_number,
+    progress_step,
+    current_index,
+    exit_point,
+    number_animation,
     bookmark_status,
     time,
   } = details;
-  const {Theme} = React.useContext(ThemeContext);
+  const {Theme, Button, Text} = React.useContext(ThemeContext);
   return (
     <View style={styles.main_container}>
       <View style={styles.headerContainer}>
         <BackButton onPress={onNavigation} />
         <View
-          style={[styles.header, {flexDirection: rtl ? 'row-reverse' : 'row'}]}>
+          style={[
+            styles.header,
+            // eslint-disable-next-line react-native/no-inline-styles
+            {flexDirection: quiz_rtl ? 'row-reverse' : 'row'},
+          ]}>
           {exit_point ? (
-            <TouchableOpacity onPress={onClose} style={styles.button}>
-              <Text style={styles.buttonText}>الانتقال للنتيجة</Text>
-            </TouchableOpacity>
+            <Button color="red" onPress={onClose} style={styles.exit_button}>
+              <Text style={styles.exit_button_text}>الانتقال للنتيجة</Text>
+            </Button>
           ) : (
-            <Text>
-              <Text
-                style={[
-                  styles.quiz_subject,
-                  {
-                    color: Theme.grey.accent_2,
-                  },
-                ]}>
-                {subject}
-              </Text>
-              {'\n'}
-              <Text
-                style={[
-                  styles.quiz_title,
-                  {
-                    color: Theme.text,
-                  },
-                ]}>
-                {title}
-              </Text>
+            <Text secondary type="medium" style={styles.title}>
+              {quiz_title}
             </Text>
           )}
-          <Text
-            style={[
-              styles.timerText,
-              {
-                color: Theme.text,
-              },
-            ]}>
-            <Text>{time}</Text> {time >= 3 ? 'دقائق' : 'دقيقة'}
+          <Text>
+            {time} {time >= 3 ? 'دقائق' : 'دقيقة'}
           </Text>
         </View>
       </View>
-      <Progress dir={rtl} step={progress_step} />
+      <Progress rtl={quiz_rtl} step={progress_step} />
       <View style={styles.spacer} />
-      <View style={[styles.row, {flexDirection: rtl ? 'row-reverse' : 'row'}]}>
+      <View
+        // eslint-disable-next-line react-native/no-inline-styles
+        style={[styles.row, {flexDirection: quiz_rtl ? 'row-reverse' : 'row'}]}>
         <Number
           total={questions_number}
           animation={number_animation}
@@ -75,7 +55,16 @@ export default function Header({details, onNavigation, onClose, onBookmark}) {
           index={current_index + 1}
           rtl={quiz_rtl}
         />
-        <BookmarksButton status={bookmark_status} onPress={onBookmark} />
+        <Button style={styles.bookmark_button} onPress={onBookmark}>
+          <Image
+            source={
+              bookmark_status
+                ? require('../../../assets/bookmark-icon-fill.png')
+                : require('../../../assets/bookmark-icon.png')
+            }
+            style={[styles.bookmark_icon, {tintColor: Theme.text}]}
+          />
+        </Button>
       </View>
     </View>
   );
@@ -98,32 +87,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  button: {
+  exit_button: {
     borderRadius: 10,
     padding: 8,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.red_light,
   },
-  buttonText: {
-    fontFamily: 'ReadexPro-Regular',
-    fontSize: 14,
+  exit_button_text: {
     color: '#212121',
-  },
-  quiz_subject: {
-    fontSize: 12,
-    fontFamily: 'ReadexPro-Regular',
-  },
-  quiz_title: {
-    fontSize: 14,
-    fontFamily: 'ReadexPro-Bold',
-  },
-  timerText: {
-    fontSize: 14,
-    fontFamily: 'ReadexPro-Regular',
   },
   spacer: {
     height: 10,
+  },
+  bookmark_button: {
+    borderRadius: 6,
+    padding: 5,
+    marginLeft: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bookmark_icon: {
+    width: 24,
+    height: 24,
   },
 });
