@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, FlatList, Modal, ScrollView, Image} from 'react-native';
-import BackButton from './components/Back.button';
+import BackButton from './components/BackButton';
 import {Colors, ThemeContext} from './Theme';
 
 export default function Bookmarks({navigation, route, storage}) {

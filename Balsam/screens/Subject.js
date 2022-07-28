@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {List} from './components/List/index';
 import {ThemeContext} from './Theme';
-import BackButton from './components/Back.button';
+import BackButton from './components/BackButton';
 import Loading from './components/Loading';
 
 export default function Subject({route, navigation}) {

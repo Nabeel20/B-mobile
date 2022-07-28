@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import Progress from './Progress';
 import Number from './Number';
-import BackButton from '../../components/Back.button';
+import BackButton from '../../components/BackButton';
 import {ThemeContext} from '../../Theme';
 
 export default function Header({details, onNavigation, onClose, onBookmark}) {
