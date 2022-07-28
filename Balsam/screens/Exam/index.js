@@ -10,11 +10,11 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Choice from './Choice';
-import Explanation from './Elements/Explanation';
+import Explanation from './Explanation';
 import Loading from '../components/Loading';
-import Header from './Elements/Header';
-import ExamModal from './Elements/ExamModal';
-import ExamButton from './Elements/ExamButton';
+import Header from './Header';
+import ExamModal from './ExamModal';
+import ExamButton from './ExamButton';
 import {ThemeContext} from '../Theme';
 
 function Exam({route, navigation, storage, bookmarksIDs}) {
