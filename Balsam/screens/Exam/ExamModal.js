@@ -1,6 +1,6 @@
 import React from 'react';
 import {Modal, View, StyleSheet, Image} from 'react-native';
-import BackButton from '../../components/Back.button';
+import BackButton from '../../components/BackButton';
 import {ThemeContext} from '../Theme';
 
 export default function ExamModal({

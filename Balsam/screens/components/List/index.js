@@ -236,8 +236,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   category_icon: {
-    width: 24,
-    height: 24,
+    width: 32,
+    height: 32,
     marginLeft: 4,
   },
   sub_title: {
