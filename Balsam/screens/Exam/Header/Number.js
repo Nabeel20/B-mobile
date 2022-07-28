@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Animated, StyleSheet} from 'react-native';
-import {Colors} from '../../../Theme';
+import {Colors} from '../../Theme';
 
 export default function QuestionNumber({
   number,

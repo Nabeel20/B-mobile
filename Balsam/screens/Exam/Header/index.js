@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import Progress from './Progress';
-import QuestionNumber from './QuestionNumber';
+import Number from './Number';
 import BookmarksButton from './Bookmarks.button';
 import BackButton from '../../../components/Back.button';
 import {Colors, ThemeContext} from '../../../Theme';
@@ -68,12 +68,12 @@ export default function Header({details, onNavigation, onClose, onBookmark}) {
       <Progress dir={rtl} step={progress_step} />
       <View style={styles.spacer} />
       <View style={[styles.row, {flexDirection: rtl ? 'row-reverse' : 'row'}]}>
-        <QuestionNumber
-          total={total_num}
-          animation={animation}
+        <Number
+          total={questions_number}
+          animation={number_animation}
           direction={direction}
-          number={index + 1}
-          RTL={rtl}
+          index={current_index + 1}
+          rtl={quiz_rtl}
         />
         <BookmarksButton status={bookmark_status} onPress={onBookmark} />
       </View>
