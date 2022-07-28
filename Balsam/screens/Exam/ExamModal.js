@@ -1,6 +1,6 @@
 import React from 'react';
 import {Modal, View, StyleSheet, Image} from 'react-native';
-import BackButton from '../../components/BackButton';
+import BackButton from '../components/BackButton';
 import {ThemeContext} from '../Theme';
 
 export default function ExamModal({
@@ -13,10 +13,10 @@ export default function ExamModal({
 }) {
   const {Theme, Text, Button} = React.useContext(ThemeContext);
   const ICONS = {
-    thinking: require('../../../assets/thinking-icon.png'),
-    confetti: require('../../../assets/confetti-icon.png'),
-    noInput: require('../../../assets/faceless-icon.png'),
-    leaving: require('../../../assets/sad-icon.png'),
+    thinking: require('../../assets/thinking-icon.png'),
+    confetti: require('../../assets/confetti-icon.png'),
+    noInput: require('../../assets/faceless-icon.png'),
+    leaving: require('../../assets/sad-icon.png'),
   };
   const {
     title,
