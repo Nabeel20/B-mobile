@@ -10,9 +10,6 @@ export default function Loading({
 }) {
   const netInfo = useNetInfo() ?? {isConnected: true};
   const {Theme, View, Button, Text} = React.useContext(ThemeContext);
-  if (netInfo.isConnected === false) {
-    status = false;
-  }
   let message = status ? 'جار التحميل...' : 'للأسف حدث خطأ بتحميل البيانات';
 
   return (
