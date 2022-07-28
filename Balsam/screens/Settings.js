@@ -28,14 +28,14 @@ export default function Settings({navigation}) {
       function() {
         return null;
       },
-      source: require('../assets/heart.png'),
+      source: require('../assets/heart-icon.png'),
     },
     {
       title: 'تواصل معنا',
       function() {
         return set_modal_visible(true);
       },
-      source: require('../assets/hand.png'),
+      source: require('../assets/hand-icon.png'),
     },
     {
       title: 'أخبر صديقاً',
@@ -53,7 +53,7 @@ export default function Settings({navigation}) {
           );
         }
       },
-      source: require('../assets/hand_shake.png'),
+      source: require('../assets/hand-shake-icon.png'),
     },
   ];
   function send_happy_message() {

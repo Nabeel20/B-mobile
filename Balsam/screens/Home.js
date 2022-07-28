@@ -38,7 +38,7 @@ export default function Home({data, navigation, storage}) {
         style={styles.settings_button}
         color="grey">
         <Image
-          source={require('../assets/gearIcon.png')}
+          source={require('../assets/gear-icon.png')}
           style={[
             styles.settings_icon,
             {

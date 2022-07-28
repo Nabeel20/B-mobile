@@ -72,12 +72,10 @@ function List({data, doneIds = [], onPress, onHome}) {
     return (
       <View style={styles.empty_state}>
         <Image
-          source={require('../../../assets/happy-icon.png')}
+          source={require('../../../assets/empty-list-icon.png')}
           style={styles.empty_state_icon}
         />
-        <Text style={styles.empty_state_text}>
-          صبراً من فضلك جار التحميل...
-        </Text>
+        <Text style={styles.empty_state_text}>لسبب ما.. لا يوجد ملفات</Text>
         <ActivityIndicator size="small" color={Theme.text} />
       </View>
     );
@@ -222,7 +220,7 @@ const styles = StyleSheet.create({
   },
   title_container: {
     flexDirection: 'row',
-    alignItems: 'end',
+    alignItems: 'flex-end',
     margin: 4,
   },
   row: {
