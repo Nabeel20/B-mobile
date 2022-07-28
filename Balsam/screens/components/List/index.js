@@ -150,7 +150,7 @@ function List({data, doneIds = [], onPress, onHome}) {
           </View>
         </View>
         <Image
-          source={require('../../../assets/arrow.png')}
+          source={require('../../../assets/arrow-icon.png')}
           style={[styles.arrow_icon, {tintColor: Theme.text}]}
         />
       </Button>
