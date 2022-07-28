@@ -43,8 +43,7 @@ function ThemeProvider({children}) {
       <NativeText
         style={[
           {
-            fontFamily: 'readex pro',
-            fontWeight:
+            fontFamily:
               fonts[weight] === undefined ? fonts.regular : fonts[weight],
             color:
               Colors[color] === undefined

@@ -7,7 +7,7 @@ import Loading from './components/Loading';
 
 export default function Subject({route, navigation}) {
   const {Button, Text, View} = React.useContext(ThemeContext);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const {title: subject_title, url: subject_url} = route.params;
   const [list_data, set_list_data] = React.useState([]);
   const [loading_error, set_loading_error] = React.useState(false);
@@ -42,7 +42,10 @@ export default function Subject({route, navigation}) {
           `https://docs.google.com/spreadsheets/d/${subject_url}/export?format=csv`,
         )
           .then(res => res.text())
-          .then(data => set_list_data(get_subjects_json(data)));
+          .then(data => {
+            set_list_data(get_subjects_json(data));
+            setLoading(false);
+          });
       } catch (error) {
         set_loading_error(true);
       }
@@ -56,9 +59,7 @@ export default function Subject({route, navigation}) {
     }
     return subject_title;
   }
-  if (loading) {
-    return <Loading status={loading_error} onPress={() => setLoading(false)} />;
-  }
+
   return (
     <View style={styles.container} background>
       <View style={styles.row}>
@@ -82,26 +83,29 @@ export default function Subject({route, navigation}) {
       <Text style={styles.title} weight="medium">
         {subject_title}
       </Text>
-
-      <List
-        data={list_data}
-        onPress={list_item => {
-          if (list_item.branch) {
-            navigation.push('Subject', {
-              title: `${subject_title}: ${list_item.title}`,
-              url: list_item.url,
+      {loading ? (
+        <Loading status={loading_error} onPress={() => setLoading(false)} />
+      ) : (
+        <List
+          data={list_data}
+          onPress={list_item => {
+            if (list_item.branch) {
+              navigation.push('Subject', {
+                title: `${subject_title}: ${list_item.title}`,
+                url: list_item.url,
+              });
+              return;
+            }
+            navigation.navigate('Exam', {
+              quiz_rtl: list_item.rtl,
+              quiz_title: list_item.title,
+              quiz_subject: subject_title,
+              quiz_id: list_item.url,
+              quiz_mcq: list_item.mcq,
             });
-            return;
-          }
-          navigation.navigate('Exam', {
-            quiz_rtl: list_item.rtl,
-            quiz_title: list_item.title,
-            quiz_subject: subject_title,
-            quiz_id: list_item.url,
-            quiz_mcq: list_item.mcq,
-          });
-        }}
-      />
+          }}
+        />
+      )}
     </View>
   );
 }
