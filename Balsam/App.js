@@ -49,11 +49,13 @@ function App() {
       data = data.split('\n');
       let output = [];
       for (let index = 1; index < data.length; index++) {
-        const [title, id, url, has_updates, details] = data[index].split(',');
+        const [title, has_updates, details, icon, url, id] =
+          data[index].split(',');
         output.push({
           title: title.replace(/"/g, ''),
           url: url.replace(/"/g, ''),
           id: id.replace(/"/g, ''),
+          icon: icon.replace(/"/g, ''),
           has_updates: has_updates.replace(/"/g, '') === 'TRUE' ? true : false,
           details: details.replace(/"/g, ''),
         });
