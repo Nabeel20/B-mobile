@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@react-native-community/netinfo": "^9.3.0",
-    "react-native-mmkv": "^2.4.3"
-  }
-}

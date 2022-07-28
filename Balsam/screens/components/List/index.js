@@ -112,6 +112,7 @@ function List({data, doneIds = [], onPress, onHome}) {
       url,
       number,
       id,
+      icon = '',
       editor_choice = false,
     } = item;
     const title_done = doneIds.length > 0 ? doneIds.includes(id) : false;
@@ -125,7 +126,7 @@ function List({data, doneIds = [], onPress, onHome}) {
         ) : null}
         <View style={styles.text_container}>
           <View style={styles.title_container}>
-            {title_done ? <Icon icon="done" color={Theme.text} /> : null}
+            {title_done ? <Icon icon={icon} color={Theme.text} /> : null}
             <Text weight="medium" style={styles.title}>
               {title}
             </Text>
