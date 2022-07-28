@@ -1,8 +1,8 @@
 import React from 'react';
 import {Animated, View, StyleSheet} from 'react-native';
-import {Colors, ThemeContext} from '../../../Theme';
+import {Colors, ThemeContext} from '../../Theme';
 
-export default function Progress({step, dir}) {
+export default function Progress({step, rtl}) {
   const loaderValue = React.useRef(new Animated.Value(0)).current;
   const {Theme} = React.useContext(ThemeContext);
 
@@ -24,7 +24,7 @@ export default function Progress({step, dir}) {
         styles.container,
         {
           backgroundColor: Theme.grey.accent_1,
-          transform: [{scaleX: dir ? -1 : 1}],
+          transform: [{scaleX: rtl ? -1 : 1}],
         },
       ]}>
       <Animated.View
