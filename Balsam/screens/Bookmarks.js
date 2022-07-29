@@ -101,11 +101,11 @@ export default function Bookmarks({navigation, route, storage}) {
               <Text>{selected_question.correct_answer}</Text>
               <View style={styles.green_dot} />
             </View>
-            <Text secondary padding={8}>
+            <Text secondary style={styles.h3}>
               باقي الخيارات
             </Text>
             {selected_question.choices?.map((choice, index) => (
-              <Text padding={4} key={index}>
+              <Text style={styles.choice} key={index}>
                 {' '}
                 - {choice}
               </Text>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginTop: '10%',
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     marginRight: 16,
     marginBottom: 16,
   },
@@ -217,5 +217,11 @@ const styles = StyleSheet.create({
   },
   header_spacer: {
     height: '20%',
+  },
+  choice: {
+    padding: 4,
+  },
+  h3: {
+    padding: 8,
   },
 });

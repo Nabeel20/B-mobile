@@ -69,7 +69,9 @@ export default function Subject({route, navigation}) {
           onPress={() =>
             navigation.navigate('Bookmarks', {subject: get_subject()})
           }>
-          <Text color="blue">المحفوظات</Text>
+          <Text color="blue" weight="medium">
+            المحفوظات
+          </Text>
         </Button>
         <BackButton
           onPress={() => {
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 18,
     marginRight: 8,
     marginBottom: 16,
   },

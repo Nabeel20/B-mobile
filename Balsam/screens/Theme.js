@@ -17,7 +17,6 @@ const Colors = {
 const fonts = {
   regular: 'ReadexPro-Regular',
   medium: 'ReadexPro-Medium',
-  bold: 'ReadexPro-Bold',
 };
 function ThemeProvider({children}) {
   const [darkTheme, setTheme] = React.useState(false);
@@ -35,16 +34,15 @@ function ThemeProvider({children}) {
     color = '',
     secondary,
     size = 14,
-    padding,
     children: textChildren,
-    weight,
+    weight = 'regular',
   }) {
     return (
       <NativeText
         style={[
+          // eslint-disable-next-line react-native/no-inline-styles
           {
-            fontFamily:
-              fonts[weight] === undefined ? fonts.regular : fonts[weight],
+            fontFamily: fonts[weight],
             color:
               Colors[color] === undefined
                 ? secondary
@@ -52,7 +50,6 @@ function ThemeProvider({children}) {
                   : Theme.text
                 : Colors[color],
             fontSize: size,
-            padding: padding === undefined ? null : padding,
           },
           style,
         ]}>
@@ -79,6 +76,7 @@ function ThemeProvider({children}) {
       <TouchableOpacity
         onPress={onPress}
         style={[
+          // eslint-disable-next-line react-native/no-inline-styles
           {
             backgroundColor: background_colors[color],
             borderRadius: round ? 99 : 8,
@@ -95,6 +93,7 @@ function ThemeProvider({children}) {
     return (
       <ViewNative
         style={[
+          // eslint-disable-next-line react-native/no-inline-styles
           {backgroundColor: background ? Theme.background : null},
           style,
         ]}>

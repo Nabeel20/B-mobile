@@ -92,7 +92,7 @@ function Exam({route, navigation, storage, bookmarksIDs}) {
           ]}>
           {item.question}
         </Text>
-        <View style={styles.spacer} />{' '}
+        <View style={styles.spacer} />
         {quiz_mcq ? (
           <View>
             {item.choices.map((choice, i) => {

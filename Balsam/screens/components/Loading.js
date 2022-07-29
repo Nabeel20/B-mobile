@@ -9,6 +9,9 @@ export default function Loading({
   text = 'حاول مرة أخرى',
 }) {
   const netInfo = useNetInfo() ?? {isConnected: true};
+  if (netInfo.isConnected === false) {
+    status = false;
+  }
   const {Theme, View, Button, Text} = React.useContext(ThemeContext);
   let message = status ? 'جار التحميل...' : 'للأسف حدث خطأ بتحميل البيانات';
 
@@ -50,7 +53,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    fontSize: 18,
     margin: 16,
     textAlign: 'center',
   },

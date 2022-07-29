@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     alignSelf: 'flex-end',
     marginRight: 16,
     marginBottom: 16,

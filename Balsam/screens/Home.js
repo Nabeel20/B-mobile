@@ -49,7 +49,7 @@ export default function Home({data, navigation, storage}) {
       </Button>
       <View style={styles.header_spacer} />
       <View style={styles.header}>
-        <Text style={styles.title} weight="bold">
+        <Text style={styles.title} weight="medium">
           {greeting}
         </Text>
         <Button
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     marginBottom: 8,
     marginRight: 8,
   },
