@@ -170,7 +170,7 @@ export default function Settings({navigation}) {
         <Text weight="medium" size={16}>
           واجهة المستخدم
         </Text>
-        <Text weight="medium" size={16} secondary>
+        <Text weight="medium" size={16} color="grey-dark">
           {darkTheme ? 'عاتمة' : 'مشرقة'}
         </Text>
       </Button>
@@ -178,7 +178,7 @@ export default function Settings({navigation}) {
         <Text weight="medium" size={16}>
           السنة الدراسية
         </Text>
-        <Text size={16} secondary>
+        <Text size={16} color="grey-dark">
           الرابعة
         </Text>
       </Button>

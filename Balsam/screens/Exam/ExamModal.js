@@ -45,7 +45,7 @@ export default function ExamModal({
           <View style={styles.header}>
             <Image source={ICONS[icon]} style={styles.image} />
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.sub_title} secondary>
+            <Text style={styles.sub_title} color="grey-dark">
               {sub_title}
             </Text>
           </View>
@@ -77,12 +77,14 @@ export default function ExamModal({
 
               <Text>خلال {time} دقيقة</Text>
               {skipped_questions_number > 0 ? (
-                <Text secondary>تجاوزت {skipped_questions_number} سؤال</Text>
+                <Text color="grey-dark">
+                  تجاوزت {skipped_questions_number} سؤال
+                </Text>
               ) : null}
             </View>
           ) : null}
           {no_user_input ? (
-            <Text secondary>لم تجب على أي من الأسئلة</Text>
+            <Text color="grey-dark">لم تجب على أي من الأسئلة</Text>
           ) : null}
         </View>
         <View style={styles.footer}>

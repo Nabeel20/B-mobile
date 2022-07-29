@@ -84,15 +84,9 @@ function List({data, doneIds = [], onPress, onHome}) {
     return (
       <View style={styles.row}>
         <Text
-          secondary
           style={styles.sub_title}
-          color={color === 'green' ? 'green' : ''}>
-          {icon === 'stars' ? (
-            <Text secondary color={color}>
-              جديد
-            </Text>
-          ) : null}{' '}
-          {text}
+          color={color === 'green' ? 'green' : 'grey-dark'}>
+          {icon === 'stars' ? <Text color="red">جديد</Text> : null} {text}
         </Text>
         {icon ? <Icon icon={icon} color={color} /> : null}
       </View>
@@ -134,7 +128,7 @@ function List({data, doneIds = [], onPress, onHome}) {
               <Tag icon="recommend" text="نصيحة" color="green" />
             ) : null}
             {onHome ? null : (
-              <Text secondary style={styles.sub_title}>
+              <Text color="grey-dark" style={styles.sub_title}>
                 {number} سؤال
               </Text>
             )}

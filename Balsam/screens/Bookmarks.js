@@ -94,14 +94,14 @@ export default function Bookmarks({navigation, route, storage}) {
           </Text>
 
           <ScrollView contentContainerStyle={styles.modalScroll}>
-            <Text secondary style={styles.modal_h2}>
+            <Text color="grey-dark" style={styles.modal_h2}>
               الإجابة الصحيحة
             </Text>
             <View style={styles.correct_answer_container}>
               <Text>{selected_question.correct_answer}</Text>
               <View style={styles.green_dot} />
             </View>
-            <Text secondary style={styles.h3}>
+            <Text color="grey-dark" style={styles.h3}>
               باقي الخيارات
             </Text>
             {selected_question.choices?.map((choice, index) => (
@@ -112,7 +112,7 @@ export default function Bookmarks({navigation, route, storage}) {
             ))}
             {selected_question.has_explanation ? (
               <>
-                <Text secondary style={styles.modal_h2}>
+                <Text color="grey-dark" style={styles.modal_h2}>
                   التوضيح
                 </Text>
                 <Text>{selected_question.explanation}</Text>

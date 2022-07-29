@@ -55,7 +55,6 @@ export default function Choice({
           },
         ]}>
         <Text
-          secondary={chosen === false}
           type="medium"
           style={styles.prefix}
           color={
