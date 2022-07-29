@@ -63,7 +63,7 @@ function ThemeProvider({children}) {
     color = 'grey',
     children: buttonChildren,
     round,
-    flex,
+    flex = 1,
   }) {
     const background_colors = {
       blue: Colors.blue_light,
@@ -80,7 +80,7 @@ function ThemeProvider({children}) {
           {
             backgroundColor: background_colors[color],
             borderRadius: round ? 99 : 8,
-            flex: flex === undefined ? null : 1,
+            flex,
           },
           styles.default_button,
           style,
@@ -89,12 +89,12 @@ function ThemeProvider({children}) {
       </TouchableOpacity>
     );
   };
-  const View = function ({background = false, style, children: viewChildren}) {
+  const View = function ({style, children: viewChildren}) {
     return (
       <ViewNative
         style={[
           // eslint-disable-next-line react-native/no-inline-styles
-          {backgroundColor: background ? Theme.background : null},
+          {backgroundColor: Theme.background},
           style,
         ]}>
         {viewChildren}

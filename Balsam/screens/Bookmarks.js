@@ -68,7 +68,7 @@ export default function Bookmarks({navigation, route, storage}) {
   }
 
   return (
-    <View style={styles.container} background>
+    <View style={styles.container}>
       <Modal
         animationType="slide"
         visible={modalVisible}

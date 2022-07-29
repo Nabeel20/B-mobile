@@ -69,7 +69,7 @@ export default function Settings({navigation}) {
     set_sad_message_sent(true);
   }
   return (
-    <View style={styles.container} background>
+    <View style={styles.container}>
       <Modal
         animationType="slide"
         visible={modal_visible}

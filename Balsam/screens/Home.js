@@ -32,7 +32,7 @@ export default function Home({data, navigation, storage}) {
   }, []);
 
   return (
-    <View style={styles.container} background>
+    <View style={styles.container}>
       <Button
         onPress={() => navigation.navigate('Settings')}
         style={styles.settings_button}

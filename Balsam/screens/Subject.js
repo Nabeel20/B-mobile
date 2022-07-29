@@ -61,7 +61,7 @@ export default function Subject({route, navigation}) {
   }
 
   return (
-    <View style={styles.container} background>
+    <View style={styles.container}>
       <View style={styles.row}>
         <Button
           color="blue"
