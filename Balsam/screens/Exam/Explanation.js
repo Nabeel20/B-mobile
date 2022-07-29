@@ -26,7 +26,7 @@ export default function Explanation({rtl, children, animation}) {
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={[styles.divider, {flexDirection: rtl ? 'row' : 'row-reverse'}]}>
-        <Text secondary weight="medium">
+        <Text color="grey-dark" weight="medium">
           {rtl ? 'التوضيح' : 'Explanation'}
         </Text>
         <View style={[styles.line, {backgroundColor: Theme.grey.default}]} />

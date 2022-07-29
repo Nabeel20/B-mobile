@@ -59,7 +59,7 @@ export default function Choice({
           type="medium"
           style={styles.prefix}
           color={
-            chosen ? 'blue' : correct ? 'green' : wrong ? 'red' : undefined
+            chosen ? 'blue' : correct ? 'green' : wrong ? 'red' : 'grey-dark'
           }>
           {prefixes[prefix]}
         </Text>

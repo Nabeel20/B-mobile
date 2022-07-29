@@ -34,7 +34,7 @@ export default function Header({details, onNavigation, onClose, onBookmark}) {
               <Text style={styles.exit_button_text}>الانتقال للنتيجة</Text>
             </Button>
           ) : (
-            <Text secondary type="medium" style={styles.title}>
+            <Text color="grey-dark" type="medium" style={styles.title}>
               {quiz_title}
             </Text>
           )}

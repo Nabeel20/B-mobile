@@ -31,24 +31,27 @@ function ThemeProvider({children}) {
   };
   const Text = function ({
     style,
-    color = '',
-    secondary,
+    color = 'regular',
     size = 14,
     children: textChildren,
     weight = 'regular',
   }) {
+    const text_colors = {
+      regular: Theme.text,
+      green: Colors.green,
+      blue: Colors.blue,
+      red: Colors.red,
+      grey: Theme.default.grey,
+      'grey-light': Theme.grey.accent_1,
+      'grey-dark': Theme.grey.accent_2,
+    };
     return (
       <NativeText
         style={[
           // eslint-disable-next-line react-native/no-inline-styles
           {
             fontFamily: fonts[weight],
-            color:
-              Colors[color] === undefined
-                ? secondary
-                  ? Theme.grey.accent_2
-                  : Theme.text
-                : Colors[color],
+            color: text_colors[color],
             fontSize: size,
           },
           style,
