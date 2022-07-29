@@ -16,21 +16,38 @@ import Subject from './screens/Subject';
 import Exam from './screens/Exam';
 import Bookmarks from './screens/Bookmarks';
 import Home from './screens/Home';
+import {MMKV} from 'react-native-mmkv';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 const Stack = createNativeStackNavigator();
+const storage = new MMKV() ?? undefined;
+
+function load_bookmarks() {
+  try {
+    let bookmarks_on_disk = storage.getString('bookmarks');
+    if (bookmarks_on_disk === undefined) {
+      storage.set('bookmarks', JSON.stringify([]));
+      return [];
+    }
+    bookmarks_on_disk = JSON.parse(bookmarks_on_disk);
+    return bookmarks_on_disk;
+  } catch (error) {
+    ToastAndroid.showWithGravity(
+      'فشل تحميل المحفوظات',
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP,
+    );
+  }
+}
+
+const bookmarks = load_bookmarks() ?? [];
 
 function App() {
-  const color_scheme = useColorScheme() || 'light';
+  const color_scheme = useColorScheme() ?? 'light';
   const home_data = React.useRef([]);
-  const bookmarks_data = React.useRef([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    function load_bookmarks() {
-      const BM = [];
-      bookmarks_data.current = BM;
-      return;
-    }
     async function handle_data() {
       try {
         fetch(
@@ -62,7 +79,6 @@ function App() {
       }
       return output;
     }
-    load_bookmarks();
     handle_data();
   }, []);
 
@@ -105,16 +121,24 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Home"
-          animation="fade_from_bottom"
-          screenOptions={{headerShown: false}}>
+          screenOptions={{headerShown: false}}
+          animation="fade_from_bottom">
           <Stack.Screen name="Home">
-            {props => <Home {...props} data={home_data.current} />}
+            {props => (
+              <Home {...props} data={home_data.current} storage={storage} />
+            )}
           </Stack.Screen>
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen name="Subject" component={Subject} />
-          <Stack.Screen name="Exam" component={Exam} />
+          <Stack.Screen name="Exam">
+            {props => (
+              <Exam {...props} storage={storage} bookmarksIDs={bookmarks} />
+            )}
+          </Stack.Screen>
           <Stack.Screen name="Bookmarks">
-            {props => <Bookmarks {...props} data={bookmarks_data.current} />}
+            {props => (
+              <Bookmarks {...props} data={bookmarks} storage={storage} />
+            )}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
