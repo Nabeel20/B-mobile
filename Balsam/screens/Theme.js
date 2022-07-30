@@ -41,7 +41,7 @@ function ThemeProvider({children}) {
       green: Colors.green,
       blue: Colors.blue,
       red: Colors.red,
-      grey: Theme.default.grey,
+      grey: Theme.grey.default,
       'grey-light': Theme.grey.accent_1,
       'grey-dark': Theme.grey.accent_2,
     };
@@ -119,7 +119,7 @@ function ThemeProvider({children}) {
 }
 const styles = StyleSheet.create({
   default_button: {
-    padding: 14,
+    padding: 12,
     alignItems: 'center',
     justifyContent: 'center',
     margin: 4,

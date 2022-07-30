@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginTop: '10%',
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     marginRight: 16,
     marginBottom: 16,
   },
